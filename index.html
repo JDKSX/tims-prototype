@@ -2445,6 +2445,23 @@ body.notes .note{display:block;}
 .login-mascot .nt{flex:0 0 auto;width:172px;}
 .nt-slot{display:flex;justify-content:center;margin:0 0 14px;}
 .nt-slot .nt{flex:0 0 auto;}
+/* แถบ "ตอนนี้ควรทำอะไรต่อ" บนหน้าหลักของทั้ง 4 บทบาท + คำแนะนำตัวบนหน้าแรกสาธารณะ
+   🔴 ใช้เปลือกเดียวกับ .card (surface/line/r3/sh-1) เพื่อไม่ให้กลายเป็นของแปลกปลอมในหน้า */
+.nt-home,.lp-greet{display:flex;align-items:center;gap:14px;
+  background:var(--surface);border:1px solid var(--line);border-radius:var(--r3);box-shadow:var(--sh-1);}
+.nt-home{margin:0 0 16px;padding:12px 16px;}
+.lp-greet{margin:18px 0 0;padding:14px 16px;}
+.nt-home .nt{flex:0 0 auto;width:62px;}
+.lp-greet .nt{flex:0 0 auto;width:70px;}
+.nt-home .nt-slot,.lp-greet .nt-slot{margin:0;flex:0 0 auto;}
+.nt-home-tx{flex:1;min-width:0;}
+.nt-home-tx b{display:block;font-size:var(--fs-3);color:var(--ink);}
+.nt-home-tx span{display:block;margin-top:2px;font-size:var(--fs-2);color:var(--ink-3);}
+.lp-greet p{margin:0;font-size:var(--fs-2);color:var(--ink-2);}
+@media (max-width:560px){
+  .nt-home .nt{width:52px;}
+  .lp-greet .nt{width:56px;}
+}
 </style>
 </head>
 <body>
@@ -5677,6 +5694,72 @@ body.notes .note{display:block;}
     return '<div class="nt-slot">' + nongTims(pose, { size: size || 'md', label: label }) + '</div>';
   }
 
+  /* ═══ น้อง TIMS บนหน้าหลักของทั้ง 4 บทบาท (17 ก.ย. 2569 · เจ้าของงานสั่ง) ═══
+     🔴 ท่าทางต้องมาจาก **สภาพจริงของคนที่กำลังเปิดอยู่** ไม่ใช่รูปประดับ
+        มาสคอตที่ยิ้มท่าเดียวตลอดไม่ว่าจะมีงานค้าง 40 ชิ้นหรือไม่มีเลย
+        คือของที่ผู้ใช้เลิกมองภายในสองวัน ⇒ ต้องพูดเรื่องที่ตรงกับหน้างานตอนนั้น
+     🔴 ตัวเลขทุกตัวดึงจากทะเบียน **BADGES ชุดเดียวกับป้ายบนเมนู**
+        ⇒ เลขบนหน้าหลักกับเลขบนเมนูตรงกันเสมอโดยไม่ต้องคิดซ้ำสองที่
+        (บทเรียน CR-33 ก้อน 2 — ตัวเลขสองชุดที่คิดแยกกันจะเพี้ยนคนละทางเสมอ)
+     🔴 ใช้ data-nt ให้ renderMascots() มาเติมทีหลัง ไม่ฝัง SVG ตรง ๆ
+        เพราะหน้าหลักถูกวาดใหม่บ่อย ฝังตรง ๆ แล้วแอนิเมชันจะกระตุกเริ่มนับใหม่ทุกครั้ง */
+  function ntN(key) { var b = badgeOf(key); return (b && b.n) || 0; }
+  function ntHome(ns) {
+    var r = null;
+    if (ns === 'stu') {
+      var it = myInternship();
+      if (!it) r = { p: 'think', s: 'ภาคเรียนนี้ยังไม่มีข้อมูลการฝึกของท่าน',
+                     d: 'ถ้าคิดว่าไม่ถูกต้อง ให้ติดต่อกรรมการสาขาของท่าน' };
+      else {
+        var cc = stuCount();
+        if (cc.rejected) r = { p: 'sorry', s: 'มีงานถูกตีกลับ ' + cc.rejected + ' ชิ้น',
+          d: 'อาจารย์นิเทศก์เขียนเหตุผลไว้ให้แล้ว แก้แล้วส่งใหม่ได้เลย', g: 'stu:logs', gl: 'ดูงานที่ถูกตีกลับ' };
+        else if (ntN('stu:logs')) r = { p: 'work', s: 'ยังมีงานที่ต้องส่งอีก ' + ntN('stu:logs') + ' ชิ้น',
+          d: 'ทยอยส่งได้ ไม่ต้องรอให้ครบทุกชิ้นแล้วค่อยส่งทีเดียว', g: 'stu:logs', gl: 'ไปส่งงาน' };
+        else if (ntN('stu:course')) r = { p: 'guide', s: 'เหลืออีก ' + ntN('stu:course') + ' ขั้นที่เป็นงานของท่าน',
+          d: 'เปิดผังการฝึกแล้วดูขั้นที่ติดป้าย "คุณอยู่ที่นี่"', g: 'stu:course', gl: 'เปิดผังการฝึก' };
+        else r = { p: 'cheer', s: 'งานของท่านครบหมดแล้ว', d: 'ไม่มีอะไรค้างในภาคเรียนนี้' };
+      }
+    } else if (ns === 'sup') {
+      var nT = ntN('sup:tasks');
+      if (!myStudents().length) r = { p: 'think', s: 'ภาคเรียนนี้ยังไม่มีนักศึกษาในความดูแลของท่าน',
+        d: 'กรรมการสาขาเป็นผู้จัดสรรนักศึกษาให้อาจารย์นิเทศก์' };
+      else if (nT) r = { p: 'work', s: 'มีงานรอตรวจ ' + nT + ' ชิ้น',
+        d: 'เริ่มจากชิ้นที่ค้างนานที่สุดก่อน จะได้ไม่มีใครรอนานเกินไป', g: 'sup:tasks', gl: 'ไปตรวจงาน' };
+      else if (ntN('sup:visits')) r = { p: 'guide', s: 'มีนัดนิเทศที่ยังไม่ถึง ' + ntN('sup:visits') + ' นัด',
+        d: 'ตรวจงานเคลียร์หมดแล้ว เหลือเรื่องลงพื้นที่', g: 'sup:visits', gl: 'ดูตารางนิเทศ' };
+      else r = { p: 'pass', s: 'ไม่มีงานค้างรอตรวจ', d: 'เคลียร์หมดแล้วทั้งคิวตรวจงานและนัดนิเทศ' };
+    } else if (ns === 'com') {
+      var nC = ntN('com:courses');
+      if (!ctxInternships('com').length) r = { p: 'think', s: 'ภาคเรียนนี้ยังไม่มีนักศึกษาออกฝึกในสาขาของท่าน',
+        d: 'ถ้าเพิ่งขึ้นภาคเรียนใหม่ ให้เริ่มที่การลงทะเบียนนักศึกษาเข้ารายวิชา', g: 'com:courses', gl: 'เปิดรายวิชาฝึก' };
+      else if (nC) r = { p: 'work', s: 'มีงานค้างของกรรมการ ' + nC + ' รายการ',
+        d: 'รออนุมัติออกฝึก และที่ยังไม่ได้จัดสรรอาจารย์นิเทศก์ — เข้าทางรายวิชา', g: 'com:courses', gl: 'เปิดรายวิชาฝึก' };
+      else if (ntN('com:results')) r = { p: 'guide', s: 'ยังกรอกคะแนนไม่ครบ ' + ntN('com:results') + ' ชุด',
+        d: 'กรอกทีละหลายคนได้ด้วยตารางกรอกรวม หรือไฟล์ Excel ไป-กลับ', g: 'com:results', gl: 'ไปกรอกคะแนน' };
+      else r = { p: 'pass', s: 'งานของสาขาเรียบร้อยดี', d: 'ไม่มีรายการค้างรออนุมัติหรือรอจัดสรร' };
+    } else {
+      var its0 = ctxInternships('adm');
+      var idm = {}; its0.forEach(function (x) { idm[x.id] = 1; });
+      var wait = DB.subs.filter(function (l) { return l.status === 'submitted' && idm[l.internshipId]; }).length;
+      if (!its0.length) r = { p: 'think', s: 'ภาคเรียนนี้ยังไม่มีนักศึกษาออกฝึก',
+        d: 'ถ้าเพิ่งขึ้นปีการศึกษา ให้ตรวจว่าเปิดรายวิชาและลงทะเบียนครบหรือยัง', g: 'adm:courses', gl: 'ดูรายวิชา' };
+      else if (ntN('adm:courses')) r = { p: 'work', s: 'มีรายวิชาที่ตั้งค่ายังไม่ครบ ' + ntN('adm:courses') + ' วิชา',
+        d: 'ยังไม่มีงานที่ต้องส่ง หรือยังไม่มีแบบประเมินสักชุด', g: 'adm:courses', gl: 'ไปตั้งค่ารายวิชา' };
+      else if (ntN('adm:schools')) r = { p: 'guide', s: 'โรงเรียนที่ยังไม่ส่งข้อมูลปีนี้ ' + ntN('adm:schools') + ' แห่ง',
+        d: 'นักศึกษาจะเลือกโรงเรียนที่ยังไม่ปรับฐานข้อมูลไม่ได้', g: 'adm:schools', gl: 'เปิดทะเบียนโรงเรียน' };
+      else r = { p: 'hello', s: 'ภาพรวมเรียบร้อยดี',
+        d: wait ? 'มีงานรอตรวจในระบบ ' + wait + ' ชิ้น ซึ่งเป็นคิวของอาจารย์นิเทศก์' : 'ไม่มีงานค้างรอตรวจในภาคเรียนนี้' };
+    }
+    return '<div class="nt-home">' +
+      '<div class="nt-slot" data-nt="' + esc(r.p) + '" data-nt-size="sm" data-nt-label="' +
+        esc('น้อง TIMS · ' + r.s) + '"></div>' +
+      '<div class="nt-home-tx"><b>' + esc(r.s) + '</b><span>' + esc(r.d) + '</span></div>' +
+      (r.g ? '<button class="btn btn-pri btn-sm" data-page="' + esc(r.g) + '">' +
+        ic('arr') + ' ' + esc(r.gl) + '</button>' : '') +
+    '</div>';
+  }
+
   function empty(t, s, action) {
     return '<div class="card"><div class="empty">' + ic('book') +
       '<b class="d-block fs-4">' + esc(t) + '</b>' +
@@ -7537,7 +7620,15 @@ body.notes .note{display:block;}
         '<button class="btn btn-terra btn-lg" data-jump="login"><svg class="i"><use href="#i-shield"/></svg> ' + esc(h.cta1) + '</button>' +
         '<button class="btn btn-ghost btn-lg" data-act="lp:flow"><svg class="i"><use href="#i-book"/></svg> ' + esc(h.cta2) + '</button>' +
       '</div>' +
-      '<div class="lp-hero-tag"><svg class="i"><use href="#i-google"/></svg> เข้าระบบด้วยบัญชีมหาวิทยาลัย @' + esc(s.allowDomain) + '</div>';
+      '<div class="lp-hero-tag"><svg class="i"><use href="#i-google"/></svg> เข้าระบบด้วยบัญชีมหาวิทยาลัย @' + esc(s.allowDomain) + '</div>' +
+      /* แนะนำตัวมาสคอตตั้งแต่หน้าแรก — คนที่เข้าระบบไปแล้วจะเจอน้อง TIMS อีกหลายจุด
+         ถ้าไม่เคยเห็นมาก่อนจะกลายเป็นตัวการ์ตูนที่โผล่มาเฉย ๆ โดยไม่รู้ว่าคืออะไร */
+      '<div class="lp-greet">' +
+        '<div class="nt-slot" data-nt="hello" data-nt-size="sm" ' +
+          'data-nt-label="น้อง TIMS มาสคอตของระบบ กำลังทักทาย"></div>' +
+        '<p>สวัสดี! ผมชื่อ <b>น้อง TIMS</b> เป็นผู้ช่วยประจำระบบ — ' +
+        'เข้าสู่ระบบแล้วผมจะคอยบอกว่าตอนนี้ท่านอยู่ขั้นไหน และควรทำอะไรต่อ</p>' +
+      '</div>';
   }
   function landingVideo() {
     var v = DB.settings.video;
@@ -7948,6 +8039,7 @@ body.notes .note{display:block;}
       esc(c.code + ' · ' + c.name) + ' · ' + esc(schoolNameOf(it)),
       n.rejected ? '<button class="btn btn-bad btn-sm" data-page="stu:logs">' + ic('x') + ' มีงานถูกตีกลับ ' + n.rejected + ' รายการ</button>' : '') +
       courseFinishedNote(c, 'stu') +
+      ntHome('stu') +
       /* 🔔 17 ก.ย. 69 (เจ้าของงานสั่ง) · "ท่านอยู่ขั้นตอนไหนในตอนนี้" — เด้งให้เห็นตั้งแต่หน้าแรก
          ใช้ currentStep() ตัวเดียวกับป้าย "คุณอยู่ที่นี่" ในผัง เลขสองที่จึงตรงกันเสมอ */
       nowStepBar(it, c) +
@@ -9418,6 +9510,7 @@ body.notes .note{display:block;}
       me.active ? '' : '<span class="badge bad">โหมดอ่านอย่างเดียว</span>') +
       (me.active ? '' : '<div class="tip bg-bad-soft t-bad-ink mb-16">' + ic('shield') +
         '<div><b>บัญชีนี้ถูกยุติหน้าที่</b><br>ยังเข้าดูข้อมูลย้อนหลังได้ แต่แก้ไขหรืออนุมัติอะไรไม่ได้</div></div>') +
+      ntHome('sup') +
       '<div class="stats">' +
         stat('cap', 'var(--terra)', mine.length, 'นักศึกษาในความดูแล', 'sup:students') +
         stat('clock', 'var(--warn)', pend.length, 'งานรอตรวจ', 'sup:tasks') +
@@ -11406,6 +11499,7 @@ body.notes .note{display:block;}
     var noSup = its.filter(function (it) { return !it.supervisorId; }).length;
     var notUpdated = ss.filter(function (s) { return !s.updated; }).length;
     return head('ภาพรวมสาขา' + esc(majorName(c.major)), 'กรรมการสาขา · ภาคเรียนที่ ' + DB.meta.semester + '/' + DB.meta.year) +
+      ntHome('com') +
       '<div class="stats">' +
         stat('cap', 'var(--amber)', ss.length, 'นักศึกษาในสาขา', 'com:students') +
         stat('check', 'var(--ok)', ss.length - notUpdated, 'อัปเดตข้อมูลแล้ว', 'com:students') +
@@ -14089,6 +14183,7 @@ body.notes .note{display:block;}
     return head('สวัสดี ' + esc(meA.nickname || meA.fullName || 'ผู้ดูแลระบบ'),
       'ยินดีต้อนรับสู่หลังบ้าน · ภาคเรียนที่ ' + c0.semester + '/' + c0.year +
       (c0.prefix ? ' · รหัส ' + c0.prefix : '') + ' · ' + esc(DB.settings.siteName)) +
+      ntHome('adm') +
       '<div class="stats">' +
         stat('cap', 'var(--plum)', ctxIts.length, 'นักศึกษาที่ออกฝึก', 'adm:accounts') +
         stat('users', 'var(--terra)', DB.supervisors.filter(function (v) { return v.active; }).length, 'อาจารย์นิเทศก์ที่ปฏิบัติหน้าที่', 'adm:accounts') +
