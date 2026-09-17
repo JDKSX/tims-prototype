@@ -1166,9 +1166,18 @@ a.stat[data-page]:hover{transform:translateY(-3px);box-shadow:var(--sh-2);border
 .tbl td{padding:13px 18px;font-size:var(--fs-2);border:1px solid var(--line-2);
   word-break:break-word;overflow-wrap:anywhere;vertical-align:top;}
 .tbl tbody tr:hover{background:var(--surface-2);}
-.act{width:34px;height:34px;border-radius:9px;border:1.5px solid var(--line);background:var(--surface);color:var(--ink-3);
-  display:inline-flex;align-items:center;justify-content:center;transition:.15s;margin-right:4px;}
+/* UI-09 (ลำดับ 22 · 18 ก.ย. 69): เดิม 34×34 ต่ำกว่าเกณฑ์เป้ากด 40px และปุ่มลบอยู่ติดปุ่มแก้ไข
+   ⇒ ขยายเป็น 40×40 และเพิ่มระยะห่างระหว่างปุ่มเป็น 6px
+   🔴 กรอบที่มองเห็นยังเท่าเดิม (34px) ด้วย background-clip:content-box + padding 3px
+      ⇒ ตารางไม่บวมขึ้นทั้งระบบ แต่พื้นที่กดจริงได้ 40px ตามเกณฑ์ */
+.act{width:40px;height:40px;padding:3px;border-radius:12px;border:1.5px solid var(--line);
+  background:var(--surface);background-clip:content-box;color:var(--ink-3);
+  display:inline-flex;align-items:center;justify-content:center;transition:.15s;margin-right:6px;}
 .act:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft);}
+/* MS-08 (ลำดับ 22): ช่องติ๊กเลือกงานเพื่อให้ผ่านยกชุด — เป้ากด 40px ตามเกณฑ์เดียวกับ .act */
+.rev-pick{width:40px;height:40px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;}
+.rev-pick input{width:18px;height:18px;cursor:pointer;accent-color:var(--ok);}
+.rev-pick input:disabled{cursor:not-allowed;opacity:.45;}
 /* CR-15: ชื่อคนที่กดดูโปรไฟล์ได้ — ปุ่มที่หน้าตาเหมือนลิงก์ (ไม่ใช้ inline JS · CSP-safe) */
 .linkname{background:none;border:none;font:inherit;color:var(--accent-dark);cursor:pointer;
   text-align:left;text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--accent) 40%,transparent);
@@ -2923,13 +2932,19 @@ body.notes .note{display:block;}
     <nav class="rail-nav">
       <div class="rail-sec">ภาพรวม</div>
       <a class="nav-i" data-page="sup:home"><svg class="i"><use href="#i-gauge"/></svg> หน้าหลัก</a>
-      <div class="rail-sec">งานนิเทศ</div>
-      <a class="nav-i" data-page="sup:courses"><svg class="i"><use href="#i-book"/></svg> รายวิชาที่นิเทศ <span class="tag" data-count="sup:courses"></span></a>
-      <div class="rail-sec">ดูภาพรวม (ข้ามรายวิชา)</div>
+      <!-- 🔴 DP-04 (ลำดับ 22 · 18 ก.ย. 69): ผลตรวจพบว่า "งานหลักประจำวันอยู่ใต้หัวข้อ ดูภาพรวม"
+           ⇒ คิวตรวจงานกับตารางนิเทศ ซึ่งเป็นสองอย่างที่อาจารย์นิเทศก์เปิดทุกวัน
+           ถูกฝังรวมกับหน้าดูข้อมูลทั่วไป · ยกขึ้นมาเป็นหมวดของตัวเองใต้หน้าหลัก
+           ⚠️ ยังเป็น "หน้าดู" ตามกฎ ก เหมือนเดิมทุกประการ — เปลี่ยนแค่การจัดหมวด
+              ปุ่มในแถวยังพาเข้าเส้นทางรายวิชาก่อนเสมอ (task:goTask / task:goCourse) -->
+      <div class="rail-sec">งานประจำวัน (เริ่มที่นี่)</div>
       <a class="nav-i" data-page="sup:tasks"><svg class="i"><use href="#i-check"/></svg> ตรวจงานที่ส่ง <span class="tag" data-count="sup:tasks"></span></a>
+      <a class="nav-i" data-page="sup:visits"><svg class="i"><use href="#i-cal"/></svg> ตารางนิเทศของฉัน <span class="tag" data-count="sup:visits"></span></a>
+      <div class="rail-sec">งานรายวิชา</div>
+      <a class="nav-i" data-page="sup:courses"><svg class="i"><use href="#i-book"/></svg> รายวิชาที่นิเทศ <span class="tag" data-count="sup:courses"></span></a>
+      <div class="rail-sec">ดูข้อมูล (ดูอย่างเดียว)</div>
       <a class="nav-i" data-page="sup:students"><svg class="i"><use href="#i-cap"/></svg> นักศึกษาในความดูแล <span class="tag" data-count="sup:students"></span></a>
       <a class="nav-i" data-page="sup:schools"><svg class="i"><use href="#i-pin"/></svg> โรงเรียนของนักศึกษา</a>
-      <a class="nav-i" data-page="sup:visits"><svg class="i"><use href="#i-cal"/></svg> ตารางนิเทศของฉัน <span class="tag" data-count="sup:visits"></span></a>
       <a class="nav-i" data-page="sup:cal"><svg class="i"><use href="#i-cal"/></svg> ปฏิทินการฝึก</a>
       <div class="rail-sec">บัญชี</div>
       <a class="nav-i" data-page="sup:notis"><svg class="i"><use href="#i-bell"/></svg> การแจ้งเตือน <span class="tag" data-count="sup:notis"></span></a>
@@ -4848,6 +4863,29 @@ body.notes .note{display:block;}
     var d = new Date(iso + 'T00:00:00'), now = new Date(TODAY + 'T00:00:00');
     return Math.round((now - d) / 86400000);
   }
+  /* ═══ ลำดับ 22 · MS-07 · ADD-12 — "ส่งช้า" ต้องติดอยู่กับงานตลอดไป (18 ก.ย. 69) ═══
+     🔴 ของเดิมคิดว่า "เลยกำหนด" ก็ต่อเมื่อ **ยังไม่ส่ง** (`t.due && !s && daysAgo(t.due) > 0`)
+        ⇒ ป้ายหายทันทีที่กดส่ง · ผลตรวจพบเคสส่งช้า 18 วันแต่หน้าจอขึ้น "อนุมัติแล้ว" เฉย ๆ
+        ⇒ ไม่มีใครรู้เลยว่าใครส่งตรงเวลาบ้าง ทั้งที่เป็นข้อมูลที่ใช้ตัดสินคะแนนจริง
+     ⇒ แยกเป็นสองสถานะที่ต่างกันจริง: **เลยกำหนด** (ยังไม่ส่ง · เร่งได้) กับ
+        **ส่งช้า N วัน** (ส่งแล้วแต่สาย · เป็นข้อเท็จจริงถาวร ห้ามหาย) */
+  function lateInfo(t, sub) {
+    if (!t || !t.due) return null;
+    if (!sub || !sub.at) {
+      var od = daysAgo(t.due);
+      return od > 0 ? { kind: 'overdue', n: od } : null;
+    }
+    var n = Math.round((new Date(sub.at + 'T00:00:00') - new Date(t.due + 'T00:00:00')) / 86400000);
+    return n > 0 ? { kind: 'late', n: n } : null;
+  }
+  /** ป้ายสำหรับติดข้างชื่องาน — ใช้ร่วมทุกหน้าที่แสดงงาน (นักศึกษา · อาจารย์ · รายงาน) */
+  function lateBadge(t, sub) {
+    var L = lateInfo(t, sub);
+    if (!L) return '';
+    return L.kind === 'overdue'
+      ? '<span class="badge bad">เลยกำหนด ' + L.n + ' วัน</span>'
+      : '<span class="badge warn" title="ส่งหลังกำหนดส่ง">ส่งช้า ' + L.n + ' วัน</span>';
+  }
   /** ข้อความบอกว่า "รอมานานแค่ไหน" — ที่เดียวสำหรับทุกหน้าที่แสดงเวลารอ */
   function agoText(iso) {
     if (!iso) return '—';
@@ -5133,6 +5171,13 @@ body.notes .note{display:block;}
     }, life);
   }
   var modalEl = null, pendingConfirm = null, acardEl = null;
+  /* 🔴 ลำดับ 17 (18 ก.ย. 69): กล่องยืนยันบางกล่องต้อง "ทำอะไรบางอย่างตอนผู้ใช้ไม่เอา" ด้วย
+     เคสแรกคือด่านย้อนกลับของเบราว์เซอร์ — ถ้าผู้ใช้ตอบว่าไม่ออก ต้องดันที่อยู่เดิมกลับไป
+     ไม่งั้นแถบที่อยู่จะชี้หน้าหนึ่ง แต่จอแสดงอีกหน้าหนึ่ง (ที่อยู่โกหก อันตรายกว่าไม่มีที่อยู่)
+     ⚠️ ยิงจาก "ทางที่ผู้ใช้ปิดกล่องเอง" เท่านั้น (ปุ่มยกเลิก · กากบาท · กดพื้นหลัง)
+        ห้ามยิงจาก closeModal() ตรง ๆ เพราะ modal() เรียก closeModal() ทุกครั้งที่เปิดกล่องใหม่
+        ⇒ เปิดกล่องซ้อนจะกลายเป็น "ยกเลิก" ทั้งที่ผู้ใช้ยังไม่ได้ตอบอะไร (ผู้เรียก closeModal มี 78 จุด) */
+  var pendingCancel = null;
   var modalReturnFocus = null, modalTitleSeq = 0;
   /* B-2 (12 ก.ย. 69): role="dialog" + aria-modal + aria-labelledby ให้โปรแกรมอ่านหน้าจอรู้ว่านี่คือ
      กล่องโต้ตอบที่ต้องจัดการก่อนถึงจะกลับไปหน้าหลังได้ + ประกาศหัวเรื่องกล่องให้ทันทีที่เปิด
@@ -5141,6 +5186,7 @@ body.notes .note{display:block;}
      ปิดแล้วคืนโฟกัสให้ปุ่มที่เปิดกล่องมา (ไม่งั้นโฟกัสหายไปที่ <body> ต้อง Tab นับหนึ่งใหม่ทั้งหน้า) */
   function modal(o) {
     closeModal();
+    pendingCancel = null;   /* กล่องใหม่ = คำถามใหม่ ตัวจัดการ "ไม่เอา" ของกล่องเก่าต้องไม่ค้าง */
     modalReturnFocus = document.activeElement;
     var titleId = 'modal-title-' + (++modalTitleSeq);
     modalEl = document.createElement('div');
@@ -5154,7 +5200,7 @@ body.notes .note{display:block;}
     document.body.appendChild(modalEl);
     /* 🔴 EC-04 · กล่อง "ต้องเข้าสู่ระบบอีกครั้ง" ต้องปิดด้วยการกดพื้นหลังไม่ได้
        ไม่งั้นผู้ใช้กดพลาดแล้วกล่องหาย จะไม่รู้เลยว่าทำไมกดบันทึกไม่ผ่านสักที */
-    if (!o.sticky) modalEl.addEventListener('click', function (e) { if (e.target === modalEl) closeModal(); });
+    if (!o.sticky) modalEl.addEventListener('click', function (e) { if (e.target === modalEl) dismissModal(); });
     modalEl.addEventListener('keydown', function (e) {
       if (e.key !== 'Tab') return;
       var items = [].slice.call(modalEl.querySelectorAll(
@@ -5175,6 +5221,12 @@ body.notes .note{display:block;}
     /* เนื้อกล่องอาจมีฟอร์ม (.field) เอง — ไม่ได้ผ่าน renderRole()/renderAll() เสมอไปตอนกล่องเปิด */
     applyFieldLabels(modalEl);
     applyIconButtonLabels(modalEl);
+  }
+  /** ผู้ใช้ปิดกล่องเอง = ตอบว่า "ไม่เอา" — ต่างจาก closeModal() ที่เป็นแค่การเก็บกล่องออกจากจอ */
+  function dismissModal() {
+    var f = pendingCancel; pendingCancel = null;
+    closeModal();
+    if (f) f();
   }
   function closeModal() {
     if (modalEl) { modalEl.remove(); modalEl = null; }
@@ -5220,13 +5272,14 @@ body.notes .note{display:block;}
       e.preventDefault(); filterTable(e.target.getAttribute('data-tsearch'));
     }
   });
-  function confirmBox(o, yes) {
+  function confirmBox(o, yes, no) {
     modal({ title: o.title, icon: o.icon || 'shield',
       body: (o.nt ? ntSlot(o.nt, o.ntLabel || 'น้อง TIMS ขอให้อ่านให้ดีก่อนกดยืนยัน', 'sm') : '') +
         '<p class="m-0 lh-170">' + o.body + '</p>',
       foot: '<button class="btn btn-ghost" data-act="modal:close">ยกเลิก</button>' +
             '<button class="btn ' + (o.danger ? 'btn-bad' : 'btn-pri') + '" data-act="confirm:yes">' + esc(o.yes || 'ยืนยัน') + '</button>' });
     pendingConfirm = yes;
+    pendingCancel = no || null;
   }
   /* ═══════════════════════════════════════════════════════════════════════════
      EC-04 · กล่องเรื่องเซสชัน — ออกแบบไว้ใน docs/EC04_FAILURE_UX.md หัวข้อ 7
@@ -5272,6 +5325,16 @@ body.notes .note{display:block;}
       foot: false });
   }
   /** เมนูจำลองความล้มเหลว (เฉพาะโปรโตไทป์) — ให้เคาะถ้อยคำและหน้าตาได้โดยไม่ต้องรอเซิร์ฟเวอร์ */
+  /* ═══ ลำดับ 20 · MS-03 · ADD-09 — สถานะกำลังโหลดของตารางใหญ่ (18 ก.ย. 69) ═══
+     🔴 `skeleton()` เขียนไว้ตั้งแต่ B-3 แต่**ไม่มีจุดเรียกใช้เลยสักจุด** — ผลตรวจจับได้
+        ⇒ เท่ากับโค้ดที่ดูเหมือนมีของแต่ไม่เคยทำงาน · แผนกำหนดว่าลำดับนี้คือ "ล็อกดีไซน์ไว้ให้ Phase 2"
+     🔴 ในโปรโตไทป์ไม่มีการรอจริง (อ่าน localStorage ทันที) ⇒ ถ้าใส่ดีเลย์ปลอมทุกครั้งที่เปิดหน้า
+        จะได้ต้นแบบที่ช้ากว่าของจริงโดยไม่มีเหตุผล และทำให้ชุดเทสต์ที่กดแล้วอ่านทันทีพังยกชุด
+        ⇒ ทำเป็น **สวิตช์ในเครื่องมือจำลอง** ที่เดียวกับความล้มเหลวอื่น (เป็นเรื่องฝั่งเซิร์ฟเวอร์เหมือนกัน)
+        เปิดแล้วตารางใหญ่ทุกหน้าขึ้นโครงเทาให้ดูดีไซน์ได้จริง · ปิดแล้วกลับเป็นปกติ
+     🔴 ต่อสายที่ `table()` จุดเดียว ไม่ไล่แก้ทีละหน้า ⇒ ตารางใหญ่ที่เขียนใหม่ในอนาคตได้ตามไปเอง */
+  var loadSim = false;
+
   function failSimBox() {
     modal({ title: 'จำลองความล้มเหลว (เฉพาะโปรโตไทป์)', icon: 'bell',
       body: '<p class="mt-0 mx-0 mb-14 lh-170">ทั้งหมดนี้เป็นเรื่องฝั่งเซิร์ฟเวอร์และเครือข่าย ' +
@@ -5282,6 +5345,8 @@ body.notes .note{display:block;}
         '<button class="btn btn-ghost" data-act="fail:net">' + (netOff ? 'กลับมาออนไลน์' : 'ติดต่อเซิร์ฟเวอร์ไม่ได้ (เน็ตหลุด)') + '</button>' +
         '<button class="btn btn-ghost" data-act="fail:warn">ใกล้ถึงเวลาออกจากระบบ (T−5 นาที)</button>' +
         '<button class="btn btn-ghost" data-act="fail:expire">เซสชันหมดอายุแล้ว</button>' +
+        '<button class="btn btn-ghost" data-act="load:sim">' +
+          (loadSim ? 'กำลังโหลดข้อมูล — เปิดอยู่ (กดเพื่อปิด)' : 'กำลังโหลดข้อมูล (ตารางใหญ่)') + '</button>' +
         '</div>', foot: false });
   }
 
@@ -5474,6 +5539,9 @@ body.notes .note{display:block;}
   }
 
   function table(cols, rows, widths, opts) {
+    /* ลำดับ 20 — ระหว่างรอข้อมูลจากเซิร์ฟเวอร์ (Phase 2) ตารางใหญ่ต้องขึ้นโครงเทา ไม่ใช่จอว่าง
+       เฉพาะตารางที่ "ใหญ่พอจะต้องรอ" — ตาราง 2–3 แถวขึ้นโครงเทาแล้วดูเหมือนหน้าพังมากกว่า */
+    if (loadSim && rows.length >= 5) return skeleton('table', rows.length);
     if (!rows.length) return empty('ไม่มีข้อมูล', 'ยังไม่มีรายการในส่วนนี้', emptyEnd('ตารางจะแสดงเองเมื่อมีข้อมูลในบริบทนี้ — ทางไปต่ออยู่ที่หน้าซึ่งเรียกใช้ตารางนี้'));
     opts = opts || {};
     var id = tblId(cols), st = tblState(id);
@@ -5955,11 +6023,16 @@ body.notes .note{display:block;}
   /* โครงเทาจำลองเนื้อหาระหว่างรอ — ให้ผู้ใช้เห็นว่า "กำลังจะมีอะไรมา" (รู้รูปทรงคร่าว ๆ ล่วงหน้า)
      ดีกว่าจอว่างเปล่าหรือตัวหมุนกลางจอที่ไม่บอกอะไรเรื่องเนื้อหา · สัดส่วนคุมด้วย flex/grid ของ
      คอนเทนเนอร์เอง ไม่ใช้คลาสความกว้างเฉพาะจุด (ตามแนวทาง B-1 — ไม่สร้างคลาสใหม่เกินจำเป็น) */
-  function skeleton(kind) {
+  function skeleton(kind, n) {
     var bar = '<span class="skel-bar"></span>';
     if (kind === 'table') {
+      /* 🔴 จำนวนแถวของโครงเทาต้องเท่าของจริง — เกณฑ์รับงานของลำดับ 20 คือ
+         "เปลี่ยนเป็นเนื้อหาจริงโดยเลย์เอาต์ไม่กระตุก" ⇒ ถ้าตรึงไว้ 5 แถวเสมอ
+         ตารางที่มี 60 แถวจะกระโดดยาวลงมาทันทีที่ข้อมูลมาถึง ซึ่งคือสิ่งที่โครงเทามีไว้กัน
+         คุมเพดานไว้ 12 แถวเพราะเกินกว่านั้นผู้ใช้ก็เลื่อนไม่ทันอยู่ดี */
+      var nr = Math.max(3, Math.min(12, n || 5));
       return '<div class="card card-pad skel-wrap">' +
-        Array(5).fill('<div class="skel-row">' + bar + bar + bar + bar + '</div>').join('') +
+        Array(nr).fill('<div class="skel-row">' + bar + bar + bar + bar + '</div>').join('') +
         '</div>';
     }
     if (kind === 'form') {
@@ -6930,6 +7003,125 @@ body.notes .note{display:block;}
     renderAll();
     window.scrollTo(0, 0);
   }
+  /* ═══════════════════════════════════════════════════════════════════════════
+     ทุกหน้ามีที่อยู่ของตัวเอง (WF-04 · ADD-18 · ระยะที่ 3 ลำดับ 17 · 18 ก.ย. 69)
+     ═══════════════════════════════════════════════════════════════════════════
+     🔴 ปัญหาเดิม: ทั้งระบบมี URL เดียว ⇒ ปุ่มย้อนกลับของเบราว์เซอร์พาออกจากระบบไปเลย ·
+        กดรีเฟรชแล้วเด้งกลับหน้าสาธารณะ เสียหน้าที่กำลังทำงานอยู่ ·
+        และอีเมลแจ้งเตือนของระบบจริง (Phase 2) ลิงก์ถึงหน้าเจาะจงไม่ได้เลยสักหน้า
+        ⇒ ผลตรวจจัดเป็น "ของที่ย้อนมาแก้ทีหลังแพงที่สุด ห้ามเลื่อน"
+
+     🔴 ผูกที่ "จุดเดียว" เหมือนกฎ ก — เขียนที่อยู่ตอนเรนเดอร์ ไม่ใช่ให้ทุกตัวจัดการมาประกาศเอง
+        (ตัวจัดการที่เปลี่ยนหน้ามี 20+ ตัว และเขียนใหม่เรื่อย ๆ — ถ้าให้แต่ละตัวจำไว้เอง
+         จะมีคนลืมแน่นอน ซึ่งเป็นสาเหตุเดียวกับที่กติกา CR-32 หลุดมาตลอด)
+        syncHash() เทียบกับที่อยู่ล่าสุดก่อนเสมอ ⇒ เรนเดอร์ซ้ำ ๆ ตอนบันทึกจะไม่ถมประวัติ
+        และ "หนึ่งการนำทาง = หนึ่งรายการในประวัติ" โดยอัตโนมัติ
+
+     ⚠️ ใช้ pushState เป็นหลัก (ไม่ยิง hashchange) · บางเบราว์เซอร์ห้าม pushState บน file://
+        ⇒ ถอยไปเขียน location.hash ตรง ๆ ซึ่งยิง hashchange กลับมาเป็นเสียงสะท้อน
+        🔴 กันเสียงสะท้อนด้วยการ "เทียบกับที่อยู่ล่าสุดที่เราเขียนเอง" ไม่ใช่ตัวนับครั้ง
+           ตัวนับพังเมื่อเหตุการณ์ยังไม่ถูกส่งแล้วมีการเขียนที่อยู่ซ้อนเข้ามาอีก —
+           ตัวนับที่ค้างอยู่จะไปกลืนเหตุการณ์จริงของครั้งถัดไปแทน (เจอจากเทสต์ด่านย้อนกลับ)  */
+  var HASH_NS = { student: 'stu', supervisor: 'sup', committee: 'com', admin: 'adm' };
+  var HASH_SCREENS = ['home', 'login', 'firstlogin', 'activate', 'testaccts', 'print',
+                      '403', 'maintenance', 'student', 'supervisor', 'committee', 'admin'];
+  var hashLock = true;   /* ตอนบูตยังไม่ตีความ view เป็นที่อยู่ — รอ bootHash() ตัดสินก่อน */
+  var hashNow = '';      /* ที่อยู่ล่าสุดที่ระบบเขียนไว้ */
+
+  /** ที่อยู่ของสภาพหน้าจอตอนนี้
+      ⚠️ ห้ามตั้งชื่อ hashOf — ชนกับฟังก์ชันแฮชสตริง hashOf(str) ที่อยู่ท้ายไฟล์
+         ซึ่งจะกินตัวนี้ทั้งไฟล์ด้วยการ hoist (ตัวตรวจข้อ 18 จับได้ตอนเขียนบรรทัดนี้เอง) */
+  function pageHash() {
+    var sc = view.screen || 'home';
+    var ns = HASH_NS[sc];
+    if (ns) {
+      var co = view.pick['course:' + ns];
+      return '#/' + sc + '/' + (view.page[ns] || (ns + ':home')) + (co ? '/c' + co : '');
+    }
+    if (sc === 'home') {
+      if (!view.lp) return '#/home';
+      return '#/home/' + view.lp + (view.lp === 'news' && view.lpItem ? '/' + view.lpItem : '');
+    }
+    return '#/' + sc;
+  }
+
+  /** เขียนที่อยู่ให้ตรงกับหน้าที่เห็นอยู่ — เรียกทุกรอบเรนเดอร์ แต่เขียนจริงเฉพาะตอนเปลี่ยนหน้า */
+  function syncHash() {
+    var h = pageHash();
+    if (h === hashNow) return;
+    var first = !hashNow;
+    hashNow = h;
+    if (hashLock) return;
+    try {
+      history[first ? 'replaceState' : 'pushState'](null, '', h);
+    } catch (e) { /* บางเบราว์เซอร์ห้าม pushState บน file:// — ตกไปใช้ทางสำรองด้านล่าง */ }
+    /* 🔴 เบราว์เซอร์จำกัดจำนวนครั้งที่เขียนประวัติได้ต่อช่วงเวลา (Chrome ~100 ครั้ง/10 วินาที)
+       เกินแล้ว **pushState ไม่โยน error แต่ไม่มีผลอะไรเลย** — ที่อยู่ค้างอยู่ที่เดิมเงียบ ๆ
+       ⇒ ต้องตรวจว่าเขียนติดจริงไหม แล้วถอยไปใช้ location.hash ซึ่งเป็นการนำทางคนละชนิด
+       (เจอจากตัวตรวจที่กวาดทุกหน้าทุกบทบาทรวดเดียวราว 170 ครั้ง แล้วที่อยู่หยุดอัปเดต
+        ผู้ใช้จริงกดไม่ถี่ขนาดนั้น แต่ถ้าไม่มีด่านนี้ อาการจะโผล่แบบหาสาเหตุไม่เจอ)
+       เสียงสะท้อนถูกกันด้วย hashNow ที่ตั้งไว้ข้างบนแล้ว */
+    if (location.hash !== h) location.hash = h;
+  }
+
+  /** ตีความที่อยู่ในแถบที่อยู่ แล้วพาไปหน้านั้นจริง */
+  function applyHash() {
+    var seg = String(location.hash || '').replace(/^#\/?/, '').split('/').filter(Boolean);
+    var sc = seg[0] || 'home';
+    /* ที่อยู่แปลกปลอม (พิมพ์เอง/ลิงก์เก่า) — อยู่หน้าเดิมแล้วเขียนที่อยู่ที่ถูกทับ
+       ห้ามเด้งกลับหน้าแรกเงียบ ๆ ซึ่งเป็นพฤติกรรมที่ WF-03 เพิ่งแก้ไปแล้ว */
+    if (HASH_SCREENS.indexOf(sc) < 0) { hashNow = ''; syncHash(); return false; }
+    hashLock = true;
+    var ns = HASH_NS[sc];
+    if (ns) {
+      var key = seg[1] || (ns + ':home');
+      if (PAGE_KEYS[ns] && !PAGE_KEYS[ns][key]) key = ns + ':home';
+      view.page[ns] = key;
+      var m = /^c([0-9]+)$/.exec(seg[2] || '');
+      if (m && byId(DB.courses, Number(m[1]))) view.pick['course:' + ns] = Number(m[1]);
+    }
+    goScreen(sc);
+    /* 🔴 ต้องตั้งหน้าย่อยสาธารณะ "หลัง" goScreen เสมอ — goScreen ล้าง view.lp ทิ้งทุกครั้ง
+       โดยตั้งใจ (กลับหน้าแรกต้องเห็นหน้าแรกจริง) ถ้าตั้งก่อนจะโดนล้างแล้วลิงก์ข่าวพัง */
+    if (sc === 'home' && seg[1]) {
+      view.lp = seg[1];
+      view.lpItem = seg[2] ? Number(seg[2]) : null;
+      renderHome();
+    }
+    hashLock = false;
+    hashNow = pageHash();
+    return true;
+  }
+
+  /** ผู้ใช้กดย้อนกลับ/ไปข้างหน้าของเบราว์เซอร์
+      🔴 ต้องผ่านด่านเดียวกับการนำทางในระบบ — ไม่งั้นกดย้อนกลับทิ้งงานที่ยังไม่บันทึกได้เงียบ ๆ
+         ซึ่งแย่กว่าเดิม เพราะตอนนี้ปุ่มย้อนกลับ "ใช้ได้จริง" คนจึงกดบ่อยขึ้นมาก */
+  function onHistoryNav() {
+    /* ที่อยู่ไม่ได้เปลี่ยนจริง (เสียงสะท้อนจากที่เราเพิ่งเขียนเอง) — ไม่ต้องทำอะไร
+       ถ้าไม่กันตรงนี้ ด่าน "ยังไม่บันทึก" จะเด้งถามซ้ำโดยที่ผู้ใช้ไม่ได้กดย้อนกลับเลย */
+    if (String(location.hash || '') === hashNow) return;
+    if (!pendAny()) { applyHash(); return; }
+    var back = hashNow;
+    confirmBox({ title: 'ยังมีการแก้ไขที่ยังไม่บันทึก', danger: true, yes: 'ออกโดยไม่บันทึก', icon: 'bell',
+      body: 'ถ้าย้อนกลับตอนนี้ การแก้ไขที่ยังไม่ได้กดบันทึกจะหายทั้งหมด' }, function () {
+      if (pendCount('profile')) DB = load();
+      pend = {}; closeModal(); applyHash();
+    }, function () {
+      /* ไม่ออก — ดันที่อยู่เดิมกลับไปให้ตรงกับหน้าที่ยังเห็นอยู่
+         (hashNow ยังเป็น back อยู่ ⇒ เสียงสะท้อนที่ตามมาจะถูกกันเองที่ต้นฟังก์ชันนี้) */
+      if (location.hash !== back) location.hash = back;
+    });
+  }
+  window.addEventListener('hashchange', onHistoryNav);
+
+  /** ตอนเปิดหน้า: มีที่อยู่มาด้วยก็ไปหน้านั้น ไม่มีก็เขียนที่อยู่ของหน้าที่เห็นอยู่ */
+  function bootHash() {
+    hashLock = false;
+    if (String(location.hash || '').length > 2) { if (applyHash()) return; }
+    hashNow = '';
+    syncHash();
+  }
+
   function tabOf(key, def) { return view.tab[key] || def; }
   /**
    * เลื่อนหน้าไปยังหัวข้อในหน้าแก้ไขโปรไฟล์
@@ -8069,6 +8261,7 @@ body.notes .note{display:block;}
     '</div>';
   }
   function renderHome() {
+    syncHash();   /* จุดเดียวที่เขียนที่อยู่ — renderAll() ก็ผ่านตรงนี้ (ดูโมดูลที่อยู่ของหน้า) */
     renderLpSub();
     fill('home:head', landingHead());
     fill('home:hero', landingHero());
@@ -8389,7 +8582,7 @@ body.notes .note{display:block;}
     }
     return '<div class="tk-list">' + ts.map(function (t) {
       var s = subAt(it.id, t.id), st = s ? s.status : 'empty';
-      var late = t.due && !s && daysAgo(t.due) > 0;
+      var lateL = lateInfo(t, s);
       return '<button class="tkrow' + (st !== 'empty' ? ' ' + st : '') +
         (view.task === t.id ? ' on' : '') + '"' +
         /* task:pick = นักศึกษาเลือกงานที่จะส่ง · task:open = อาจารย์เปิดดูงานที่ส่งมาแล้ว
@@ -8410,7 +8603,9 @@ body.notes .note{display:block;}
             esc(t.title) + '</span>' +
           '<span class="tkrow-meta">' +
             (t.due ? ic('cal') + ' กำหนดส่ง ' + thDate(t.due) +
-              (late ? ' <b class="t-bad">· เลยกำหนดแล้ว</b>' : '') : 'ไม่ระบุกำหนดส่ง') +
+              (!lateL ? ''
+                : lateL.kind === 'overdue' ? ' <b class="t-bad">· เลยกำหนดแล้ว ' + lateL.n + ' วัน</b>'
+                : ' <b class="t-warn-ink">· ส่งช้า ' + lateL.n + ' วัน</b>') : 'ไม่ระบุกำหนดส่ง') +
           '</span>' +
         '</span>' +
         '<span class="tkrow-st">' + statusChip(st, { text: st === 'empty' ? 'ยังไม่ส่ง' : ST[st].l }) + '</span>' +
@@ -9972,6 +10167,30 @@ body.notes .note{display:block;}
         '</div>' +
       '</div>';
   }
+  /* ═══ ลำดับ 22 · MS-08 — ตัวช่วยกลางของการ "ให้ผ่าน" (18 ก.ย. 69) ═══
+     ดึงออกมาให้การกดทีละชิ้นกับการให้ผ่านยกชุดใช้ตรรกะเดียวกัน —
+     ไม่ใช่ก๊อปโค้ดไปอีกชุด ซึ่งจะเพี้ยนกันเองภายหลัง (เช่นชุดหนึ่งลืมถอนการแจ้งเตือนตอนย้อน) */
+  function subApprove(l) {
+    var prevSt = l.status, prevNote = l.note;
+    l.status = 'approved'; l.note = '';
+    var stu = studentOf(l.internshipId);
+    var title = taskDef(l.taskId) ? taskDef(l.taskId).title : '';
+    audit('task', stuName(stu), 'ตรวจผ่าน · ' + title,
+      { from: prevSt === 'rejected' ? 'ตีกลับ' : 'รอตรวจ', to: 'ผ่าน' });
+    var noti = pushNoti('student', stu.id, 'งาน "' + title + '" ผ่านการตรวจแล้ว', supName(meSup()), 'stu:logs');
+    return { l: l, prevSt: prevSt, prevNote: prevNote, noti: noti, title: title, stu: stu };
+  }
+  function subApproveUndo(r) {
+    r.l.status = r.prevSt; r.l.note = r.prevNote;
+    var ix = DB.notis.indexOf(r.noti); if (ix >= 0) DB.notis.splice(ix, 1);
+    audit('task', stuName(r.stu), 'เลิกทำการตรวจ · ' + r.title,
+      { from: 'ผ่าน', to: r.prevSt === 'rejected' ? 'ตีกลับ' : 'รอตรวจ' });
+  }
+  /* 🔴 "เปิดดูแล้วหรือยัง" เก็บในหน่วยความจำของรอบการทำงานนี้เท่านั้น ไม่เก็บลงข้อมูล
+     เจตนาคือ "อ่านแล้วในรอบนี้" ไม่ใช่ "เคยอ่านเมื่อไหร่ก็ได้" — โหลดหน้าใหม่ต้องเปิดดูใหม่
+     (ถ้าเก็บถาวร ครั้งหน้าจะติ๊กผ่านรวดได้โดยไม่ต้องอ่านอะไรเลย ซึ่งคือสิ่งที่ด่านนี้กันอยู่) */
+  var reviewSeen = {}, revSel = {};
+
   function taskRow(l, compact) {
     var st = studentOf(l.internshipId), d = daysAgo(l.at), t = taskDef(l.taskId), co = courseOf(l.internshipId);
     var tone = d > 10 ? 'bad' : (d > 5 ? 'warn' : 'draft');
@@ -9982,6 +10201,12 @@ body.notes .note{display:block;}
       '<div class="mt-6"><span class="badge ' + tone + '">' + ic('clock') + ' ' + (d < 0 ? agoText(l.at) : 'รอมา ' + d + ' วัน') + '</span>' +
       (l.link ? ' <span class="badge">' + ic('clip') + ' ' + esc(l.link.kind) + '</span>' : ' <span class="badge bad">ไม่มีลิงก์</span>') + '</div></div>' +
       '<div class="acts">' +
+        /* MS-08 · ADD-11 — ติ๊กได้เฉพาะงานที่กด "ดู" เปิดอ่านแล้วในรอบนี้
+           ปิดไว้ก่อนพร้อมบอกเหตุผล ดีกว่าไม่แสดงช่องเลย เพราะผู้ใช้จะได้รู้ว่ามีวิธีนี้อยู่ */
+        (compact ? '<label class="rev-pick" title="' +
+            (reviewSeen[l.id] ? 'เลือกไว้เพื่อให้ผ่านพร้อมกัน' : 'กด "ดู" เพื่อเปิดงานชิ้นนี้ก่อนจึงจะเลือกได้') + '">' +
+            '<input type="checkbox" data-act="rev:pick" data-id="' + l.id + '"' +
+              (revSel[l.id] ? ' checked' : '') + (reviewSeen[l.id] ? '' : ' disabled') + '></label>' : '') +
         (compact ? '<button class="btn btn-sm btn-ghost" data-act="task:open" data-id="' + l.id + '">ดู</button>' : '') +
         '<button class="btn btn-sm btn-ok" data-act="task:approve" data-id="' + l.id + '">' + ic('check') + ' ผ่าน</button>' +
         '<button class="btn btn-sm btn-ghost t-bad" data-act="task:reject" data-id="' + l.id + '">' + ic('x') + ' ตีกลับ</button>' +
@@ -10036,7 +10261,10 @@ body.notes .note{display:block;}
                 var t = taskDef(l.taskId), stX = studentOf(l.internshipId);
                 return ['<b>' + personLink(stuName(stX), 'student', stX && stX.id) + '</b>',
                   esc(t ? t.title : '(ไม่พบงาน)'),
-                  l.at ? thDate(l.at) + ' <span class="muted">· ' + agoText(l.at) + '</span>' : '—',
+                  /* MS-07 · ADD-12 — ป้าย "ส่งช้า" ต้องเห็นตรงนี้ด้วย ไม่ใช่เฉพาะฝั่งนักศึกษา
+                     คนที่ต้องใช้ข้อเท็จจริงนี้ตัดสินคือคนตรวจงาน */
+                  (l.at ? thDate(l.at) + ' <span class="muted">· ' + agoText(l.at) + '</span>' : '—') +
+                    (t ? ' ' + lateBadge(t, l) : ''),
                   badge(l.status),
                   '<button class="btn btn-sm ' + (l.status === 'submitted' ? 'btn-pri' : 'btn-ghost') +
                     '" data-act="task:goTask" data-id="' + l.id + '">' +
@@ -12205,6 +12433,22 @@ body.notes .note{display:block;}
         { k: 'approved', l: 'ผ่านแล้ว', n: by('approved').length },
         { k: 'rejected', l: 'ตีกลับ', n: by('rejected').length }
       ], tab) +
+      /* MS-08 · ADD-11 — แถบ "ให้ผ่านที่เลือกไว้" โผล่เมื่อมีของที่เลือกจริงเท่านั้น
+         ⚠️ นับเฉพาะงานที่ยังรอตรวจและเปิดดูแล้ว — ถ้าเลือกไว้แล้วสถานะเปลี่ยนไปเอง
+            (เช่นถูกตรวจจากอีกหน้าหนึ่ง) ต้องไม่ค้างอยู่ในตัวนับ */
+      (function () {
+        var picked = Object.keys(revSel).map(Number).filter(function (id) {
+          var x = byId(DB.subs, id);
+          return x && x.status === 'submitted' && reviewSeen[id] && ids.indexOf(x.internshipId) >= 0;
+        });
+        return !picked.length ? '' :
+          '<div class="pend-bar">' + ic('check') +
+          '<span class="pend-tx">เลือกไว้ <b>' + picked.length + '</b> ชิ้น · ' +
+            '<span class="muted">ทุกชิ้นเปิดอ่านแล้วในรอบนี้</span></span>' +
+          '<button class="btn btn-ghost btn-sm" data-act="rev:clear">ล้างที่เลือก</button>' +
+          '<button class="btn btn-ok btn-sm" data-act="rev:approveSel">' + ic('check') +
+            ' ให้ผ่านที่เลือกไว้ (' + picked.length + ')</button></div>';
+      })() +
       (list.length
         ? '<div class="card">' + list.sort(function (a, b) { return daysAgo(b.at) - daysAgo(a.at); })
             .map(function (l) { return tab === 'submitted' ? taskRow(l, true) : doneRow(l); }).join('') + '</div>'
@@ -15027,36 +15271,121 @@ body.notes .note{display:block;}
           }).join(''));
   }
 
+  /* ═══ ลำดับ 19 · WF-08 · ADD-13 — รายงานสองชั้น (18 ก.ย. 69) ═══
+     🔴 ของเดิมเป็นตารางแบนรายคนล้วน ⇒ ฝ่ายฝึกที่ต้องตอบว่า "สาขาไหนช้าสุด"
+        ต้องกวาดตาทีละแถวจากนักศึกษาเกือบ 2,000 คน ซึ่งตอบไม่ได้จริงในภาคเรียนที่หนักที่สุด
+     ⇒ ชั้นที่ 1 สรุปรายสาขา (เรียงช้าสุดขึ้นก่อน) → กดแล้วเจาะลงรายชื่อ "ที่กรองไว้ให้แล้ว"
+     ⚠️ คนละเรื่องกับ adm:progress ซึ่งสรุป "ความพร้อมก่อนออกฝึก" (จัดสรรอาจารย์ · ระบุโรงเรียน)
+        ของรายวิชาเดียว — หน้านี้สรุป "ความสำเร็จระหว่างฝึก" ข้ามทุกรายวิชาในบริบท */
+  function reportNums(it) {
+    var c = courseOf(it.id);
+    var ts = c ? tasksOf(c.id) : [];
+    /* ⚠️ ความคืบหน้าหารด้วย "จำนวนงานของรายวิชา" ไม่ใช่จำนวนสัปดาห์
+       ระยะเวลาออกฝึก (durN/durUnit) ไม่เกี่ยวกับจำนวนงานที่ต้องส่ง
+       (บันทึกการสอนรายสัปดาห์ถูกยกเลิกแล้ว — COURSE_ITEMS 10.1)
+       ของเดิมหารด้วยจำนวนสัปดาห์ ⇒ รายวิชา 15 วันที่มี 5 งาน ขึ้น 167% ได้ */
+    var ap = ts.filter(function (t) {
+      var sub = subAt(it.id, t.id); return sub && sub.status === 'approved'; }).length;
+    return {
+      ts: ts.length, ap: ap,
+      vis: DB.visits.filter(function (x) { return x.internshipId === it.id && x.status === 'completed'; }).length,
+      forms: DB.responses.filter(function (r) { return r.internshipId === it.id; }).length,
+      pct: ts.length ? Math.round(ap / ts.length * 100) : 0
+    };
+  }
+  /** รวมยอดรายสาขา · เรียง "ช้าที่สุดขึ้นก่อน" เพื่อให้ตอบคำถามได้ในหน้าจอเดียว */
+  function reportByMajor(its) {
+    var by = {}, order = [];
+    its.forEach(function (it) {
+      var st = studentOf(it.id), n = reportNums(it), k = st.major;
+      if (!by[k]) { by[k] = { major: k, n: 0, ap: 0, ts: 0, vis: 0, forms: 0, done: 0 }; order.push(k); }
+      var g = by[k];
+      g.n++; g.ap += n.ap; g.ts += n.ts; g.vis += n.vis; g.forms += n.forms;
+      if (n.ts && n.ap >= n.ts) g.done++;
+    });
+    return order.map(function (k) {
+      var g = by[k];
+      g.pct = g.ts ? Math.round(g.ap / g.ts * 100) : 0;
+      return g;
+    }).sort(function (a, b) { return a.pct - b.pct || b.n - a.n; });
+  }
+  function reportStudentTable(its, key) {
+    return table(['นักศึกษา', 'สาขา', 'อาจารย์นิเทศก์', 'งานที่ส่ง', 'นิเทศ', 'แบบสำรวจ', 'ความคืบหน้า'], its.map(function (it) {
+      var s = studentOf(it.id), v = byId(DB.supervisors, it.supervisorId), n = reportNums(it);
+      return ['<b>' + personLink(stuName(s), 'student', s.id) + '</b><br><small class="muted">' + esc(s.username) + '</small>',
+        esc(majorName(s.major)), esc(v ? supName(v) : '—'),
+        n.ap + '/' + n.ts, n.vis + ' ครั้ง', n.forms + ' ชุด',
+        '<div class="bar w-110"><i data-css="' + esc('width:' + n.pct + '%') + '"></i></div><small class="muted">' + n.pct + '%</small>'];
+    }),
+    /* B-4 (12 ก.ย. 69): คอลัมน์สุดท้ายมี .bar.w-110 (แถบคืบหน้า 110px) — เผื่อ padding/border ของ td (~38px) */
+    ['180px', '130px', '150px', '90px', '80px', '90px', '160px'],
+    { recs: its, key: key });
+  }
+
   function admReports() {
+    /* 🔴 ต้องกรองตามบริบทเหมือนทุกหน้าในระบบ
+       เดิมอ่าน DB.internships ทั้งฐาน ⇒ หน้าจอแสดงข้ามปีข้ามภาคเรียนปนกันหมด
+       และไฟล์ที่ส่งออก (ซึ่งกรองถูก) ก็ไม่ตรงกับจอ */
     var reportIts = ctxInternships('adm');
-    return head('รายงานความสำเร็จ', 'สรุปความคืบหน้ารายบุคคลตลอดภาคเรียน',
-      '<button class="btn btn-ghost btn-sm" data-act="report:export">' + ic('up') + ' ส่งออก Excel</button>') +
-      /* 🔴 ต้องกรองตามบริบทเหมือนทุกหน้าในระบบ
-         เดิมอ่าน DB.internships ทั้งฐาน ⇒ หน้าจอแสดงข้ามปีข้ามภาคเรียนปนกันหมด
-         และไฟล์ที่ส่งออก (ซึ่งกรองถูก) ก็ไม่ตรงกับจอ */
-      table(['นักศึกษา', 'สาขา', 'อาจารย์นิเทศก์', 'งานที่ส่ง', 'นิเทศ', 'แบบสำรวจ', 'ความคืบหน้า'], reportIts.map(function (it) {
-        var s = studentOf(it.id), c = courseOf(it.id), v = byId(DB.supervisors, it.supervisorId);
-        /* ⚠️ ความคืบหน้าต้องหารด้วย "จำนวนงานของรายวิชา" ไม่ใช่จำนวนสัปดาห์
-           ระยะเวลาออกฝึก (durN/durUnit) ไม่เกี่ยวกับจำนวนงานที่ต้องส่ง
-           (บันทึกการสอนรายสัปดาห์ถูกยกเลิกไปแล้ว — COURSE_ITEMS 10.1)
-           ของเดิมหารด้วยจำนวนสัปดาห์ ⇒ รายวิชา 15 วันที่มี 5 งาน ขึ้น 167% ได้ */
-        var ts = c ? tasksOf(c.id) : [];
-        var ap = ts.filter(function (t) {
-          var sub = subAt(it.id, t.id); return sub && sub.status === 'approved'; }).length;
-        var vc = DB.visits.filter(function (x) { return x.internshipId === it.id && x.status === 'completed'; }).length;
-        var fr = DB.responses.filter(function (r) { return r.internshipId === it.id; }).length;
-        var pct = ts.length ? Math.round(ap / ts.length * 100) : 0;
-        return ['<b>' + personLink(stuName(s), 'student', s.id) + '</b><br><small class="muted">' + esc(s.username) + '</small>',
-          esc(majorName(s.major)), esc(v ? supName(v) : '—'),
-          ap + '/' + ts.length, vc + ' ครั้ง', fr + ' ชุด',
-          '<div class="bar w-110"><i data-css="' + esc('width:' + pct + '%') + '"></i></div><small class="muted">' + pct + '%</small>'];
-      }),
-      /* B-4 (12 ก.ย. 69): คอลัมน์สุดท้ายมี .bar.w-110 (แถบคืบหน้า 110px) — เผื่อ padding/border ของ td (~38px) */
-      ['180px', '130px', '150px', '90px', '80px', '90px', '160px'],
-      { recs: reportIts, key: 'report' }) + '<div class="hint mt-8">' + ic('up') +
-        ' ปุ่มส่งออกให้ไฟล์ Excel (.xlsx) จริงที่เปิดได้ทันที · ส่งออกตามบริบทที่กำลังดูอยู่' +
+    var mj = view.pick['report:major'] || '';
+    var xls = '<button class="btn btn-ghost btn-sm" data-act="report:export">' + ic('up') + ' ส่งออก Excel</button>';
+
+    /* ── ชั้นที่ 2 · รายชื่อของสาขาที่เลือก (กรองไว้ให้แล้ว ไม่ต้องมานั่งกรองเอง) ── */
+    if (mj) {
+      /* 🔴 '*' = ดูรายชื่อทั้งหมดโดยไม่กรองสาขา — ต้องมีไว้เสมอ
+         เพราะบางงานต้องการรายชื่อทั้งบริบทจริง ๆ (ค้นหาข้ามสาขา · เรียง · ส่งออกทีเดียว)
+         ถ้าตัดทิ้ง การแยกเป็นสองชั้นจะกลายเป็นการ "เอาของเดิมออก" ไม่ใช่การเพิ่มชั้นสรุป */
+      var all = mj === '*';
+      var mine = all ? reportIts : reportIts.filter(function (it) { return studentOf(it.id).major === mj; });
+      return '<a class="back-link" data-act="report:all">' + ic('back') + ' กลับสรุปรายสาขา</a>' +
+        head('รายงานความสำเร็จ · ' + (all ? 'ทุกสาขา' : majorName(mj)),
+          'รายบุคคล' + (all ? 'ทั้งบริบทนี้' : 'เฉพาะสาขานี้') + ' · ' + mine.length + ' คน', xls) +
+        (!mine.length
+          ? empty('ยังไม่มีนักศึกษาของสาขานี้ในบริบทนี้',
+              'ลองเปลี่ยนปีการศึกษา/ภาคเรียนบนแถบด้านบน',
+              emptyAct('report:all', 'กลับสรุปรายสาขา'))
+          : reportStudentTable(mine, 'report')) +
+        '<div class="hint mt-8">' + ic('up') +
+          ' ไฟล์ที่ส่งออกตรงกับที่เห็นบนจอ — ตอนนี้คือ' +
+          (all ? 'รายชื่อทั้งบริบทนี้' : 'เฉพาะสาขา ' + esc(majorName(mj))) + '</div>';
+    }
+
+    /* ── ชั้นที่ 1 · สรุปรายสาขา — ตอบ "สาขาไหนช้าสุด" ได้ในหน้าจอเดียว ── */
+    var rows = reportByMajor(reportIts);
+    var slow = rows.length ? rows[0] : null;
+    return head('รายงานความสำเร็จ',
+      'สรุปรายสาขาก่อน แล้วเจาะลงรายบุคคล · ' + reportIts.length + ' คนในบริบทนี้',
+      '<button class="btn btn-ghost btn-sm" data-act="report:major" data-mj="*">' + ic('users') +
+        ' ดูรายชื่อทั้งหมด (' + reportIts.length + ')</button>' + xls) +
+      (!rows.length
+        ? empty('ยังไม่มีข้อมูลการฝึกในบริบทนี้', 'เลือกปีการศึกษา/ภาคเรียนอื่นบนแถบด้านบน',
+            emptyEnd('รายงานจะมีข้อมูลเองเมื่อมีนักศึกษาออกฝึกในภาคเรียนที่เลือก'))
+        : (slow && rows.length > 1
+            /* ⚠️ ห้ามใช้ .note — คลาสนั้นคือกล่อง "เปลี่ยนจากเดิม" ที่ตั้ง display:none ไว้
+               และโผล่เฉพาะตอนเปิดสวิตช์หมายเหตุบนแถบโปรโตไทป์ · ใช้ .tip ที่เห็นเสมอแทน */
+            ? '<div class="tip tip-warn mb-14">' + ic('bell') + ' <span><b>สาขาที่ช้าที่สุดตอนนี้คือ ' +
+              esc(majorName(slow.major)) + '</b> — งานที่ผ่านแล้ว ' + slow.pct + '% · ' +
+              'ส่งครบแล้ว ' + slow.done + ' จาก ' + slow.n + ' คน</span></div>' : '') +
+          table(['สาขา', 'นักศึกษา', 'งานที่ผ่าน', 'ส่งครบแล้ว', 'นิเทศ', 'แบบสำรวจ', 'ความคืบหน้า', ''],
+            rows.map(function (g, i) {
+              return [
+                '<b>' + esc(majorName(g.major)) + '</b>' +
+                  (i === 0 && rows.length > 1 ? ' <span class="badge warn">ช้าที่สุด</span>' : ''),
+                g.n + ' คน', g.ap + '/' + g.ts, g.done + '/' + g.n, g.vis + ' ครั้ง', g.forms + ' ชุด',
+                '<div class="bar w-110"><i data-css="' + esc('width:' + g.pct + '%' +
+                  (g.pct < 50 ? ';background:var(--warn)' : '')) + '"></i></div>' +
+                  '<small class="muted">' + g.pct + '%</small>',
+                '<button class="btn btn-ghost btn-sm" data-act="report:major" data-mj="' + esc(g.major) + '">' +
+                  ic('arr') + ' ดูรายชื่อ</button>'
+              ];
+            }), ['180px', '90px', '100px', '100px', '90px', '90px', '150px', '130px'],
+            { recs: rows, key: 'reportSum' })) +
+      '<div class="hint mt-8">' + ic('up') +
+        ' เรียงจากสาขาที่ช้าที่สุดขึ้นก่อนเสมอ · กด "ดูรายชื่อ" เพื่อเจาะลงรายบุคคลที่กรองไว้ให้แล้ว' +
+        ' · ปุ่มส่งออกให้ไฟล์ Excel (.xlsx) ของรายชื่อทั้งบริบทนี้' +
         ' · ระบบจริงส่งเป็น .xlsx (สร้างที่ฝั่งเซิร์ฟเวอร์ด้วย ExcelExport ของ IT-CIL)</div>';
   }
+
 
   /* การ์ดหนึ่งใบในศูนย์ตั้งค่า — เปิดหน้าย่อยด้วย tab:set หรือไปหน้าอื่นด้วย data-page */
   function hubCard(o) {
@@ -18266,11 +18595,11 @@ body.notes .note{display:block;}
              bad: out.filter(function (r) { return r.errs.length; }) };
   }
   var A = {
-    'modal:close': closeModal,
+    'modal:close': dismissModal,
     /* B-3 (12 ก.ย. 69): ส่งปุ่มที่กดจริงต่อให้ callback ด้วย (เดิมไม่ส่ง) — ให้ callback ที่ต้องการ
        ห่อ busy()/idle() (เช่น rollover:go) เรียก busy(el) ได้ตรง ๆ โดยไม่ต้อง query หาปุ่มเอง
        callback เดิมที่ไม่รับพารามิเตอร์ (ส่วนใหญ่ของระบบ) ไม่กระทบ — JS เพิกเฉย argument ส่วนเกินเอง */
-    'confirm:yes': function (el) { if (pendingConfirm) { var f = pendingConfirm; pendingConfirm = null; f(el); } },
+    'confirm:yes': function (el) { pendingCancel = null; if (pendingConfirm) { var f = pendingConfirm; pendingConfirm = null; f(el); } },
     'tab:set': function (el) { view.tab[el.getAttribute('data-key')] = el.getAttribute('data-v'); renderAll(); },
 
     /* ── แถบบริบท ──
@@ -20481,6 +20810,7 @@ body.notes .note{display:block;}
     },
     'lp:man': function (el) { view.lpMan = el.getAttribute('data-v') || 'stu'; renderAll(); },
     'fail:sim': function () { failSimBox(); },
+    'load:sim': function () { loadSim = !loadSim; closeModal(); renderAll(); },
     /* 🔴 กู้ร่างต้องให้คนกดเอง — ดูเหตุผลที่หัวข้อฉบับร่างในโค้ด */
     'draft:use': function (el) {
       var sc = el.getAttribute('data-sc'), d = draftGet(sc);
@@ -20741,6 +21071,8 @@ body.notes .note{display:block;}
        โมดัลบังหน้าเดิมไว้ทั้งจอ อาจารย์เห็นแค่งานเดียวโดยไม่มีบริบท และเลื่อนอ่านยาก
        ⇒ เปิดเป็นหน้าเต็ม มีชื่อนักศึกษา+ชื่องานบนหัว และไปงานถัดไปได้ */
     'task:open': function (el) {
+      /* MS-08 — จำว่า "เปิดอ่านงานชิ้นนี้แล้วในรอบนี้" · เป็นด่านเดียวที่ปลดล็อกการติ๊กเลือก */
+      reviewSeen[Number(el.getAttribute('data-id'))] = true;
       view.pick.review = Number(el.getAttribute('data-id'));
       goPage('sup:task');
     },
@@ -20748,35 +21080,62 @@ body.notes .note{display:block;}
       if (!guardActive()) return;
       var l = byId(DB.subs, el.getAttribute('data-id'));
       if (finishedGuardIt(byId(DB.internships, l.internshipId))) return;
-      var prevSt = l.status, prevNote = l.note;
-      l.status = 'approved'; l.note = ''; save();
-      audit('task', stuName(studentOf(l.internshipId)),
-        'ตรวจผ่าน · ' + (taskDef(l.taskId) ? taskDef(l.taskId).title : ''),
-        { from: prevSt === 'rejected' ? 'ตีกลับ' : 'รอตรวจ', to: 'ผ่าน' });
+      var r = subApprove(l); save();
       /* ⚠️ การตรวจงานเป็นหน้าเต็มแล้ว ไม่ใช่โมดัล — ตรวจเสร็จต้องพากลับรายการ
          ไม่งั้นอาจารย์ค้างอยู่หน้าเดิมโดยไม่รู้ว่าต้องกดอะไรต่อ */
       /* ตรวจงานจบหนึ่งชิ้นแล้วระบบพาไปงานถัดไปทันที ⇒ ต้องค้างผลไว้ให้รับรู้ก่อน ไม่งั้นงานเลื่อนไปเฉย ๆ */
-      ntPop('ok', 'ตรวจผ่านแล้ว', taskDef(l.taskId) ? taskDef(l.taskId).title : '', 'hold');
+      ntPop('ok', 'ตรวจผ่านแล้ว', r.title, 'hold');
       if (view.page.sup === 'sup:task') goPage('sup:review'); else { closeModal(); renderAll(); }
-      var s = studentOf(l.internshipId);
-      var tTitle = taskDef(l.taskId) ? taskDef(l.taskId).title : '';
-      var notiA = pushNoti('student', s.id, 'งาน "' + tTitle + '" ผ่านการตรวจแล้ว', supName(meSup()), 'stu:logs');
-      save();
       /* MS-05 + ADD-02: กดผ่านแล้วย้อนได้ใน 8 วินาที — คืนทั้งสถานะ ข้อความ และการแจ้งเตือน
          🔴 ต้องถอนการแจ้งเตือนคืนด้วย ไม่งั้นนักศึกษาเห็น "งานผ่านแล้ว" ของสิ่งที่ถูกยกเลิกไปแล้ว
          🔴 ร่องรอยการแก้ไขบันทึก "ทั้งสองครั้ง" (ตรวจผ่าน + เลิกทำ) ไม่ใช่ลบรอยแรกทิ้ง —
             การย้อนเป็นเหตุการณ์ที่เกิดขึ้นจริง ต้องตรวจสอบย้อนหลังได้ว่าใครย้อนและเมื่อไร */
-      toast('ตรวจผ่านแล้ว', tTitle + ' ของ ' + stuName(s) + ' · นักศึกษาได้รับแจ้งเตือน', '', {
+      toast('ตรวจผ่านแล้ว', r.title + ' ของ ' + stuName(r.stu) + ' · นักศึกษาได้รับแจ้งเตือน', '', {
         undo: function () {
-          l.status = prevSt; l.note = prevNote;
-          var ix = DB.notis.indexOf(notiA); if (ix >= 0) DB.notis.splice(ix, 1);
-          audit('task', stuName(s), 'เลิกทำการตรวจ · ' + tTitle,
-            { from: 'ผ่าน', to: prevSt === 'rejected' ? 'ตีกลับ' : 'รอตรวจ' });
-          save(); renderAll();
-          toast('เลิกทำแล้ว', tTitle + ' กลับไปเป็น "' + (prevSt === 'rejected' ? 'ตีกลับ' : 'รอตรวจ') + '"', 'warn');
+          subApproveUndo(r); save(); renderAll();
+          toast('เลิกทำแล้ว', r.title + ' กลับไปเป็น "' + (r.prevSt === 'rejected' ? 'ตีกลับ' : 'รอตรวจ') + '"', 'warn');
         }
       });
     },
+    /* ═══ ลำดับ 22 · MS-08 · ADD-11 — ให้ผ่านยกชุด (18 ก.ย. 69) ═══
+       🔴 ผลตรวจเตือนไว้เองว่า "ถ้าใส่ผิดวิธีจะกลายเป็นการกดผ่านโดยไม่อ่าน"
+          ⇒ ด่านบังคับคือ **ติ๊กได้เฉพาะงานที่กดเปิดดูแล้วในรอบการทำงานนี้**
+             ซึ่งตรงกับที่ ADD-11 กำหนดไว้ ไม่ใช่ปุ่ม "เลือกทั้งหมด" ที่ให้ผ่านรวดเดียว
+       🔴 จงใจไม่มีปุ่ม "เลือกทั้งหมด" — มันคือทางลัดที่ทำให้ด่านข้างบนไร้ความหมายทันที */
+    'rev:pick': function (el) {
+      var id = Number(el.getAttribute('data-id'));
+      if (!reviewSeen[id]) { toast('ยังเลือกไม่ได้', 'กด "ดู" เพื่อเปิดงานชิ้นนี้ก่อน', 'warn'); renderAll(); return; }
+      revSel[id] = !revSel[id];
+      if (!revSel[id]) delete revSel[id];
+      renderAll();
+    },
+    'rev:clear': function () { revSel = {}; renderAll(); },
+    'rev:approveSel': function () {
+      if (!guardActive()) return;
+      var ids = Object.keys(revSel).map(Number);
+      var subs = ids.map(function (id) { return byId(DB.subs, id); })
+        .filter(function (l) { return l && l.status === 'submitted' && reviewSeen[l.id]; });
+      if (!subs.length) { toast('ยังไม่ได้เลือกงาน', 'ติ๊กเลือกงานที่เปิดดูแล้วก่อน', 'warn'); return; }
+      if (subs.some(function (l) { return finishedGuardIt(byId(DB.internships, l.internshipId)); })) return;
+      confirmBox({
+        title: 'ให้ผ่าน ' + subs.length + ' ชิ้นพร้อมกัน', icon: 'check', yes: 'ให้ผ่านทั้งหมด',
+        body: 'ทุกชิ้นด้านล่างนี้ท่านกดเปิดดูแล้วในรอบนี้<ul class="m-0 mt-8">' +
+          subs.map(function (l) {
+            return '<li>' + esc(stuName(studentOf(l.internshipId))) + ' · ' +
+              esc(taskDef(l.taskId) ? taskDef(l.taskId).title : '(ไม่พบงาน)') + '</li>';
+          }).join('') + '</ul>'
+      }, function () {
+        var rs = subs.map(subApprove);
+        revSel = {}; save(); closeModal(); renderAll();
+        toast('ให้ผ่านแล้ว ' + rs.length + ' ชิ้น', 'นักศึกษาทุกคนได้รับแจ้งเตือน', '', {
+          undo: function () {
+            rs.forEach(subApproveUndo); save(); renderAll();
+            toast('เลิกทำแล้ว', 'คืนสถานะ ' + rs.length + ' ชิ้นกลับเป็นรอตรวจ', 'warn');
+          }
+        });
+      });
+    },
+
     /**
      * ลิงก์เปิดไม่ได้ — ทางลัดของอาจารย์สำหรับกรณีที่พบบ่อยที่สุด
      * (เจ้าของงานเห็นชอบ 20 ส.ค. 69) · เป็นการตีกลับที่เติมเหตุผลให้แล้ว
@@ -22077,7 +22436,22 @@ body.notes .note{display:block;}
     /* ส่งออกรายงานความสำเร็จเป็นไฟล์จริง — คอลัมน์ตรงกับที่เห็นบนจอ
        ⚠️ ต้องส่งออก "ตามบริบทที่กำลังดูอยู่" ไม่ใช่ทั้งฐาน ไม่งั้นได้ไฟล์ 2,600 แถว
           ทั้งที่บนจอกรองไว้แล้ว — คนเปิดไฟล์จะเทียบกับหน้าจอไม่ตรง */
+    'report:major': function (el) { view.pick['report:major'] = el.getAttribute('data-mj'); renderAll(); },
+    'report:all': function () { view.pick['report:major'] = ''; renderAll(); },
     'report:export': function () {
+      /* 🔴 ลำดับ 19 — หน้านี้มีสองชั้นแล้ว · ไฟล์ต้องตรงกับ "ชั้นที่กำลังดูอยู่" เสมอ (ADD-05)
+         ชั้นสรุปรายสาขาอยู่บนจอ ⇒ ไฟล์ต้องเป็นสรุปรายสาขา ไม่ใช่รายชื่อ 2,000 คนที่ไม่ได้เห็น */
+      var sum = tblShown('reportSum');
+      if (sum && sum.length) {
+        var sRows = [['สาขา', 'นักศึกษา (คน)', 'งานที่ผ่าน', 'งานทั้งหมด', 'ส่งครบแล้ว (คน)',
+                      'นิเทศแล้ว (ครั้ง)', 'แบบสำรวจ (ชุด)', 'ความคืบหน้า (%)']];
+        sum.forEach(function (g) {
+          sRows.push([majorName(g.major), g.n, g.ap, g.ts, g.done, g.vis, g.forms, g.pct]);
+        });
+        xlsxDownload(exportName('รายงานความสำเร็จ-รายสาขา') + '.xlsx', sRows);
+        toast('ส่งออกแล้ว', sum.length + ' สาขา', 'ok');
+        return;
+      }
       var its = tblShown('report') || ctxInternships('adm');   // ADD-05 · ตามตัวกรองบนจอ
       if (!its.length) { toast('ไม่มีข้อมูลให้ส่งออก', 'ลองเปลี่ยนบริบทด้านบน', 'bad'); return; }
       var rows = [['รหัสนักศึกษา', 'ชื่อ-สกุล', 'สาขา', 'รายวิชา', 'อาจารย์นิเทศก์',
@@ -22923,6 +23297,7 @@ body.notes .note{display:block;}
      เพราะตอนนั้น TODAY/thDate/bkkTimeHM ยังไม่ถูกกำหนดค่า (ดูคอมเมนต์ที่ trashPurgeExpired) */
   if (trashPurgeExpired()) save();
   renderAll();
+  bootHash();   /* ที่อยู่ของหน้า — ต้องเรียกหลัง renderAll() แรก เพราะ PAGE_KEYS เติมตอนเรนเดอร์ */
   /* A-9: 6 จุดโลโก้จริงอยู่ในมาร์กอัปนิ่ง (สแตติกก่อน <script>) ไม่ผ่าน renderAll() ปกติ
      ต้องเติมตอนโหลดหน้าเสมอ แม้ session จะเปิดตรงเข้าแดชบอร์ดโดยไม่เคยผ่าน renderHome() เลยก็ตาม */
   renderBrandLogos();
