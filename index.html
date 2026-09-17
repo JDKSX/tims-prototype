@@ -2203,6 +2203,36 @@ body.notes .note{display:block;}
 .first-box.on{border-color:color-mix(in srgb,var(--terra) 40%,var(--line));background:var(--terra-soft);}
 .login-alt{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);text-align:center;}
 /* เส้นคั่นระหว่างช่องกรอกรหัสผ่าน (ทางหลักที่เห็นทันที) กับปุ่ม Google (ทางเลือกที่สอง) */
+/* หัวข้อกำกับชุดกรอกรหัสผ่าน — บอกว่า "ชุดนี้สำหรับใคร" (17 ก.ย. 69)
+   เพราะชุดปกติกับชุดเปิดใช้งานครั้งแรกหน้าตาเหมือนกันเป๊ะ (สองช่อง + ปุ่ม) */
+/* กล่องยุบ "เข้าด้วยรหัสผ่านของตัวเอง" (17 ก.ย. 69 · เจ้าของงานสั่งให้หน้าสั้นลง)
+   🔴 ต่างจากลิงก์ข้อความลอย ๆ ของเดิม ตรงที่หัวกล่องบอกครบว่า "ข้างในคืออะไร สำหรับใคร"
+      ⇒ ยุบได้โดยที่ผู้ใช้ยังตัดสินใจถูกว่าต้องกดหรือไม่ */
+.pw-fold{border:1px solid var(--line);border-radius:var(--r3);background:var(--surface);overflow:hidden;}
+.pw-fold.on{border-color:var(--accent);box-shadow:var(--sh-1);}
+.pw-toggle{display:flex;align-items:center;gap:12px;width:100%;padding:13px 15px;text-align:left;
+  background:none;border:0;cursor:pointer;font:inherit;color:inherit;min-height:44px;}
+.pw-toggle:hover{background:var(--surface-2);}
+.pw-toggle-ic{flex:none;display:grid;place-items:center;width:32px;height:32px;border-radius:50%;
+  background:var(--accent-soft);color:var(--accent-dark);}
+.pw-toggle-ic svg{width:16px;height:16px;}
+.pw-toggle-tx{flex:1;min-width:0;}
+.pw-toggle-tx b{display:block;font-size:var(--fs-3);color:var(--ink);}
+.pw-toggle-tx span{display:block;margin-top:1px;font-size:var(--fs-1);color:var(--ink-3);line-height:1.45;}
+.pw-toggle-ar{flex:none;color:var(--ink-3);}
+.pw-toggle-ar svg{width:15px;height:15px;transform:rotate(180deg);transition:transform .16s;}
+.pw-fold.on .pw-toggle-ar svg{transform:rotate(0deg);}
+.pw-body{padding:2px 15px 15px;border-top:1px solid var(--line-2);}
+.pw-body .field:first-child{margin-top:13px;}
+/* ทางเข้า "ครั้งแรก" — คำถามสั้น ๆ + ปุ่ม · คำอธิบายเต็มอยู่หน้าถัดไป */
+.first-line{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  margin-top:14px;padding-top:14px;border-top:1px dashed var(--line);}
+.first-line > span{font-size:var(--fs-2);color:var(--ink-2);}
+/* ขั้นตอน 1-2-3 บนหน้าเข้าสู่ระบบครั้งแรก */
+.steps-mini{display:flex;flex-direction:column;gap:9px;}
+.steps-mini > div{display:flex;align-items:flex-start;gap:10px;font-size:var(--fs-2);color:var(--ink-2);line-height:1.5;}
+.steps-mini b{flex:none;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;
+  background:var(--pine-soft);color:var(--pine);font-size:var(--fs-1);}
 .login-or{display:flex;align-items:center;gap:12px;margin:18px 0 14px;
   font-size:var(--fs-2);color:var(--ink-3);}
 .login-or::before,.login-or::after{content:'';flex:1;height:1px;background:var(--line);}
@@ -2382,6 +2412,7 @@ body.notes .note{display:block;}
     <button data-go="supervisor">อ.นิเทศก์</button>
     <button data-go="committee">กรรมการ</button>
     <button data-go="admin">TIMS Admin</button>
+    <button data-go="activate">เข้าระบบครั้งแรก</button>
     <button data-go="firstlogin">ตั้งรหัสครั้งแรก</button>
     <button data-go="print">ใบรหัสผ่าน</button>
     <button data-go="testaccts">บัญชีทดสอบ</button>
@@ -2525,13 +2556,15 @@ body.notes .note{display:block;}
         <p class="muted mt-6 mx-0 mb-0 fs-3">สำหรับนักศึกษา อาจารย์นิเทศก์ กรรมการสาขา และฝ่ายฝึก</p>
       </div>
 
-      <!-- 17 ก.ย. 69 (เจ้าของงานสั่ง) · ช่องกรอกชื่อผู้ใช้/รหัสผ่านต้องเห็นทันที ไม่ต้องกดเปิด
-           Google ย้ายลงมาเป็นทางเลือกที่สอง (ยังเป็นทางที่แนะนำ แต่ไม่ใช่สิ่งเดียวที่เห็น)
-           ⚠️ D-6 ยังอยู่ครบ: ไม่มีสมัครเอง · ไม่มีหน้า "ลืมรหัสผ่าน" ที่คายรหัสออกมา -->
+      <!-- 17 ก.ย. 69 (เจ้าของงานสั่ง · รอบสอง) · ลำดับบนหน้าจอ
+           ① Google = ทางหลักตาม D-6 อยู่บนสุด
+           ② เส้นคั่น "หรือ"
+           ③ ชื่อผู้ใช้/รหัสผ่าน — ยัง **แสดงช่องกรอกทันที** ไม่ซ่อนหลังลิงก์เหมือนของเดิม
+           ⚠️ รอบแรกเอาช่องกรอกขึ้นบนสุด แล้วเจ้าของงานให้สลับกลับ — ของที่เปลี่ยนจริง
+              คือ "ช่องกรอกไม่ซ่อนอีกแล้ว" ไม่ใช่ลำดับ · D-6 ยังอยู่ครบ
+              (ไม่มีสมัครเอง · ไม่มีหน้า "ลืมรหัสผ่าน" ที่คายรหัสออกมา) -->
       <div class="card login-narrow r-var4 sh-3">
         <div class="pt-24 px-26 pb-26">
-          <div data-view="loginform"></div>
-          <div class="login-or"><span>หรือ</span></div>
           <button class="btn-google" data-act="login:google">
             <svg class="i w-19 h-19"><use href="#i-google"/></svg>
             เข้าสู่ระบบด้วยบัญชีมหาวิทยาลัย
@@ -2539,6 +2572,8 @@ body.notes .note{display:block;}
           <div class="d-flex items-center gap-7 justify-center mt-13 fs-2 t-ink-3">
             <svg class="i"><use href="#i-shield"/></svg> ใช้อีเมล <b class="t-ink-2">@sskru.ac.th</b> ของมหาวิทยาลัย
           </div>
+          <div class="login-or"><span>หรือ</span></div>
+          <div data-view="loginform"></div>
           <div class="tip mt-18">
             <svg class="i"><use href="#i-key"/></svg>
             <div>พยายามเข้าระบบได้อีก <b data-view="tries">5</b> ครั้ง ก่อนถูกพักชั่วคราว 15 นาที</div>
@@ -2560,6 +2595,45 @@ body.notes .note{display:block;}
      โครงนี้ = โครงเดียวกับ layout Blade ของระบบจริง (rail + topbar + page)
      ═══════════════════════════════════════════════════════════════════════════ -->
 
+
+<!-- ═══════════════ เข้าสู่ระบบครั้งแรก (เปิดใช้งานบัญชีด้วยรหัสจากใบแจ้ง) ═══════════════
+     17 ก.ย. 69 · แยกออกจากหน้าเข้าสู่ระบบเพราะ
+       ① เป็นกระบวนการคนละอย่างกับการล็อกอินปกติ (ใช้รหัสเปิดใช้งาน ไม่ใช่รหัสผ่าน)
+       ② ใช้ครั้งเดียวต่อคนตลอดชีวิต ⇒ ไม่ควรกินที่บนหน้าที่คนเข้าทุกวัน
+     ⚠️ คนละหน้ากับ s-firstlogin ซึ่งเป็น "ขั้นถัดไป" หลังรหัสเปิดใช้งานถูกต้องแล้ว -->
+<section class="screen" id="s-activate">
+  <div class="solo">
+    <div class="w-100p mw-470">
+      <div class="text-center mb-22">
+        <span class="status-mark w-54 h-54 fs-6 mt-0 mx-auto mb-13"><svg class="i"><use href="#i-key"/></svg></span>
+        <h2 class="fs-5">เข้าสู่ระบบครั้งแรก</h2>
+        <p class="muted mt-6 mx-0 mb-0 fs-3">เปิดใช้งานบัญชีด้วยรหัสจากใบแจ้งที่ได้รับ</p>
+      </div>
+
+      <!-- คำอธิบายเต็มอยู่ที่นี่ ไม่ใช่บนหน้าเข้าสู่ระบบ -->
+      <div class="card card-pad mb-16">
+        <div class="tip"><svg class="i"><use href="#i-shield"/></svg>
+          <div><b>ใช้รหัสเปิดใช้งาน 8 ตัวจากใบแจ้ง — ไม่ใช่รหัสผ่าน</b><br>
+          นักศึกษารับใบแจ้งจากกรรมการสาขา · อาจารย์นิเทศก์และกรรมการรับจากเจ้าหน้าที่ฝ่ายฝึก</div></div>
+        <div class="steps-mini mt-14">
+          <div><b>1</b><span>กรอกชื่อผู้ใช้และรหัสเปิดใช้งานจากใบแจ้ง</span></div>
+          <div><b>2</b><span>ตั้งรหัสผ่านของตัวเอง</span></div>
+          <div><b>3</b><span>ผูกบัญชี Google <b>@sskru.ac.th</b> แล้วกรอกข้อมูลส่วนตัว</span></div>
+        </div>
+        <div class="hint mt-12"><svg class="i"><use href="#i-key"/></svg>
+          รหัสเปิดใช้งาน<b>ใช้ได้ครั้งเดียว</b> — ทำเสร็จแล้วครั้งต่อไปเข้าด้วยปุ่ม Google หรือรหัสผ่านที่ตั้งไว้</div>
+      </div>
+
+      <div class="card r-var4 sh-3"><div class="pt-24 px-26 pb-26">
+        <div data-view="activateform"></div>
+      </div></div>
+
+      <div class="text-center mt-18">
+        <button class="alt-link" data-jump="login">← กลับหน้าเข้าสู่ระบบ</button>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- ═══════════════ บัญชีสำหรับทดสอบ (เฉพาะโปรโตไทป์ · 17 ก.ย. 69) ═══════════════
      เดิมกล่องนี้แปะอยู่ใต้กล่องล็อกอิน ทำให้ประตูเข้าระบบดูเหมือนหน้าเดโม ไม่ใช่หน้าจริง
@@ -6171,6 +6245,11 @@ body.notes .note{display:block;}
   function goScreen(id) {
     /* ออกจากหน้าแรกเมื่อไร รีเซ็ตหน้าย่อยสาธารณะ — กลับมาหน้าแรกจะเห็นหน้าแรกจริง ไม่ใช่หน้าย่อยค้าง */
     view.lp = null; view.lpItem = null;
+    /* 🔴 17 ก.ย. 69 · เข้าหน้าเข้าสู่ระบบใหม่ทุกครั้ง ต้องเห็น "หน้าสั้น" เสมอ
+       เดิม view.loginMode ค้างอยู่ในหน่วยความจำข้ามหน้า ⇒ คนที่เคยกางกล่องรหัสผ่านไว้
+       แล้วออกไปทำอย่างอื่น กลับมาเจอหน้ายาวเหมือนไม่เคยยุบ — ซึ่งค้านกับเหตุผลที่ทำให้มันยุบ
+       (ตัวตรวจจับได้จากด่าน "ข้อมูลเก่าค้างในเบราว์เซอร์" ที่รันเทสต์ต่อกันเป็นชุด) */
+    if (id === 'login') view.loginMode = null;
     /* แถบบนสุดเป็น "เครื่องมือสลับบัญชีทดสอบ" ของโปรโตไทป์
        ⚠️ เดิมสลับหน้าจอเฉย ๆ โดยไม่ตั้ง session ⇒ ระบบคิดว่ายังไม่มีใครล็อกอิน
           ทำให้ช่องข้อมูลอ่อนไหวขึ้นว่า "ต้องเข้าสู่ระบบก่อน" ทั้งที่กำลังดูหน้าบทบาทนั้นอยู่ */
@@ -6755,6 +6834,7 @@ body.notes .note{display:block;}
     renderPrint();
     renderTestAccounts();
     renderLoginForm();
+    renderActivateForm();
     renderWizard();
     renderRole('stu', meStu(), stuName(meStu()), meStu().username, ini(meStu().first, meStu().last), {
       'stu:home': stuHome, 'stu:course': stuCourse, 'stu:logs': stuLogs, 'stu:task': stuTask, 'stu:form': stuForm, 'stu:visits': stuVisits,
@@ -7332,21 +7412,12 @@ body.notes .note{display:block;}
    *   'pw'    = ทางสำรองเมื่อเข้าด้วย Google ไม่ได้ (ใช้รหัสผ่านที่ตั้งเอง)
    * แยก "การเล่าเรื่อง" แต่ไม่แยกฟอร์ม — ผู้ใช้จึงไม่ต้องตัดสินว่าตัวเองเป็นใครก่อนกรอก
    */
-  function renderLoginForm() {
-    /* 🔴 17 ก.ย. 69 (เจ้าของงานสั่ง) · ช่องกรอกชื่อผู้ใช้/รหัสผ่าน **แสดงทันที** ไม่ต้องกดเปิดก่อน
-       เดิมซ่อนไว้หลังลิงก์ "เข้าด้วยรหัสผ่าน" เพราะ D-6 บอกว่า Google เป็นทางหลัก
-       แต่ในทางปฏิบัติคนที่ยังผูก Google ไม่ได้ (อีเมลเดิมว่าง 15 บัญชี) คือคนกลุ่มแรกที่จะเข้ามา
-       ⇒ Google ยังอยู่และยังเป็นทางที่แนะนำ แต่เลื่อนลงไปเป็นทางเลือกที่สองใต้เส้นคั่น "หรือ"
-       ⚠️ ไม่กระทบ D-6 ข้ออื่น: ไม่มีสมัครเอง · ไม่มีหน้าลืมรหัสผ่านที่คายรหัสออกมา */
-    var isFirst = view.loginMode === 'first';
-    var form =
-      (isFirst
-        ? '<div class="tip mb-16">' + ic('key') +
-          '<div><b>ใช้ข้อมูลจากใบแจ้งที่ได้รับ</b><br>' +
-          'นักศึกษารับใบแจ้งจากกรรมการสาขา · อาจารย์นิเทศก์และกรรมการรับจากเจ้าหน้าที่ฝ่ายฝึก<br>' +
-          'เมื่อรหัสถูกต้อง ระบบจะพาไปตั้งรหัสผ่านและผูกอีเมลต่อทันที</div></div>'
-        : '') +
-      '<div class="field"><label>ชื่อผู้ใช้</label>' +
+  /* ═══ ช่องกรอกของหน้าเข้าสู่ระบบ — ชุดเดียวใช้ 2 ที่ ═══
+     isFirst = false → รหัสผ่านของตัวเอง (ในกล่องยุบบนหน้าเข้าสู่ระบบ)
+     isFirst = true  → รหัสเปิดใช้งาน 8 ตัวจากใบแจ้ง (หน้า "เข้าสู่ระบบครั้งแรก" ของตัวเอง)
+     🔴 ต้องเป็นตัวสร้างเดียวกัน ไม่งั้นแก้ที่หนึ่งแล้วอีกที่เพี้ยนตามไม่รู้ตัว */
+  function loginFields(isFirst) {
+    return '<div class="field"><label>ชื่อผู้ใช้</label>' +
         '<input class="inp" data-login="user" placeholder="' +
         (isFirst ? 'รหัสนักศึกษา หรือชื่อผู้ใช้จากใบแจ้ง' : 'รหัสนักศึกษา หรืออีเมลมหาวิทยาลัย') + '"></div>' +
       '<div class="field"><label>' + (isFirst ? 'รหัสเปิดใช้งาน' : 'รหัสผ่าน') + '</label>' +
@@ -7359,20 +7430,41 @@ body.notes .note{display:block;}
       '<div class="hint text-center mt-11">' +
         (isFirst ? 'ทำใบแจ้งหาย?' : 'ลืมรหัสผ่าน?') +
         ' <a class="t-accent fw-600" data-act="login:help">ติดต่อผู้ดูแลระบบ</a></div>';
+  }
 
-    /* ลำดับบนหน้าจอหลังยกเครื่อง:
-       1. ช่องกรอกชื่อผู้ใช้/รหัสผ่าน — เห็นทันที
-       2. หรือ → ปุ่ม Google (อยู่ในมาร์กอัปของหน้า ไม่ได้เรนเดอร์ที่นี่)
-       3. ยังไม่เคยเข้าระบบ — กรณีพิเศษที่ใช้ครั้งเดียวต่อคน จึงอยู่ท้ายสุด */
+  function renderLoginForm() {
+    /* 🔴 17 ก.ย. 69 (เจ้าของงานสั่ง รอบสาม) · "หน้าเข้าสู่ระบบยาวมาก"
+       ⇒ ① ชุดรหัสผ่าน = กล่องยุบ กดเปิดเอา (ไม่ใช่กางค้างไว้)
+          ② เข้าสู่ระบบครั้งแรก = แยกไปหน้าของตัวเอง ไม่กางในหน้านี้
+       ต่างจากของเดิมก่อนรอบสอง ตรงที่ตอนนี้ **กล่องยุบบอกชัดว่าข้างในคืออะไรและสำหรับใคร**
+       ไม่ใช่ลิงก์ข้อความลอย ๆ ที่ไม่มีใครรู้ว่ากดแล้วเจออะไร */
+    var open = view.loginMode === 'pw';
     fill('loginform',
-      '<div class="login-pw">' + form + '</div>' +
-      '<div class="first-box' + (isFirst ? ' on' : '') + '">' +
-        '<div class="fh">' + ic('key') + ' ยังไม่เคยเข้าระบบ?</div>' +
-        '<p>บัญชีใหม่ต้องเปิดใช้งานด้วย<b>รหัสจากใบแจ้ง</b>ก่อนหนึ่งครั้ง จึงจะใช้ปุ่ม Google ได้</p>' +
-        '<button class="btn btn-ghost btn-sm" ' +
-          'data-act="login:mode" data-mode="' + (isFirst ? 'none' : 'first') + '">' +
-          ic(isFirst ? 'x' : 'arr') + ' ' + (isFirst ? 'ปิด' : 'เข้าสู่ระบบครั้งแรก') + '</button>' +
+      '<div class="pw-fold' + (open ? ' on' : '') + '">' +
+        '<button class="pw-toggle" data-act="login:mode" data-mode="' + (open ? 'none' : 'pw') + '"' +
+          ' aria-expanded="' + (open ? 'true' : 'false') + '">' +
+          '<span class="pw-toggle-ic">' + ic('shield') + '</span>' +
+          '<span class="pw-toggle-tx"><b>เข้าด้วยรหัสผ่านของตัวเอง</b>' +
+            '<span>สำหรับคนที่ตั้งรหัสผ่านของตัวเองไว้แล้ว</span></span>' +
+          /* ไม่มีไอคอน "ลง" ในชุด — ใช้ตัวเดียวกันแล้วหมุน 180° ด้วย CSS */
+          '<span class="pw-toggle-ar">' + ic('up') + '</span>' +
+        '</button>' +
+        (open ? '<div class="pw-body">' + loginFields(false) + '</div>' : '') +
+      '</div>' +
+      /* 🔴 ครั้งแรกใช้ครั้งเดียวต่อคนตลอดชีวิต — บนหน้าที่คนเข้าทุกวันเหลือแค่
+         "คำถามที่ผู้ใช้ถามตัวเอง + ปุ่ม" · คำอธิบายเต็มไปอยู่ในหน้าถัดไป
+         (เจ้าของงานสั่ง 17 ก.ย. 69: "กดแล้วค่อยอธิบายเต็ม") */
+      '<div class="first-line">' +
+        '<span>เพิ่งได้รับใบแจ้งรหัส? ยังไม่เคยเข้าระบบ?</span>' +
+        '<button class="btn btn-ghost btn-sm" data-jump="activate">' +
+          ic('arr') + ' เข้าสู่ระบบครั้งแรก</button>' +
       '</div>');
+  }
+
+  /** หน้า "เข้าสู่ระบบครั้งแรก" — แยกออกมาเพราะเป็นกระบวนการคนละอย่างกับการล็อกอินปกติ
+      และใช้ครั้งเดียวต่อคน ไม่ควรกินที่บนหน้าที่คนเข้าทุกวัน */
+  function renderActivateForm() {
+    fill('activateform', loginFields(true));
   }
 
   /** รายการบัญชีทดสอบบนหน้าล็อกอิน — สร้างจากข้อมูลจริงในระบบ จึงไม่มีทางล้าสมัย */
@@ -14180,7 +14272,9 @@ body.notes .note{display:block;}
         hubCard({ v: 'general', ic: 'gear', color: 'var(--plum)', t: 'ตั้งค่าทั่วไป',
           d: 'ชื่อระบบ · โดเมนอีเมล · ปี/ภาคเรียนปัจจุบัน · จำนวนสัปดาห์' }) +
         hubCard({ v: 'auth', ic: 'google', color: 'var(--pine)', t: 'การยืนยันตัวตน (Google)',
-          d: 'Google Client ID/Secret · โดเมนอีเมลที่อนุญาต', tag: 'จำลอง' })) +
+          d: 'Google Client ID/Secret · โดเมนอีเมลที่อนุญาต', tag: 'จำลอง' }) +
+        hubCard({ v: 'loginpage', ic: 'key', color: 'var(--terra)', t: 'ข้อความบนหน้าเข้าสู่ระบบ',
+          d: 'ชื่อระบบไทย/อังกฤษ · คำต้อนรับ · อัตลักษณ์นักศึกษา — ฝั่งซ้ายของหน้าเข้าสู่ระบบ' })) +
       hubGroup('pin', 'หน้าเว็บสาธารณะ',
         hubCard({ v: 'org', ic: 'pin', color: 'var(--terra)', t: 'ข้อมูลหน่วยงานและช่องทางติดต่อ',
           d: 'ที่อยู่ · เวลาทำการ · โทร/อีเมล · โซเชียล — ใช้บนหน้าแรกและส่วนท้าย' }) +
@@ -15045,24 +15139,13 @@ body.notes .note{display:block;}
       return back + head('ข้อมูลหน่วยงานและช่องทางติดต่อ', 'ใช้แสดงบนหน้าแรกสาธารณะ ส่วน "ติดต่อ" และส่วนท้าย') +
         '<div class="set-2col">' + oForm + oSide + '</div>';
     }
-    if (tab === 'auth') {
-      var authForm =
-        '<div class="card card-pad">' +
-          '<div class="tip">' + ic('shield') + '<div>ทางเข้าหลักคือบัญชี Google ' +
-            '<b>@' + esc(s.allowDomain) + '</b> · ระบบจับคู่เฉพาะบัญชีที่นำเข้าแล้ว <b>ไม่สร้างบัญชีใหม่</b>จาก Google</div></div>' +
-          '<div class="grid2 mt-14">' +
-            fld('Google Client ID', '<input class="inp" placeholder="xxxxxx.apps.googleusercontent.com" disabled>') +
-            fld('Google Client Secret', '<input class="inp" type="password" value="xxxxxxxxxxxx" disabled>') +
-          '</div>' +
-          fld('โดเมนอีเมลที่อนุญาต', '<input class="inp" value="' + esc(s.allowDomain) + '" disabled>' +
-            shownAt(['ปุ่มเข้าสู่ระบบด้วย Google', 'การตรวจสิทธิ์ตอนล็อกอิน'])) +
-          fld('อีเมลผู้ดูแล (ยกเว้นการตรวจโดเมน)', '<input class="inp" value="' + esc(s.adminEmails || '') + '" disabled>' +
-            '<div class="hint">แก้ที่ "ตั้งค่าทั่วไป" — ใช้ค่าเดียวกันทั้งระบบ</div>') +
-          bypassNote('ค่า Client ID/Secret จริงเก็บใน .env ที่ฝั่งเซิร์ฟเวอร์ ไม่แสดงบนหน้าเว็บ · ตั้งตอนขึ้น subdomain จริง') +
-        '</div>' +
-        /* 17 ก.ย. 69 · ข้อความฝั่งซ้ายของหน้าเข้าสู่ระบบ — เจ้าของงานสั่งว่าต้อง "แอดมินแก้ไขได้"
-           ต่างจากช่อง Google ด้านบนที่เป็นบายพาส (ค่าจริงอยู่ .env) — ชุดนี้บันทึกลง settings จริง */
-        '<div class="card card-pad mt-16"><form data-form="loginpage">' +
+    /* ═══ ข้อความบนหน้าเข้าสู่ระบบ (17 ก.ย. 2569) ═══
+       🔴 แยกออกมาเป็นการ์ดของตัวเอง เพราะรอบแรกไปแปะไว้ใต้ "การยืนยันตัวตน (Google)"
+          แล้วเจ้าของงานหาไม่เจอ — **ของที่แก้ได้ต้องหาเจอด้วย ไม่งั้นเท่ากับไม่มี**
+       ⚠️ ต่างจากการ์ด Google ตรงที่ชุดนี้ **บันทึกลง settings จริง ไม่ใช่บายพาส** */
+    if (tab === 'loginpage') {
+      var lpForm =
+        '<div class="card card-pad"><form data-form="loginpage">' +
           '<div class="sec-h mb-10">' + ic('eye') + ' ข้อความบนหน้าเข้าสู่ระบบ (ฝั่งซ้าย)</div>' +
           fld('ชื่อระบบ (ภาษาไทย)', '<input class="inp" name="loginTitleTh" data-lv="loginTitleTh" value="' +
             esc(s.loginTitleTh || '') + '">', true) +
@@ -15077,6 +15160,42 @@ body.notes .note{display:block;}
           '<div class="f-actions"><button type="button" class="btn btn-pri" data-act="loginpage:save">' +
             ic('check') + ' บันทึกข้อความหน้าเข้าสู่ระบบ</button></div>' +
         '</form></div>';
+      var lpSide =
+        '<div class="set-side">' +
+          '<div class="sec-h">' + ic('eye') + ' ตัวอย่างฝั่งซ้ายของหน้าเข้าสู่ระบบ</div>' +
+          '<div class="pv-card"><div class="pv-body pt-20 px-18 pb-20 text-center">' +
+            '<img src="' + (s.logo || genLogo()) + '" alt="" class="w-44 h-44 r-10 mb-10">' +
+            '<div class="fw-700 t-ink mb-2" data-lvout="loginTitleTh" data-lvph="(ชื่อระบบภาษาไทย)">' +
+              esc(s.loginTitleTh || '') + '</div>' +
+            '<div class="fs-1 t-ink-3 mb-12" data-lvout="loginTitleEn" data-lvph="(ชื่อระบบภาษาอังกฤษ)">' +
+              esc(s.loginTitleEn || '') + '</div>' +
+            '<div class="tip text-left"><div><b>' + esc(s.loginWelcomeTitle || '(ยังไม่ได้ใส่หัวข้อ)') + '</b><br>' +
+              '<span class="fs-1">' + esc(s.loginWelcome || '(ยังไม่ได้ใส่ข้อความ)') + '</span></div></div>' +
+          '</div></div>' +
+          '<div class="tip">' + ic('pin') + '<div>ตราคณะ/มหาวิทยาลัยและชื่อหน่วยงานด้านบนของฝั่งซ้าย ' +
+            'มาจาก <b>ข้อมูลหน่วยงาน</b> และ <b>โลโก้และภาพแบรนด์</b> — แก้ที่การ์ดนั้นแทน (แหล่งเดียว)</div></div>' +
+          '<div class="tip">' + ic('cap') + '<div><b>ที่ยืนของมาสคอต</b> — เมื่อออกแบบ "น้อง TIMS" ' +
+            'เสร็จ จะมาแทนตราระบบตรงกลางฝั่งซ้ายให้อัตโนมัติ</div></div>' +
+        '</div>';
+      return back + head('ข้อความบนหน้าเข้าสู่ระบบ',
+        'ชื่อระบบ 2 ภาษา และกล่องข้อความที่ทุกคนเห็นก่อนล็อกอิน') +
+        '<div class="set-2col">' + lpSide + lpForm + '</div>';
+    }
+    if (tab === 'auth') {
+      var authForm =
+        '<div class="card card-pad">' +
+          '<div class="tip">' + ic('shield') + '<div>ทางเข้าหลักคือบัญชี Google ' +
+            '<b>@' + esc(s.allowDomain) + '</b> · ระบบจับคู่เฉพาะบัญชีที่นำเข้าแล้ว <b>ไม่สร้างบัญชีใหม่</b>จาก Google</div></div>' +
+          '<div class="grid2 mt-14">' +
+            fld('Google Client ID', '<input class="inp" placeholder="xxxxxx.apps.googleusercontent.com" disabled>') +
+            fld('Google Client Secret', '<input class="inp" type="password" value="xxxxxxxxxxxx" disabled>') +
+          '</div>' +
+          fld('โดเมนอีเมลที่อนุญาต', '<input class="inp" value="' + esc(s.allowDomain) + '" disabled>' +
+            shownAt(['ปุ่มเข้าสู่ระบบด้วย Google', 'การตรวจสิทธิ์ตอนล็อกอิน'])) +
+          fld('อีเมลผู้ดูแล (ยกเว้นการตรวจโดเมน)', '<input class="inp" value="' + esc(s.adminEmails || '') + '" disabled>' +
+            '<div class="hint">แก้ที่ "ตั้งค่าทั่วไป" — ใช้ค่าเดียวกันทั้งระบบ</div>') +
+          bypassNote('ค่า Client ID/Secret จริงเก็บใน .env ที่ฝั่งเซิร์ฟเวอร์ ไม่แสดงบนหน้าเว็บ · ตั้งตอนขึ้น subdomain จริง') +
+        '</div>';
       var authSide =
         '<div class="set-side">' +
           '<div class="sec-h">' + ic('eye') + ' ตัวอย่างหน้าเข้าสู่ระบบ</div>' +
