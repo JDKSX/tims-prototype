@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TIMS · โปรโตไทป์ระบบฝึกประสบการณ์วิชาชีพครู</title>
+<title>TIMS · โปรโตไทป์ระบบบริหารจัดการการฝึกประสบการณ์วิชาชีพครู</title>
 <style>
 /* ═══════════════════════════════════════════════════════════════════════════
    B-1 (12 ก.ย. 69): ฟอนต์เก็บไว้ในเครื่องเอง (design/fonts/) แทนโหลดจาก
@@ -2262,8 +2262,17 @@ body.notes .note{display:block;}
 /* 🔵 ที่ยืนของ "มาสคอต" ในอนาคต — ตอนนี้วางตราระบบนิ่ง ๆ ไว้ก่อน
    กันพื้นที่ด้วย min-height เพื่อให้เลย์เอาต์ไม่กระตุกตอนเปลี่ยนเป็นตัวการ์ตูนเคลื่อนไหว */
 .login-mascot{display:flex;align-items:center;min-height:104px;margin:22px 0 0;}
-.login-msg{display:flex;gap:13px;margin-top:22px;padding:16px 18px;border-radius:var(--r3);
+.login-msg{position:relative;display:flex;gap:13px;margin:0;padding:16px 18px;border-radius:var(--r3);
   background:var(--surface);border:1px solid var(--line);box-shadow:var(--sh-1);}
+/* หางกล่องคำพูด — ชี้ "ลงซ้าย" ไปหาตัวผู้พูดที่อยู่ใต้กล่อง (ตามเฟรมเวิร์คของเจ้าของงาน)
+   วาดสองชั้น: ชั้นล่างคือสีขอบ ชั้นบนคือสีพื้น เหลื่อมกันเท่าความหนาขอบ ⇒ หางมีเส้นขอบเหมือนตัวกล่อง */
+.login-msg::before{content:'';position:absolute;bottom:-14px;left:48px;width:28px;height:15px;
+  background:var(--line);clip-path:polygon(0 0,100% 0,14% 100%);}
+.login-msg::after{content:'';position:absolute;bottom:-12px;left:50px;width:24px;height:13px;
+  background:var(--surface);clip-path:polygon(0 0,100% 0,14% 100%);}
+/* ที่ทางของ "คำพูด + ผู้พูด" — ตัวผู้พูดชิดซ้ายใต้หางกล่อง ไม่ใช่กลางคอลัมน์ */
+.login-say{width:100%;max-width:560px;margin-top:4px;}
+.seal-div-sm{width:34px;height:3px;margin:15px auto;opacity:.75;}
 .login-msg-mark{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;
   background:var(--pine-soft);color:var(--pine);}
 .login-msg-mark svg{width:17px;height:17px;}
@@ -2360,6 +2369,82 @@ body.notes .note{display:block;}
 .cursor-default{cursor:default;}.cursor-pointer{cursor:pointer;}.ff-mono{font-family:ui-monospace,monospace;}
 .ff-serif{font-family:var(--serif);}.fit-cover{object-fit:cover;}.of-auto{overflow:auto;}.of-hidden{overflow:hidden;}
 .pos-rel{position:relative;}.stroke-none{stroke:none;}.ar-169{aspect-ratio:16 / 9;}.rot-180{transform:rotate(180deg);}
+/* ═══════════ น้อง TIMS · มาสคอตประจำระบบ ═══════════
+   ออกแบบใน design/tims-logo-maker.html (ที่นั่นดาวน์โหลดไฟล์ได้ 7 รูปแบบ)
+   🔴 คีย์เฟรมอยู่ที่นี่ ไม่ได้ฝังใน <svg> แบบไฟล์ที่ดาวน์โหลดไป
+      เพราะ CSP ของระบบจริงไม่มี unsafe-inline ⇒ <style> ในมาร์กอัปถูกบล็อก (R-1 ข้อ 7)
+      โชคดีที่จุดหมุนทุกจุดเป็นค่าคงที่ (กรอบภาพ 280×320 เท่ากันทุกท่า) จึงย้ายมาไว้ที่นี่ได้ครบ
+   🔴 ห้ามกำหนดจุดหมุนเป็นแอตทริบิวต์สไตล์อินไลน์ที่ตัว svg เด็ดขาด — check_prototype ข้อ 5ข แบนไว้ */
+.nt{display:block;width:100%;height:auto;}
+.nt-xs{max-width:46px;}.nt-sm{max-width:74px;}.nt-md{max-width:124px;}.nt-lg{max-width:186px;}
+.nt-body{transform-origin:140px 300px;}
+.nt-cap{transform-origin:140px 90px;}
+.nt-arm-l{transform-origin:64px 168px;}
+.nt-arm-r{transform-origin:216px 168px;}
+.nt-eye-l{transform-origin:114px 162px;}
+.nt-eye-r{transform-origin:166px 162px;}
+.nt-z1{transform-origin:220px 94px;}.nt-z2{transform-origin:240px 70px;}.nt-z3{transform-origin:262px 42px;}
+.nt-anim .nt-body{animation:nt-float 3s ease-in-out infinite;}
+.nt-anim[data-pose="pass"] .nt-body{animation-name:nt-bounce;}
+.nt-anim[data-pose="guide"] .nt-body{animation-name:nt-nod;}
+.nt-anim[data-pose="think"] .nt-body{animation-name:nt-think;}
+.nt-anim[data-pose="sorry"] .nt-body{animation-name:nt-sorry;}
+.nt-anim[data-pose="cheer"] .nt-body{animation-name:nt-cheer;}
+.nt-anim[data-pose="sleep"] .nt-body{animation-name:nt-sleep;}
+.nt-anim .nt-cap{animation:nt-capbob 2.9s ease-in-out infinite;}
+.nt-anim[data-pose="cheer"] .nt-cap{animation:nt-toss 3s ease-in-out infinite;}
+.nt-anim .nt-arm-l{animation:nt-armb 2.6s ease-in-out infinite;}
+.nt-anim .nt-arm-r{animation:nt-armb 2.6s ease-in-out .5s infinite;}
+.nt-anim[data-pose="hello"] .nt-arm-r{animation:nt-wave 1.7s ease-in-out infinite;}
+.nt-anim .nt-eye-l,.nt-anim .nt-eye-r{animation:nt-blink 5.2s infinite;}
+.nt-anim .nt-z1,.nt-anim .nt-z2,.nt-anim .nt-z3{opacity:0;animation:nt-zf 3.2s ease-in-out infinite;}
+.nt-anim .nt-z2{animation-delay:.5s;}.nt-anim .nt-z3{animation-delay:1s;}
+@keyframes nt-float{0%,100%{transform:translateY(0);}50%{transform:translateY(-7px);}}
+@keyframes nt-bounce{0%,100%{transform:translateY(0) scaleY(1);}30%{transform:translateY(-16px) scaleY(1.03);}55%{transform:translateY(0) scaleY(.97);}75%{transform:translateY(-5px) scaleY(1);}}
+@keyframes nt-nod{0%,100%{transform:rotate(0);}30%{transform:rotate(-3.5deg);}65%{transform:rotate(2.5deg);}}
+@keyframes nt-think{0%,100%{transform:translateY(0) rotate(0);}50%{transform:translateY(-4px) rotate(3deg);}}
+@keyframes nt-sorry{0%,100%{transform:translateY(0) rotate(0);}50%{transform:translateY(4px) rotate(-2deg);}}
+@keyframes nt-cheer{0%,100%{transform:translateY(0);}40%{transform:translateY(-24px);}70%{transform:translateY(-4px);}}
+@keyframes nt-sleep{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(3px) scale(.985);}}
+@keyframes nt-capbob{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
+@keyframes nt-toss{0%,100%{transform:translateY(0) rotate(0);}40%{transform:translateY(-26px) rotate(-13deg);}70%{transform:translateY(-6px) rotate(5deg);}}
+@keyframes nt-armb{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
+@keyframes nt-wave{0%,100%{transform:rotate(0);}25%{transform:rotate(-19deg);}60%{transform:rotate(13deg);}}
+@keyframes nt-blink{0%,92%,100%{transform:scaleY(1);}96%{transform:scaleY(.08);}}
+@keyframes nt-zf{0%{opacity:0;transform:translateY(6px) scale(.8);}35%{opacity:1;}100%{opacity:0;transform:translateY(-16px) scale(1.1);}}
+/* ปิดการเคลื่อนไหวให้ผู้ที่ตั้งค่าระบบปฏิบัติการไว้ว่าไม่ต้องการ — แต่ตัว Z ต้องยังเห็น ไม่งั้นท่านอนอ่านไม่ออก */
+@media (prefers-reduced-motion:reduce){
+  .nt-anim .nt-body,.nt-anim .nt-cap,.nt-anim .nt-arm-l,.nt-anim .nt-arm-r,
+  .nt-anim .nt-eye-l,.nt-anim .nt-eye-r,.nt-anim .nt-z1,.nt-anim .nt-z2,.nt-anim .nt-z3{animation:none;}
+  .nt-anim .nt-z1,.nt-anim .nt-z2,.nt-anim .nt-z3{opacity:1;}
+}
+/* ═══ ป๊อบอัปผลลัพธ์กลางจอของน้อง TIMS ═══
+   ต่างจาก toast มุมจอตรงที่อยู่กลางสายตา ⇒ ใช้กับ "ผลของสิ่งที่เพิ่งทำ" ให้รับรู้แน่ ๆ
+   เสริม toast ไม่ใช่แทน — toast ยังถือปุ่ม "เลิกทำ" ไว้ ซึ่งเป็นทางถอยที่ห้ามหาย
+   🔴 pointer-events:none — ห้ามขวางการคลิกเด็ดขาด เพราะบางงานทำถี่ ๆ ทีละหลายรายการ
+      (อนุมัติรายคน) ถ้าขวางแม้เสี้ยววินาที มือที่กำลังรัวจะพลาดทันที
+   🔴 ความเร็วเลือกตามบริบท: quick (งานถี่) · normal · hold (งานที่จบเป็นชิ้น ควรหยุดรับรู้ก่อนไปต่อ) */
+.ntpop-back{position:fixed;inset:0;z-index:2100;display:grid;place-items:center;pointer-events:none;}
+.ntpop{display:flex;flex-direction:column;align-items:center;gap:9px;padding:20px 28px 18px;
+  border-radius:var(--r4);background:var(--surface);box-shadow:var(--sh-3);border:1px solid var(--line);
+  min-width:230px;max-width:min(92vw,360px);text-align:center;
+  animation:ntpop-in .26s cubic-bezier(.2,1.4,.4,1);}
+.ntpop.out{animation:ntpop-out .22s ease-in forwards;}
+.ntpop .nt{width:92px;max-width:92px;}
+.ntpop b{font-size:var(--fs-4);color:var(--ink);}
+.ntpop p{margin:0;font-size:var(--fs-2);line-height:1.6;color:var(--ink-2);}
+.ntpop-bad{border-color:var(--bad);}
+@keyframes ntpop-in{from{opacity:0;transform:scale(.86) translateY(10px);}to{opacity:1;transform:none;}}
+@keyframes ntpop-out{to{opacity:0;transform:scale(.96) translateY(-6px);}}
+@media (prefers-reduced-motion:reduce){.ntpop,.ntpop.out{animation:none;}}
+
+/* ที่ยืนของน้อง TIMS ในแต่ละหน้า
+   🔴 ห้ามตั้ง width:auto ให้ svg ในกล่อง flex — svg ไม่มีขนาดในตัว จะยุบเหลือ 0 ทันที
+      (เจอจริงตอนต่อสายหน้าเข้าสู่ระบบ: อยู่ใน DOM ครบ แอนิเมชันวิ่ง แต่วัดได้ 0×0) */
+.login-mascot{justify-content:flex-start;padding-left:10px;margin:0;min-height:0;}
+.login-mascot .nt{flex:0 0 auto;width:172px;}
+.nt-slot{display:flex;justify-content:center;margin:0 0 14px;}
+.nt-slot .nt{flex:0 0 auto;}
 </style>
 </head>
 <body>
@@ -2526,6 +2611,7 @@ body.notes .note{display:block;}
           <span class="seal-row">
             <span class="brand-logo-slot" data-kind="university" data-h="71" data-maxw="140"></span>
             <span class="brand-logo-slot" data-kind="faculty" data-h="62" data-maxw="140"></span>
+            <span class="brand-logo-slot" data-h="58" data-maxw="120"></span>
           </span>
           <span class="seal-bar"></span>
           <span class="seal-tx"><span class="s1" data-org-line="1"></span><span class="s2" data-org-line="2"></span><span class="s3" data-org-line="3"></span></span>
@@ -2534,19 +2620,19 @@ body.notes .note{display:block;}
         <!-- ชื่อระบบ 2 ภาษา — ค่ามาจาก settings แอดมินแก้เองได้ -->
         <h1 class="login-name-th" data-login-tx="loginTitleTh"></h1>
         <p class="login-name-en" data-login-tx="loginTitleEn"></p>
-        <!-- 🔵 ตราของระบบ — ที่นี่คือที่ที่จะกลายเป็น "มาสคอตเคลื่อนไหวได้" ในอนาคต
-             (ออกแบบคู่กับโลโก้ใน design/tims-logo-maker.html) · คลาส .login-mascot กันไว้แล้ว
-             ระหว่างนี้แสดงตราระบบนิ่ง ๆ ไปก่อน ไม่ใช่ที่ว่างเปล่า -->
-        <div class="login-mascot" data-mascot-slot>
-          <span class="brand-logo-slot" data-h="92" data-maxw="300"></span>
-        </div>
-        <!-- ปิดท้ายด้วยข้อความที่แอดมินเขียนเอง (ยินดีต้อนรับ · อัตลักษณ์ · วิสัยทัศน์ แล้วแต่จะใส่) -->
-        <div class="login-msg" data-login-msg hidden>
-          <span class="login-msg-mark"><svg class="i"><use href="#i-cap"/></svg></span>
-          <div>
-            <b data-login-tx="loginWelcomeTitle"></b>
-            <p data-login-tx="loginWelcome"></p>
+        <span class="seal-div seal-div-sm"></span>
+        <!-- 🔵 คำพูดของน้อง TIMS แล้วตามด้วยตัวผู้พูด — เรียงตามเฟรมเวิร์คที่เจ้าของงานร่างมา
+             ข้อความมาก่อน ตัวละครอยู่ล่างซ้าย หางกล่องชี้ลงไปหาตัว ⇒ อ่านว่า "น้อง TIMS พูดประโยคนี้"
+             ตัวปรับแต่ง/ดาวน์โหลดมาสคอตอยู่ที่ design/tims-logo-maker.html -->
+        <div class="login-say">
+          <div class="login-msg" data-login-msg hidden>
+            <div>
+              <b data-login-tx="loginWelcomeTitle"></b>
+              <p data-login-tx="loginWelcome"></p>
+            </div>
           </div>
+          <div class="login-mascot" data-nt="hello" data-nt-size="lg"
+               data-nt-label="น้อง TIMS มาสคอตของระบบ กำลังทักทาย"></div>
         </div>
       </div>
 
@@ -2605,7 +2691,7 @@ body.notes .note{display:block;}
   <div class="solo">
     <div class="w-100p mw-470">
       <div class="text-center mb-22">
-        <span class="status-mark w-54 h-54 fs-6 mt-0 mx-auto mb-13"><svg class="i"><use href="#i-key"/></svg></span>
+        <div class="nt-slot" data-nt="guide" data-nt-size="sm" data-nt-label="น้อง TIMS กำลังแนะนำวิธีเปิดใช้งานบัญชี"></div>
         <h2 class="fs-5">เข้าสู่ระบบครั้งแรก</h2>
         <p class="muted mt-6 mx-0 mb-0 fs-3">เปิดใช้งานบัญชีด้วยรหัสจากใบแจ้งที่ได้รับ</p>
       </div>
@@ -2664,7 +2750,7 @@ body.notes .note{display:block;}
   <div class="solo">
     <div class="w-100p mw-470">
       <div class="text-center mb-22">
-        <span class="status-mark w-54 h-54 fs-6 mt-0 mx-auto mb-13"><svg class="i"><use href="#i-key"/></svg></span>
+        <div class="nt-slot" data-nt="guide" data-nt-size="sm" data-nt-label="น้อง TIMS กำลังแนะนำขั้นตอนเปิดใช้งาน"></div>
         <h2 class="fs-5">เปิดใช้งานบัญชีของท่าน</h2>
         <p class="muted mt-6 mx-0 mb-0 fs-3">ทำครั้งเดียวก่อนเริ่มใช้งานระบบ</p>
       </div>
@@ -2687,8 +2773,7 @@ body.notes .note{display:block;}
 <section class="screen" id="s-403">
   <div class="solo">
     <div class="w-100p mw-470 text-center">
-      <span class="status-mark w-60 h-60 fs-6 mt-0 mx-auto mb-16 bg-grad-bad t-white">
-        <svg class="i"><use href="#i-shield"/></svg></span>
+      <div class="nt-slot" data-nt="sorry" data-nt-label="น้อง TIMS บอกว่าเข้าหน้านี้ไม่ได้"></div>
       <h2 class="fs-6">บัญชีของคุณไม่มีสิทธิ์เข้าถึงส่วนนี้</h2>
       <p class="muted mt-10 mx-0 mb-0 lh-170">
         หน้านี้สงวนไว้สำหรับบทบาทอื่น หากคิดว่าเป็นความผิดพลาด กรุณาติดต่อฝ่ายฝึกประสบการณ์วิชาชีพครู</p>
@@ -2705,7 +2790,7 @@ body.notes .note{display:block;}
 <section class="screen" id="s-maintenance">
   <div class="solo">
     <div class="w-100p mw-470 text-center">
-      <span class="status-mark w-60 h-60 fs-6 mt-0 mx-auto mb-16"><svg class="i"><use href="#i-gear"/></svg></span>
+      <div class="nt-slot" data-nt="sleep" data-nt-label="น้อง TIMS กำลังหลับ ระบบปิดปรับปรุง"></div>
       <h2 class="fs-6">ระบบปิดปรับปรุงชั่วคราว</h2>
       <p class="muted mt-10 mx-0 mb-0 lh-170">
         ขณะนี้ระบบอยู่ระหว่างการปรับปรุง คาดว่าจะกลับมาใช้งานได้ภายใน 1 ชั่วโมง<br>
@@ -4257,7 +4342,7 @@ body.notes .note{display:block;}
       /* ⚠️ ภาคเรียนปัจจุบันของโปรโตไทป์ตั้งเป็น 2/2569 โดยตั้งใจ
          เพราะเป็นภาคเรียนที่ระบบจะถูกใช้จริงครั้งแรก และเป็นภาคที่หนักที่สุด
          (3 รุ่นออกฝึกพร้อมกัน ~1,950 คน) ⇒ ต้องทดสอบที่สภาพนี้ ไม่ใช่สภาพที่เบาที่สุด */
-      settings: { siteName: 'TIMS ระบบฝึกประสบการณ์วิชาชีพครู', year: '2569', semester: '2', maintenance: false,
+      settings: { siteName: 'TIMS ระบบบริหารจัดการการฝึกประสบการณ์วิชาชีพครู', year: '2569', semester: '2', maintenance: false,
         /* ระยะเวลาฝึกจริง (เจ้าของงานยืนยัน 14 ก.ย. 69): ครั้งที่ 1–3 = 15 วัน · ครั้งที่ 4 = เต็ม 1 ภาคเรียน
            🔴 เดิมเก็บเป็น "จำนวนสัปดาห์" ค่าเดียวทั้งระบบ (16) ซึ่งเป็นข้อมูลเก่าและใช้กับครั้งที่ 1–3 ไม่ได้เลย
            เก็บเป็นค่าเริ่มต้นแยกรายครั้งที่ + มีหน่วย เพื่อให้ปรับได้เองเมื่อระเบียบเปลี่ยนในอนาคต
@@ -4265,7 +4350,7 @@ body.notes .note{display:block;}
         durByRound: { '1': { n: 15, u: 'day' }, '2': { n: 15, u: 'day' }, '3': { n: 15, u: 'day' }, '4': { n: 1, u: 'term' } }, allowDomain: DOMAIN, stuPrefix: STU_PREFIX, adminEmails: ADMIN_EMAILS.join(','), timezone: 'Asia/Bangkok',
         announce: {
           banner: { on: true, text: 'ระบบอยู่ระหว่างทดลองใช้งาน · ข้อมูลที่ปรากฏเป็นข้อมูลตัวอย่างเท่านั้น' },
-          popup: { on: false, title: 'ยินดีต้อนรับสู่ TIMS', body: 'ระบบฝึกประสบการณ์วิชาชีพครูอยู่ระหว่างทดลองใช้งาน หากพบปัญหาแจ้งฝ่ายฝึกประสบการณ์', image: '', btnText: '', btnLink: '', force: false }
+          popup: { on: false, title: 'ยินดีต้อนรับสู่ TIMS', body: 'ระบบบริหารจัดการการฝึกประสบการณ์วิชาชีพครูอยู่ระหว่างทดลองใช้งาน หากพบปัญหาแจ้งฝ่ายฝึกประสบการณ์', image: '', btnText: '', btnLink: '', force: false }
         },
         rosterGreeting: '',
         /* A-9 (12 ก.ย. 69): หน้าแรกสาธารณะตั้งค่าได้จริงจากศูนย์ตั้งค่า — เดิมเป็น HTML นิ่งทั้งก้อน ไม่อ่าน settings เลย
@@ -4305,7 +4390,7 @@ body.notes .note{display:block;}
         orgHours: 'จันทร์–ศุกร์ 08:30–16:30 น.', orgPhone: '', orgEmail: '',
         orgAddr: '319 ถ.ไทยพันทา ต.โพธิ์ อ.เมือง จ.ศรีสะเกษ 33000', orgFb: '', orgYt: '',
         copyright: '© 2569 คณะครุศาสตร์และการพัฒนามนุษย์ มหาวิทยาลัยราชภัฏศรีสะเกษ',
-        seoTitle: 'TIMS · ระบบฝึกประสบการณ์วิชาชีพครู มรภ.ศรีสะเกษ',
+        seoTitle: 'TIMS · ระบบบริหารจัดการการฝึกประสบการณ์วิชาชีพครู มรภ.ศรีสะเกษ',
         seoDesc: 'ระบบจัดการการฝึกประสบการณ์วิชาชีพครู คณะครุศาสตร์และการพัฒนามนุษย์ มหาวิทยาลัยราชภัฏศรีสะเกษ' }
     };
   }
@@ -4320,7 +4405,8 @@ body.notes .note{display:block;}
      รอบล่าสุด 17 ส.ค. 69: เพิ่ม addr/nationalId/photo ให้กรรมการและแอดมิน
      แต่ไม่ได้ขึ้นเลข ⇒ ข้อมูลเก่าไม่มี addr → อ่าน c.addr.detail แล้วพัง หน้าเปิดไม่ขึ้น
      ⚠️ เทสต์จับไม่ได้เพราะทุกตัวสั่ง localStorage.clear() ก่อนเสมอ — ต้องระวังเอง */
-  var SCHEMA = 65;  // 65: ป้ายสถานะทั้งระบบ — DB.seen (จำว่าเปิดดูหน้าไหนล่าสุด) + ขยับวันข่าวล่าสุดให้ป้าย "ใหม่" มีของให้เห็น
+  var SCHEMA = 66;  // 66: ชื่อไทยของระบบให้ตรงชื่อทางการทุกจุด (siteName · seoTitle · การ์ดประกาศ · ประกาศทดลองใช้)
+                    // 65: ป้ายสถานะทั้งระบบ — DB.seen (จำว่าเปิดดูหน้าไหนล่าสุด) + ขยับวันข่าวล่าสุดให้ป้าย "ใหม่" มีของให้เห็น
                     // 64: หน้าเข้าสู่ระบบสองฝั่ง — settings.loginTitleTh/En · loginWelcomeTitle · loginWelcome
                     // 62: คะแนนรายวิชา (CR-33.3/33.4) — taskDef.score · หมวด 'extra' · sub.score · course.gradeCuts
                     // 61: ซีดเว้นนักศึกษารหัส 66 บางคนไว้ยังไม่ลงทะเบียน (CR-33.1 — หน้าลงทะเบียนต้องมีของให้กดจริง)
@@ -4443,7 +4529,50 @@ body.notes .note{display:block;}
     }
     return true;
   }
-  function save() { try { DB.schema = SCHEMA; localStorage.setItem(KEY, JSON.stringify(DB)); } catch (e) {} }
+  /* ═══ EC-04 · บันทึกล้มเหลวต้องไม่เงียบ และต้องไม่ทำให้งานที่กรอกไว้หาย ═══
+     🔴 ของเดิมเป็น `catch (e) {}` ว่างเปล่า และผู้เรียกทุกจุด (138 จุด) เขียนเรียงกันว่า
+        save(); ... toast('บันทึกแล้ว') ⇒ **เด้งว่าสำเร็จเสมอไม่ว่าจะเขียนลงไปได้จริงหรือไม่**
+        เกิดขึ้นได้จริง: รูปที่อัปโหลดเก็บเป็น data URI อยู่ในตัวข้อมูลเอง · ข้อมูลตั้งต้น ~1,012 KB
+        ต่อเพดาน ~5 MB ⇒ ภาพจากมือถือรูปเดียว (2–5 MB + base64 อีก ~33%) ก็ทะลุได้
+        แล้วของที่แก้ในรอบเดียวกันหายไปด้วยทั้งหมด เพราะเขียนทั้งก้อนเป็นคีย์เดียว
+     🔴 แก้ที่ศูนย์กลาง ไม่ไล่แก้ผู้เรียกทั้ง 138 จุด — เพราะทุกจุดเด้งแถบผลและล้างค่าที่พักไว้
+        ใน "จังหวะซิงโครนัสเดียวกัน" กับ save() จึงดักที่ toast() และ pendClear() ได้ครบ
+        (คืนค่า boolean ไว้ด้วย เพื่อให้โค้ดที่เขียนใหม่เช็คผลได้ตรง ๆ — แพตเทิร์นเดียวกับ busy())
+     ⚠️ ระบบจริง (Laravel) เปลี่ยน "เขียน localStorage ไม่สำเร็จ" เป็น "ยิงไปเซิร์ฟเวอร์ไม่สำเร็จ"
+        โดยหน้าตาและถ้อยคำเหมือนกันทุกประการ — ดู docs/EC04_FAILURE_UX.md */
+  /* 🐛 บทเรียน: เคยตั้งธงนี้แล้วล้างด้วย setTimeout(0) — **ใช้ไม่ได้**
+     ในเบราว์เซอร์ที่รันด้วยนาฬิกาจำลอง (ตัวตรวจ) ตัวจับเวลาไม่ได้เดินตามที่คิด
+     ธงจึงค้างข้ามการกระทำ แล้วไปกลบแถบผลของหน้าอื่นที่ไม่เกี่ยวกันเลย
+     ⇒ เลิกพึ่งตัวจับเวลา ใช้ธง "ใช้ครั้งเดียวแล้วหมดอายุ" แทน:
+        ตั้งเมื่อบันทึกล้ม · ถูกใช้ไปกับแถบผลตัวถัดไป · และล้างทุกครั้งที่เริ่มบันทึกใหม่ */
+  var saveFail = false;     /* บันทึกเพิ่งล้ม ⇒ ห้ามเด้งแถบเขียวทับ (ใช้ครั้งเดียว) */
+  var pendBackup = null;    /* สำเนาค่าที่พักไว้ ก่อนถูกล้างในจังหวะเดียวกัน */
+  function saveFailToast(e) {
+    /* ชื่อรหัสต่างกันตามเบราว์เซอร์ — Safari ใช้ code 22 · Firefox ใช้ 1014 */
+    var full = !!e && (e.name === 'QuotaExceededError' || e.code === 22 || e.code === 1014);
+    var failT = full ? 'บันทึกไม่สำเร็จ — พื้นที่ในเครื่องเต็ม' : 'บันทึกไม่สำเร็จ';
+    var failS = full ? 'ไฟล์ภาพที่เพิ่งใส่ใหญ่เกินไป ลองใช้ไฟล์ที่เล็กลง หรือกด "รีเซ็ตข้อมูลตัวอย่าง" บนแถบด้านบน'
+      : 'สิ่งที่ท่านกรอกไว้ยังอยู่ในหน้านี้ ไม่ได้หายไปไหน — ลองบันทึกอีกครั้ง';
+    toast(failT, failS, 'bad');
+    ntPop('bad', failT, full ? 'พื้นที่ในเครื่องเต็ม — งานที่กรอกไว้ยังอยู่ครบ' :
+      'งานที่กรอกไว้ยังอยู่ครบ ลองบันทึกอีกครั้ง', 'hold');
+  }
+  function save() {
+    saveFail = false;       /* เริ่มการบันทึกครั้งใหม่ — ผลของครั้งก่อนหมดอายุ */
+    try {
+      DB.schema = SCHEMA;
+      localStorage.setItem(KEY, JSON.stringify(DB));
+      pendBackup = null;
+      return true;
+    } catch (e) {
+      saveFail = true;
+      /* คืนค่าที่พักไว้ให้ครบ — ผู้เรียกล้างทิ้งไปก่อนเรียก save() แล้ว
+         ถ้าปล่อยไว้ ผู้ใช้จะเสียงานที่กรอกโดยไม่มีอะไรบอก ซึ่งแย่กว่าบันทึกไม่ได้เฉย ๆ */
+      if (pendBackup) { if (pendBackup.v) pend[pendBackup.sc] = pendBackup.v; pendBackup = null; }
+      saveFailToast(e);
+      return false;
+    }
+  }
   function reset() { DB = seed(); save(); }
 
   /* ═══ 1ข · ถังขยะ — ลบจริงได้ + กู้คืนได้ 30 วัน (A-1 · 11 ก.ย. 69 · เจ้าของงานเคาะ) ═══
@@ -4869,6 +4998,9 @@ body.notes .note{display:block;}
   var UNDO_MS = 8000;
   function offerUndo(fn) { pendingUndo = fn; }
   function toast(title, sub, kind, opts) {
+    /* 🔴 EC-04 · บันทึกเพิ่งล้มในจังหวะเดียวกัน ⇒ กลืนแถบ "บันทึกแล้ว" ของผู้เรียกทิ้ง
+       "บอกว่าสำเร็จทั้งที่ล้ม" แย่กว่า "บอกว่าล้ม" เสมอ — ผู้ใช้เดินต่อโดยเชื่อว่าของถูกบันทึกแล้ว */
+    if (saveFail && kind !== 'bad') { saveFail = false; return; }
     if (!toastWrap) {
       toastWrap = document.createElement('div');
       toastWrap.className = 'toast-wrap';
@@ -5000,7 +5132,8 @@ body.notes .note{display:block;}
   });
   function confirmBox(o, yes) {
     modal({ title: o.title, icon: o.icon || 'shield',
-      body: '<p class="m-0 lh-170">' + o.body + '</p>',
+      body: (o.nt ? ntSlot(o.nt, o.ntLabel || 'น้อง TIMS ขอให้อ่านให้ดีก่อนกดยืนยัน', 'sm') : '') +
+        '<p class="m-0 lh-170">' + o.body + '</p>',
       foot: '<button class="btn btn-ghost" data-act="modal:close">ยกเลิก</button>' +
             '<button class="btn ' + (o.danger ? 'btn-bad' : 'btn-pri') + '" data-act="confirm:yes">' + esc(o.yes || 'ยืนยัน') + '</button>' });
     pendingConfirm = yes;
@@ -5404,6 +5537,146 @@ body.notes .note{display:block;}
         esc(t.l) + (t.n != null ? ' <span class="cnt">' + t.n + '</span>' : '') + '</button>';
     }).join('') + '</div>';
   }
+  /* ═══════════ น้อง TIMS · มาสคอตประจำระบบ ═══════════
+     ต้นฉบับและตัวปรับแต่งอยู่ที่ design/tims-logo-maker.html (ดาวน์โหลดได้ 7 รูปแบบ)
+     ที่นี่เป็นฉบับย่อสำหรับใช้ในระบบ — วาดจากพิกัดชุดเดียวกันเป๊ะ แต่
+     🔴 ไม่มีบล็อกสไตล์ฝังใน svg และไม่มีแอตทริบิวต์สไตล์อินไลน์ที่ element ใด ๆ (CSP · R-1 ข้อ 7)
+        คีย์เฟรมกับจุดหมุนย้ายไปอยู่ใน CSS กลางแล้ว (ค้นคำว่า "น้อง TIMS" ในบล็อก <style>)
+     🔴 สีใช้ var(--pine)/var(--terra) ผ่าน presentation attribute ⇒ เปลี่ยนชุดสีระบบแล้วเปลี่ยนตาม
+        (presentation attribute ไม่ใช่ style attribute จึงไม่ติดข้อ 5ข ของ check_prototype) */
+  var NT_POSES = {
+    hello: { armL: -50, armR: 40, mouth: 'smile', eyes: 'open' },
+    pass:  { armL: -46, armR: 62, mouth: 'grin',  eyes: 'happy' },
+    guide: { armL: -58, armR: 10, mouth: 'talk',  eyes: 'open' },
+    work:  { armL: -22, armR: -70, mouth: 'flat', eyes: 'look' },
+    think: { armL: -56, armR: 64, mouth: 'small', eyes: 'think' },
+    sorry: { armL: -74, armR: -74, mouth: 'sad',  eyes: 'sad' },
+    cheer: { armL: 64,  armR: 64, mouth: 'grin',  eyes: 'happy' },
+    sleep: { armL: -78, armR: -78, mouth: 'zz',   eyes: 'shut', zzz: 1 }
+  };
+  var NT_INK = 'var(--pine)', NT_ACC = 'var(--terra)', NT_FACE = '#ffffff';
+  function ntR(n) { return Math.round(n * 100) / 100; }
+  /* แขนลอย — องศาวัดจาก "ชี้ออกข้างลำตัวในแนวนอน" · บวก = ยกขึ้น · ลบ = ทิ้งลง
+     ทั้งสองข้างใช้เครื่องหมายเดียวกัน ตัวมันสะท้อนซ้าย-ขวาให้เอง */
+  function ntArm(side, deg, cls) {
+    var sx = 140 + side * 76, sy = 168, a = deg * Math.PI / 180;
+    var dx = side * Math.cos(a), dy = -Math.sin(a);
+    return '<g class="' + cls + '"><ellipse cx="0" cy="0" rx="11" ry="26" fill="' + NT_INK +
+      '" transform="translate(' + ntR(sx + 30 * dx) + ',' + ntR(sy + 30 * dy) +
+      ') rotate(' + ntR(Math.atan2(-dx, dy) * 180 / Math.PI) + ')"/></g>';
+  }
+  /* ตา 6 แบบ — 3 ชั้น (ตาขาว → ลูกตา → ประกายตา) · ลูกตาเท่านั้นที่เลื่อนตอนมองข้าง/มองขึ้น */
+  function ntEyes(kind) {
+    var L = 114, R = 166, Y = 162;
+    if (kind === 'happy' || kind === 'shut') {
+      var d = kind === 'happy' ? 'q16 -19 32 0' : 'q16 17 32 0';
+      return [L, R].map(function (x) {
+        return '<path d="M' + (x - 16) + ' ' + Y + d + '" fill="none" stroke="' + NT_FACE +
+          '" stroke-width="7" stroke-linecap="round"/>';
+      }).join('');
+    }
+    var sad = kind === 'sad', dx = kind === 'look' ? 5 : 0, dy = kind === 'think' ? -5 : 0;
+    var rx = sad ? 13 : 16, ry = sad ? 16 : 21, pr = sad ? 7 : 9, py = sad ? 9 : 12;
+    return [L, R].map(function (x, i) {
+      var brow = sad ? '<path d="M' + (x - 15) + ' ' + (Y - 25) + 'q15 ' + (i ? -9 : 9) + ' 30 ' +
+        (i ? 9 : -9) + '" fill="none" stroke="' + NT_FACE + '" stroke-width="6" stroke-linecap="round"/>' : '';
+      return brow + '<g class="nt-eye-' + (i ? 'r' : 'l') + '">' +
+        '<ellipse cx="' + x + '" cy="' + Y + '" rx="' + rx + '" ry="' + ry + '" fill="' + NT_FACE + '"/>' +
+        '<ellipse cx="' + (x + dx) + '" cy="' + (Y + dy + 3) + '" rx="' + pr + '" ry="' + py + '" fill="' + NT_INK + '"/>' +
+        '<circle cx="' + (x + dx + 4) + '" cy="' + (Y + dy - 3) + '" r="4" fill="' + NT_FACE + '"/>' +
+        '<circle cx="' + (x + dx - 3) + '" cy="' + (Y + dy + 8) + '" r="2" fill="' + NT_FACE + '" opacity=".75"/></g>';
+    }).join('');
+  }
+  function ntMouth(kind) {
+    var Y = 208, L = 116;
+    if (kind === 'grin') return '<path d="M' + L + ' ' + (Y - 6) + 'q24 30 48 0z" fill="' + NT_FACE +
+      '"/><ellipse cx="140" cy="' + (Y + 5) + '" rx="10" ry="6" fill="' + NT_ACC + '"/>';
+    if (kind === 'smile') return '<path d="M' + L + ' ' + Y + 'q24 21 48 0" fill="none" stroke="' + NT_FACE +
+      '" stroke-width="7" stroke-linecap="round"/>';
+    if (kind === 'talk') return '<ellipse cx="140" cy="' + (Y + 4) + '" rx="14" ry="12" fill="' + NT_FACE +
+      '"/><ellipse cx="140" cy="' + (Y + 10) + '" rx="8" ry="5" fill="' + NT_ACC + '"/>';
+    if (kind === 'sad') return '<path d="M' + L + ' ' + (Y + 9) + 'q24 -21 48 0" fill="none" stroke="' + NT_FACE +
+      '" stroke-width="7" stroke-linecap="round"/>';
+    if (kind === 'small') return '<circle cx="140" cy="' + (Y + 2) + '" r="8" fill="' + NT_FACE + '"/>';
+    if (kind === 'zz') return '<ellipse cx="140" cy="' + (Y + 2) + '" rx="11" ry="13" fill="' + NT_FACE +
+      '"/><ellipse cx="140" cy="' + (Y + 7) + '" rx="7" ry="5" fill="' + NT_ACC + '"/>';
+    return '<rect x="' + L + '" y="' + (Y - 4) + '" width="48" height="8" rx="4" fill="' + NT_FACE + '"/>';
+  }
+  function ntZ(x, y, s, i) {
+    return '<path class="nt-z' + i + '" d="M' + x + ' ' + y + 'h' + s + 'l-' + s + ' ' + s + 'h' + s +
+      '" fill="none" stroke="' + NT_ACC + '" stroke-width="' + ntR(s * 0.22) +
+      '" stroke-linecap="round" stroke-linejoin="round"/>';
+  }
+  /**
+   * วาดน้อง TIMS หนึ่งตัว
+   * @param {string} pose  ท่าทาง — hello · pass · guide · work · think · sorry · cheer · sleep
+   * @param {object} [o]   {size:'xs|sm|md|lg', anim:false, label:'ข้อความสำหรับโปรแกรมอ่านหน้าจอ'}
+   */
+  function nongTims(pose, o) {
+    o = o || {};
+    var p = NT_POSES[pose] || NT_POSES.hello, g = '';
+    /* ตัว = กล่องมนใบเดียว (หัวกับตัวเป็นชิ้นเดียวกัน) */
+    g += '<rect x="68" y="110" width="144" height="138" rx="26" fill="' + NT_INK + '"/>';
+    /* หมวกบัณฑิต — แผ่นสี่เหลี่ยม + ฐานทรงกระบอกที่สวมหัว + พู่ (พิกัดคิดจากสัญลักษณ์ cap ของโลโก้)
+       วาดหลังตัว เพื่อให้ฐานทับขอบบนของตัว ⇒ อ่านว่าสวมอยู่จริง ไม่ใช่ลอยอยู่เฉย ๆ */
+    g += '<g class="nt-cap">' +
+      '<path d="M102 72L102 112A38 10 0 0 1 178 112L178 72Z" fill="' + NT_ACC + '"/>' +
+      '<ellipse cx="140" cy="72" rx="38" ry="10" fill="' + NT_ACC + '"/>' +
+      '<polygon points="140,46.4 202.4,71.6 140,96.8 77.6,71.6" fill="' + NT_INK + '"/>' +
+      '<circle cx="140" cy="71.6" r="6.6" fill="' + NT_ACC + '"/>' +
+      '<path d="M140 76.4L186.8 66.8V101.6" fill="none" stroke="' + NT_INK +
+      '" stroke-width="6.6" stroke-linecap="round" stroke-linejoin="round"/>' +
+      '<circle cx="186.8" cy="107.6" r="6" fill="' + NT_ACC + '"/></g>';
+    /* เท้าลอยสองชิ้น — ไม่ติดกับตัว */
+    g += '<ellipse cx="112" cy="262" rx="24" ry="12" fill="' + NT_ACC + '" transform="rotate(-12 112 262)"/>' +
+      '<ellipse cx="170" cy="259" rx="24" ry="12" fill="' + NT_ACC + '" transform="rotate(11 170 259)"/>';
+    /* แขนลอย — ข้างขวาของมาสคอตคือข้างซ้ายของคนดู */
+    g += ntArm(-1, p.armL, 'nt-arm-l') + ntArm(1, p.armR, 'nt-arm-r');
+    /* หน้า — วาดท้ายสุด ไม่มีอะไรทับได้ */
+    g += ntEyes(p.eyes) +
+      '<ellipse cx="88" cy="195" rx="11" ry="7" fill="' + NT_ACC + '"/>' +
+      '<ellipse cx="192" cy="195" rx="11" ry="7" fill="' + NT_ACC + '"/>' + ntMouth(p.mouth);
+    if (p.zzz) g += ntZ(214, 88, 13, 1) + ntZ(232, 62, 17, 2) + ntZ(252, 32, 21, 3);
+    return '<svg class="nt nt-' + (o.size || 'md') + (o.anim === false ? '' : ' nt-anim') +
+      '" data-pose="' + esc(pose) + '" viewBox="0 0 280 320" role="img" aria-label="' +
+      esc(o.label || 'น้อง TIMS มาสคอตของระบบ') + '"><g class="nt-body">' + g + '</g></svg>';
+  }
+  /**
+   * ป๊อบอัปผลลัพธ์กลางจอ — เสริม toast ไม่ใช่แทน (toast ยังถือปุ่ม "เลิกทำ" อยู่)
+   * 🔴 ความเร็วต้องเลือกตามบริบทของงาน (เจ้าของงานเคาะ 17 ก.ย. 69):
+   *    'quick' งานที่ทำถี่ ๆ ทีละหลายรายการ — เด้งแล้วหายไว ไม่ขวางจังหวะมือ
+   *    'hold'  งานที่จบเป็นชิ้น (ตรวจงานเสร็จ · บันทึกคะแนน) — ค้างให้รับรู้ก่อนไปงานถัดไป
+   * @param {'ok'|'bad'} kind  ok = ท่าผ่านแล้ว · bad = ท่ายังไม่ได้
+   * @param {string} title
+   * @param {string} [sub]
+   * @param {'quick'|'normal'|'hold'} [speed]
+   */
+  var ntPopEl = null, ntPopTm = null;
+  function ntPop(kind, title, sub, speed) {
+    var ms = speed === 'quick' ? 850 : (speed === 'hold' ? 2200 : 1400);
+    if (ntPopTm) { clearTimeout(ntPopTm); ntPopTm = null; }
+    if (ntPopEl) { ntPopEl.remove(); ntPopEl = null; }
+    var back = document.createElement('div');
+    back.className = 'ntpop-back';
+    back.setAttribute('data-speed', speed || 'normal');
+    back.setAttribute('role', 'status');
+    back.setAttribute('aria-live', kind === 'bad' ? 'assertive' : 'polite');
+    back.innerHTML = '<div class="ntpop' + (kind === 'bad' ? ' ntpop-bad' : '') + '">' +
+      nongTims(kind === 'bad' ? 'sorry' : 'pass', { size: 'sm', label: '' }) +
+      '<b>' + esc(title) + '</b>' + (sub ? '<p>' + esc(sub) + '</p>' : '') + '</div>';
+    document.body.appendChild(back);
+    ntPopEl = back;
+    ntPopTm = setTimeout(function () {
+      var card = back.querySelector('.ntpop');
+      if (card) card.classList.add('out');
+      setTimeout(function () { back.remove(); if (ntPopEl === back) ntPopEl = null; }, 220);
+    }, ms);
+  }
+  /** ที่ยืนของน้อง TIMS เหนือข้อความในหน้าสถานะ */
+  function ntSlot(pose, label, size) {
+    return '<div class="nt-slot">' + nongTims(pose, { size: size || 'md', label: label }) + '</div>';
+  }
+
   function empty(t, s, action) {
     return '<div class="card"><div class="empty">' + ic('book') +
       '<b class="d-block fs-4">' + esc(t) + '</b>' +
@@ -5453,7 +5726,7 @@ body.notes .note{display:block;}
      (ยืมมาตรฐานเดียวกับหน้า 403/ปิดปรับปรุงแบบเต็มจอ — ดู #s-403) ให้เห็นชัดว่า "รุนแรงกว่าว่างเฉย ๆ" */
   function denied(t, s) {
     return '<div class="card"><div class="empty">' +
-      '<span class="status-mark w-60 h-60 fs-6 mt-0 mx-auto mb-16 bg-grad-bad t-white">' + ic('shield') + '</span>' +
+      ntSlot('sorry', 'น้อง TIMS บอกว่าดูส่วนนี้ไม่ได้', 'sm') +
       '<b class="d-block fs-4">' + esc(t) + '</b>' +
       '<p class="mt-6 mx-0 mb-0 fs-2">' + esc(s) + '</p></div></div>';
   }
@@ -6283,7 +6556,9 @@ body.notes .note{display:block;}
   function pendHas(sc, k) { return !!(pend[sc] && (k in pend[sc])); }
   function pendMap(sc) { return pend[sc] || {}; }
   function pendCount(sc) { return Object.keys(pendMap(sc)).length; }
-  function pendClear(sc) { delete pend[sc]; }
+  /* 🔴 ผู้เรียกเขียน pendClear(sc); save(); เรียงกัน ⇒ ตอน save() รู้ผล ค่าถูกล้างไปแล้ว
+     จึงต้องเก็บสำเนาไว้ที่นี่ ให้ save() คืนกลับได้ถ้าเขียนไม่สำเร็จ (EC-04) */
+  function pendClear(sc) { pendBackup = { sc: sc, v: pend[sc] }; delete pend[sc]; }
   function pendClear2(sc, k) { if (pend[sc]) delete pend[sc][k]; }
   function pendAny() {
     return Object.keys(pend).some(function (k) { return pendCount(k) > 0; });
@@ -6876,6 +7151,21 @@ body.notes .note{display:block;}
     /* 14 ก.ย. 69: ตราสัญลักษณ์โผล่ในหน้าที่เรนเดอร์สดด้วย (ศูนย์ตั้งค่า · พรีวิว OG) ไม่ใช่แค่มาร์กอัปนิ่ง
        จึงต้องเติมทุกรอบ — เรียกซ้ำได้ ไม่มีผลข้างเคียง (ตั้งค่าเดิมทับค่าเดิม) */
     renderBrandLogos();
+    renderMascots();
+  }
+  /* เติมน้อง TIMS ลงช่องที่ปักไว้ในมาร์กอัป (data-nt="ท่าทาง")
+     🔴 เติมช่องละครั้งเดียว ไม่วาดซ้ำทุกรอบเรนเดอร์ — วาดซ้ำเมื่อไรแอนิเมชันจะกระตุกเริ่มนับใหม่
+        ต่างจาก renderBrandLogos() ที่เขียนทับได้ไม่มีผลข้างเคียงเพราะเป็นภาพนิ่ง */
+  function renderMascots() {
+    document.querySelectorAll('[data-nt]').forEach(function (el) {
+      var pose = el.getAttribute('data-nt');
+      if (el.getAttribute('data-nt-on') === pose) return;
+      el.innerHTML = nongTims(pose, {
+        size: el.getAttribute('data-nt-size') || 'md',
+        label: el.getAttribute('data-nt-label') || ''
+      });
+      el.setAttribute('data-nt-on', pose);
+    });
   }
 
   /* ── ประกาศระบบ (Phase A) — แถบบน + ป๊อบอัปหน้าแรก + เตือนโหมดปิดปรับปรุงให้แอดมิน ── */
@@ -14497,7 +14787,7 @@ body.notes .note{display:block;}
         '</div>' +
       '</div>' +
       '<div class="acard-greet">' + ic('mega') + '<p>' + esc(g) + '</p></div>' +
-      '<div class="acard-foot">TIMS · ระบบฝึกประสบการณ์วิชาชีพครู</div>' +
+      '<div class="acard-foot">TIMS · ระบบบริหารจัดการการฝึกประสบการณ์วิชาชีพครู</div>' +
     '</div>';
   }
   /* เปิดการ์ดประกาศแบบ "ลอยบนพื้นหลัง" (ไม่มีกรอบ modal) — เฉพาะการ์ด + ปุ่มลอยด้านล่าง */
@@ -17584,6 +17874,7 @@ body.notes .note{display:block;}
         notifyCourseState(co, 'รายวิชาถูกปิดแล้ว',
           'ฝ่ายฝึกสรุปจบรอบ — คะแนน การตรวจงาน การกดผ่าน และการนิเทศ แก้ไขไม่ได้แล้ว');
         save(); renderAll();
+        ntPop('ok', 'ปิดรายวิชาแล้ว', co.code + ' · ผลถูกล็อกเรียบร้อย', 'hold');
         toast('ปิดรายวิชาแล้ว', co.code + ' · ผลถูกล็อกเรียบร้อย', 'ok');
       });
     },
@@ -17615,7 +17906,9 @@ body.notes .note{display:block;}
       /* ด่านซ้ำฝั่งตัวจัดการ — ปุ่มถูกปิดอยู่แล้วบนจอ แต่ห้ามเชื่อแค่ชั้นหน้าจอ (R-4 ข้อ 1) */
       if (!readyOk(it, co)) {
         var miss = readyChecks(it, co).filter(function (c) { return !c.ok; });
-        toast('ยังอนุมัติไม่ได้', 'ขาด: ' + miss.map(function (c) { return c.l; }).join(' · '), 'bad');
+        var missTx = 'ขาด: ' + miss.map(function (c) { return c.l; }).join(' · ');
+        toast('ยังอนุมัติไม่ได้', missTx, 'bad');
+        ntPop('bad', 'ยังอนุมัติไม่ได้', missTx, 'hold');
         return;
       }
       confirmBox({ title: 'อนุมัติให้ออกฝึก', yes: 'อนุมัติ', icon: 'check',
@@ -17624,6 +17917,7 @@ body.notes .note{display:block;}
           'หลังอนุมัติแล้ว <b>โรงเรียนและอาจารย์นิเทศก์จะถูกล็อก</b> — จะแก้ต้องถอนอนุมัติก่อน' }, function () {
         apSet(it, 'approved', '');
         save(); closeModal(); renderAll();
+        ntPop('ok', 'อนุมัติแล้ว', stuName(studentOf(it.id)), 'quick');
         toast('อนุมัติแล้ว', stuName(studentOf(it.id)) + ' · แจ้งเตือนถึงนักศึกษาแล้ว', 'ok');
       });
     },
@@ -17698,6 +17992,7 @@ body.notes .note{display:block;}
       var from = el.getAttribute('data-from'), to = el.getAttribute('data-to');
       var src = DB.courses.filter(function (c) { return String(c.year) === from; });
       confirmBox({ title: 'ยกโครงไปปีการศึกษา ' + to, yes: 'ยกโครง', icon: 'cr',
+        nt: 'think', ntLabel: 'น้อง TIMS ขอให้ตรวจปีการศึกษาให้ดีก่อน เพราะยกโครงแล้วต้องไล่ลบทีละรายวิชา',
         body: 'สร้างรายวิชาใหม่ <b>' + src.length + '</b> รายวิชาในปี ' + to + ' พร้อมคัดลอกงานที่ต้องส่ง/แบบประเมิน · ตั้งเป็น "ยังไม่เปิดรับ" · ไม่ยกนักศึกษา/คะแนน/โควตาโรงเรียน' }, function (btn) {
         if (!busy(btn)) return;
         setTimeout(function () {
@@ -17790,6 +18085,7 @@ body.notes .note{display:block;}
         return;
       }
       confirmBox({ title: 'เผยแพร่เป็นข่าว', yes: 'เผยแพร่', icon: 'mega',
+        nt: 'think', ntLabel: 'น้อง TIMS เตือนว่าเผยแพร่แล้วคนเห็นทันที ถอนคืนไม่ได้',
         body: 'สร้างข่าว "<b>' + esc(d.title) + '</b>" (' + count + ' รายการ) และเผยแพร่สู่หน้าสาธารณะทันที' }, function () {
         /* นักศึกษา = บล็อกค้นหา+การ์ดรายคน (สแนปช็อตคำอวยพร) · โรงเรียน = ตาราง (เจ้าของงานโอเคแบบตาราง) */
         var body = kind === 'students'
@@ -18194,11 +18490,12 @@ body.notes .note{display:block;}
          ถูกซ่อนแค่ที่ปุ่ม แต่ตัวจัดการไม่เคยตรวจ** ⇒ ยิงคำสั่งตรงก็กดผ่านได้ทั้งที่ยังไม่ครบ
          (บทเรียนเดิม 15 ก.ย. 69 ขั้น 9: ด่านต้องอยู่ที่ตัวจัดการที่เขียนข้อมูล ไม่ใช่ที่ปุ่ม) */
       if (!pc.docs || !pc.tasks || !pc.scores || !pc.markOk) {
-        toast('ยังกดผ่านไม่ได้',
-          !pc.docs ? 'เอกสารก่อนออกฝึกยังไม่ครบ'
-            : !pc.tasks ? 'งานยังส่งไม่ครบหรือยังตรวจไม่หมด'
-              : !pc.scores ? 'คะแนนประเมินยังกรอกไม่ครบ'
-                : 'คะแนนแบบประเมินไม่ถึงเกณฑ์ที่ฝ่ายฝึกกำหนด', 'bad');
+        var whyPass = !pc.docs ? 'เอกสารก่อนออกฝึกยังไม่ครบ'
+          : !pc.tasks ? 'งานยังส่งไม่ครบหรือยังตรวจไม่หมด'
+            : !pc.scores ? 'คะแนนประเมินยังกรอกไม่ครบ'
+              : 'คะแนนแบบประเมินไม่ถึงเกณฑ์ที่ฝ่ายฝึกกำหนด';
+        toast('ยังกดผ่านไม่ได้', whyPass, 'bad');
+        ntPop('bad', 'ยังกดผ่านไม่ได้', whyPass, 'hold');
         return;
       }
       var s = studentOf(it.id), co = byId(DB.courses, it.courseId);
@@ -18317,6 +18614,11 @@ body.notes .note{display:block;}
       var r = scoreImport.result;
       if (!r || !r.ok || !r.ok.length) { toast('ไม่มีแถวที่บันทึกได้', null, 'bad'); return; }
       if (finishedGuard(pickedCourse('com'))) return;
+      /* 🔴 เขียนทับคะแนนเดิมของคนที่กรอกไว้แล้ว ของเก่าหายถาวร ⇒ ต้องมีเบรกก่อน */
+      confirmBox({ title: 'บันทึกคะแนนจากไฟล์ ' + r.ok.length + ' รายการ', yes: 'บันทึกเลย', icon: 'up',
+        nt: 'think', ntLabel: 'น้อง TIMS เตือนว่าคะแนนเดิมของคนที่กรอกไว้แล้วจะถูกทับถาวร',
+        body: 'บันทึกคะแนน <b>' + r.ok.length + '</b> รายการจากไฟล์<br>' +
+          '<b>คนที่มีคะแนนอยู่แล้วจะถูกเขียนทับ</b> และคะแนนเดิมจะหายถาวร — ตรวจว่าเป็นไฟล์ของแบบประเมินชุดนี้จริง' }, function () {
       if (!busy(el)) return;
       setTimeout(function () {
         var f = byId(DB.evalForms, scoreImport.formId);
@@ -18356,6 +18658,7 @@ body.notes .note{display:block;}
           (over ? 'ทับของเดิม ' + over + ' แถว · ' : '') +
           (r.bad.length ? 'ข้าม ' + r.bad.length + ' แถวที่มีปัญหา' : 'ครบทุกแถวในไฟล์'), 'ok');
       }, 600);
+      });
     },
     /* ⚠️ ชื่อต้องไม่ขึ้นต้นด้วย reset/clear — แค่กลับไปเลือกไฟล์ใหม่ ไม่ได้ลบข้อมูลอะไร
        ตัวตรวจ (ข้อ 10) ถือว่าชื่อพวกนั้นคือการล้างข้อมูลและต้องถามยืนยันก่อน */
@@ -18443,6 +18746,7 @@ body.notes .note{display:block;}
           if (old) Object.assign(old, payload); else { payload.id = Date.now() + r.iid; DB.scores.push(payload); }
         });
         save(); closeModal(); renderAll();
+        ntPop('ok', 'บันทึกคะแนนแล้ว', toSave.length + ' คน · ' + f.title, 'hold');
         toast('บันทึกคะแนนแล้ว', toSave.length + ' คน · ' + f.title, 'ok');
       });
     },
@@ -19777,6 +20081,7 @@ body.notes .note{display:block;}
       var u = byId(acctList(kind), el.getAttribute('data-id'));
       if (!u) return;
       confirmBox({ title: 'ออกรหัสผ่านใหม่', icon: 'key',
+        nt: 'think', ntLabel: 'น้อง TIMS เตือนว่ารหัสเดิมจะใช้ไม่ได้ทันทีและเรียกคืนไม่ได้',
         body: 'ออกรหัสผ่านชั่วคราวใหม่ให้ <b>' + esc(acctName(kind, u)) + '</b> และบังคับเปลี่ยนเมื่อเข้าระบบครั้งแรก<br>' +
               '<span class="hint">ระบบเดิมจะ<b>แสดงรหัสผ่านจริง</b>ของผู้ใช้ออกมา (C-2) — ของใหม่สุ่มรหัสใช้ครั้งเดียวแล้วเก็บเป็น bcrypt เท่านั้น</span>',
         yes: 'ออกรหัสใหม่' }, function () {
@@ -19807,6 +20112,8 @@ body.notes .note{display:block;}
         { from: prevSt === 'rejected' ? 'ตีกลับ' : 'รอตรวจ', to: 'ผ่าน' });
       /* ⚠️ การตรวจงานเป็นหน้าเต็มแล้ว ไม่ใช่โมดัล — ตรวจเสร็จต้องพากลับรายการ
          ไม่งั้นอาจารย์ค้างอยู่หน้าเดิมโดยไม่รู้ว่าต้องกดอะไรต่อ */
+      /* ตรวจงานจบหนึ่งชิ้นแล้วระบบพาไปงานถัดไปทันที ⇒ ต้องค้างผลไว้ให้รับรู้ก่อน ไม่งั้นงานเลื่อนไปเฉย ๆ */
+      ntPop('ok', 'ตรวจผ่านแล้ว', taskDef(l.taskId) ? taskDef(l.taskId).title : '', 'hold');
       if (view.page.sup === 'sup:task') goPage('sup:review'); else { closeModal(); renderAll(); }
       var s = studentOf(l.internshipId);
       var tTitle = taskDef(l.taskId) ? taskDef(l.taskId).title : '';
@@ -19879,6 +20186,7 @@ body.notes .note{display:block;}
         { from: prevSt2 === 'approved' ? 'ผ่าน' : 'รอตรวจ', to: 'ตีกลับ', note: note.slice(0, 60) });
       var s = studentOf(l.internshipId);
       var tTitle2 = taskDef(l.taskId) ? taskDef(l.taskId).title : '';
+      ntPop('bad', 'ส่งกลับให้แก้ไขแล้ว', tTitle2, 'hold');
       var notiR = pushNoti('student', s.id, 'งาน "' + tTitle2 + '" ถูกส่งกลับให้แก้ไข', note.slice(0, 60), 'stu:logs');
       save();
       /* ตีกลับจากหน้าตรวจงานชิ้นเดียว → กลับไปรายการงานที่รอตรวจ (งานนี้จัดการแล้ว)
@@ -20523,6 +20831,11 @@ body.notes .note{display:block;}
     'import:apply': function (el) {
       var r = importState.result;
       if (!r || !r.ok || !r.ok.length) { toast('ไม่มีแถวที่นำเข้าได้', null, 'bad'); return; }
+      /* 🔴 สร้างบัญชีจริงทั้งชุดในคราวเดียว ย้อนกลับต้องไล่ลบทีละคน ⇒ ต้องมีเบรกก่อน */
+      confirmBox({ title: 'นำเข้าบัญชี ' + r.ok.length + ' รายการ', yes: 'นำเข้าเลย', icon: 'up',
+        nt: 'think', ntLabel: 'น้อง TIMS ขอให้ตรวจรายการให้ครบก่อน เพราะนำเข้าผิดต้องไล่ลบทีละคน',
+        body: 'สร้างบัญชีใหม่ <b>' + r.ok.length + '</b> รายการจากไฟล์ พร้อมออกรหัสเปิดใช้งานให้แต่ละคน<br>' +
+          'ถ้ามีรายการผิด ต้องไล่ลบทีละคนภายหลัง — ตรวจตารางด้านบนให้ครบก่อนกดนำเข้า' }, function () {
       if (!busy(el)) return;
       setTimeout(function () {
         var kind = importState.kind, made = [];
@@ -20565,6 +20878,7 @@ body.notes .note{display:block;}
           (r.bad.length ? 'ข้าม ' + r.bad.length + ' แถวที่ยังมีปัญหา · ' : '') +
           'ทุกบัญชีได้รหัสเปิดใช้งานใช้ครั้งเดียว — พิมพ์ใบรหัสแจกได้เลย', 'ok');
       }, 600);
+      });
     },
     /* ไฟล์ตัวอย่าง — เจ้าหน้าที่ต้องเห็นรูปแบบก่อน ไม่ใช่เดาจากคำอธิบาย */
     'import:tpl': function () {
