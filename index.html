@@ -1446,6 +1446,51 @@ textarea.inp{resize:vertical;min-height:76px;}
   padding:9px 18px;font-size:var(--fs-2);font-weight:500;
   background:linear-gradient(90deg,var(--pine),var(--pine-dark));color:#fff;}
 .ann-bar.warn{background:linear-gradient(90deg,var(--warn),var(--warn-ink));}
+/* EC-04 · แถบ "ติดต่อเซิร์ฟเวอร์ไม่ได้" — ไม่บังหน้าจอ ไม่ล็อกการทำงาน
+   ผู้ใช้ยังกรอกต่อได้ระหว่างเน็ตหลุด แล้วค่อยกดบันทึกทีเดียวเมื่อกลับมาออนไลน์ */
+.net-bar{display:flex;align-items:center;gap:12px;padding:9px 18px;
+  font-size:var(--fs-2);font-weight:500;color:#fff;
+  background:linear-gradient(90deg,var(--bad),var(--bad-ink));}
+.net-bar .net-tx{flex:1;min-width:0;}
+.fail-sim{display:flex;flex-direction:column;gap:8px;}
+/* ปฏิทินเดือนฉบับหน้าสาธารณะ (รอบสี่ ข้อ 6) */
+.lpc-head{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:12px;}
+.lpc-head b{font-size:var(--fs-4);font-family:var(--serif);}
+.lpc-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--line-2);
+  border:1px solid var(--line-2);border-radius:var(--r2);overflow:hidden;}
+.lpc-dow{background:var(--paper);padding:7px 4px;text-align:center;font-size:var(--fs-1);
+  font-weight:700;color:var(--ink-3);}
+.lpc-d{background:var(--surface);min-height:82px;padding:5px 5px 4px;}
+.lpc-d.out{background:var(--paper);}
+.lpc-d.today{background:var(--accent-soft);}
+.lpc-n{font-size:var(--fs-1);font-weight:700;color:var(--ink-3);}
+.lpc-ev{margin-top:3px;padding:3px 5px;border-radius:6px;background:var(--pine-soft);
+  color:var(--pine-deep);font-size:var(--fs-1);line-height:1.35;
+  overflow:hidden;text-overflow:ellipsis;}
+.lpc-dup{opacity:.7;}
+@media (max-width:560px){.lpc-d{min-height:58px;}.lpc-ev{font-size:var(--fs-1);padding:2px 3px;}}
+/* ผัง 10 ขั้นฉบับหน้าสาธารณะ (รอบสี่ ข้อ 5) */
+.lp-rolebar{display:flex;flex-wrap:wrap;gap:8px;}
+.lp-flow10{display:flex;flex-direction:column;gap:2px;}
+.lp-fstep{display:flex;gap:14px;padding:13px 2px;border-bottom:1px solid var(--line-2);}
+.lp-fstep:last-child{border-bottom:0;}
+.lp-fstep.dim{opacity:.4;}
+.lp-fno{flex:0 0 auto;width:30px;height:30px;border-radius:var(--pill);
+  display:grid;place-items:center;font-weight:700;font-size:var(--fs-2);
+  background:var(--accent-soft);color:var(--accent-dark);}
+.lp-fbody{flex:1;min-width:0;}
+.lp-fbody>b{display:flex;align-items:center;gap:7px;font-size:var(--fs-3);}
+.lp-fby{display:flex;gap:8px;margin-top:7px;font-size:var(--fs-2);color:var(--ink-2);line-height:1.6;}
+.lp-fby .tag{flex:0 0 auto;align-self:flex-start;}
+@media (max-width:560px){.lp-fby{flex-direction:column;gap:3px;}}
+.ronly-bar{display:flex;align-items:center;gap:12px;}
+.ronly-bar .btn{flex:0 0 auto;margin-left:auto;}
+@media (max-width:560px){.ronly-bar{flex-wrap:wrap;}.ronly-bar .btn{margin-left:0;width:100%;}}
+.lp-num-note{grid-column:1/-1;display:flex;align-items:center;gap:7px;
+  margin-top:4px;font-size:var(--fs-1);color:var(--ink-4);}
+/* แถบเสนอให้กู้ฉบับร่าง — สีต่างจากแถบ "ยังไม่บันทึก" เพื่อไม่ให้สับสนว่าเป็นอันเดียวกัน */
+.draft-bar{border-color:var(--warn);background:var(--warn-soft);}
+.fail-sim .btn{justify-content:flex-start;}
 .ann-bar .ann-ic{flex-shrink:0;font-size:var(--fs-4);opacity:.9;}
 .ann-bar .ann-tx{flex:1;min-width:0;line-height:1.4;}
 .ann-bar .ann-x{flex-shrink:0;width:26px;height:26px;border-radius:50%;border:none;cursor:pointer;
@@ -1744,18 +1789,6 @@ body.notes .note{display:block;}
 .drill-card > .scorebar{margin-top:12px;}
 .drill-arr{color:var(--ink-4);flex-shrink:0;}
 /* ⭐ หน้าย่อยสาธารณะแบบกราฟิก (เจ้าของงานสั่ง 29 ส.ค. 69) */
-.lp-steps{display:flex;flex-direction:column;gap:0;}
-.lp-step{display:flex;gap:18px;align-items:flex-start;position:relative;padding:0 0 26px;}
-.lp-step:last-child{padding-bottom:0;}
-.lp-step::before{content:'';position:absolute;left:27px;top:56px;bottom:-2px;width:2px;background:var(--line);}
-.lp-step:last-child::before{display:none;}
-.lp-step-ic{width:56px;height:56px;border-radius:18px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
-  font-size:var(--fs-6);position:relative;z-index:1;}
-.lp-step-no{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;
-  font-size:var(--fs-1);font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid var(--surface);}
-.lp-step-tx{padding-top:6px;flex:1;min-width:0;}
-.lp-step-tx b{font-size:var(--fs-4);font-family:var(--serif);display:block;}
-.lp-step-tx p{margin:5px 0 0;color:var(--ink-3);font-size:var(--fs-3);line-height:1.6;}
 .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;}
 .info-tile{background:var(--surface);border:1.5px solid var(--line);border-radius:var(--r3);padding:18px;box-shadow:var(--sh-1);}
 .info-tile .info-ic{width:44px;height:44px;border-radius:var(--r2);display:flex;align-items:center;justify-content:center;
@@ -2521,11 +2554,13 @@ body.notes .note{display:block;}
     <button data-go="403">403</button>
     <button data-go="maintenance">ปิดปรับปรุง</button>
   </div>
+  <button class="btn btn-sm bg-white-12 t-white bdc-white-20" data-act="fail:sim">จำลองความล้มเหลว</button>
   <button class="btn btn-sm bg-white-12 t-white bdc-white-20" data-act="proto:reset">รีเซ็ตข้อมูลตัวอย่าง</button>
   <label class="mk-tog"><input type="checkbox" id="tog"> หมายเหตุ "เปลี่ยนจากเดิม"</label>
 </div>
 
 <!-- แถบประกาศระบบ (Phase A) — เติมเนื้อหาโดย renderAnnounce() · โผล่เหนือหน้าจอที่กำลังแสดง -->
+<div id="net-bar" hidden></div>
 <div id="ann-bar" hidden></div>
 
 <!-- ═══════════════ หน้าแรก ═══════════════ -->
@@ -2713,8 +2748,14 @@ body.notes .note{display:block;}
         <p class="muted mt-6 mx-0 mb-0 fs-3">เปิดใช้งานบัญชีด้วยรหัสจากใบแจ้งที่ได้รับ</p>
       </div>
 
-      <!-- คำอธิบายเต็มอยู่ที่นี่ ไม่ใช่บนหน้าเข้าสู่ระบบ -->
-      <div class="card card-pad mb-16">
+      <!-- 🔴 รอบสี่ ข้อ 3 (18 ก.ย. 69 · เจ้าของงานสั่ง): ของที่ต้อง "ลงมือทำ" มาก่อนคำอธิบายเสมอ
+           คนที่ถือใบแจ้งอยู่ในมือมาที่หน้านี้เพื่อ "กรอก" ไม่ได้มาเพื่อ "อ่าน"
+           ⇒ การ์ดกรอกขึ้นบนสุด · คำอธิบายเต็มเลื่อนลงไปอยู่ท้ายหน้าสำหรับคนที่ต้องการจริง ๆ -->
+      <div class="card r-var4 sh-3 mb-16"><div class="pt-24 px-26 pb-26">
+        <div data-view="activateform"></div>
+      </div></div>
+
+      <div class="card card-pad">
         <div class="tip"><svg class="i"><use href="#i-shield"/></svg>
           <div><b>ใช้รหัสเปิดใช้งาน 8 ตัวจากใบแจ้ง — ไม่ใช่รหัสผ่าน</b><br>
           นักศึกษารับใบแจ้งจากกรรมการสาขา · อาจารย์นิเทศก์และกรรมการรับจากเจ้าหน้าที่ฝ่ายฝึก</div></div>
@@ -2726,10 +2767,6 @@ body.notes .note{display:block;}
         <div class="hint mt-12"><svg class="i"><use href="#i-key"/></svg>
           รหัสเปิดใช้งาน<b>ใช้ได้ครั้งเดียว</b> — ทำเสร็จแล้วครั้งต่อไปเข้าด้วยปุ่ม Google หรือรหัสผ่านที่ตั้งไว้</div>
       </div>
-
-      <div class="card r-var4 sh-3"><div class="pt-24 px-26 pb-26">
-        <div data-view="activateform"></div>
-      </div></div>
 
       <div class="text-center mt-18">
         <button class="alt-link" data-jump="login">← กลับหน้าเข้าสู่ระบบ</button>
@@ -4574,11 +4611,35 @@ body.notes .note{display:block;}
     ntPop('bad', failT, full ? 'พื้นที่ในเครื่องเต็ม — งานที่กรอกไว้ยังอยู่ครบ' :
       'งานที่กรอกไว้ยังอยู่ครบ ลองบันทึกอีกครั้ง', 'hold');
   }
+  /* ═══ EC-04 · ช่องทางติดต่อเมื่อระบบขัดข้อง — อ่านจากศูนย์ตั้งค่า ไม่ฮาร์ดโค้ด ═══
+     เจ้าของงานเคาะ 17 ก.ย. 69: ห้ามเขียนชื่อ/เบอร์ใครลงโค้ด เพราะฝ่ายฝึกต้องแก้เองได้
+     เว้นว่าง = ไม่แสดงบรรทัดช่องทางติดต่อ (แพตเทิร์นเดียวกับข้อความหน้าเข้าสู่ระบบ) */
+  function orgContact() {
+    var s2 = DB.settings || {}, a = [];
+    if (s2.orgPhone) a.push('โทร ' + s2.orgPhone);
+    if (s2.orgEmail) a.push(s2.orgEmail);
+    return a.length ? ' — แจ้ง' + (s2.orgUnit || 'ฝ่ายฝึกประสบการณ์วิชาชีพครู') + ' ' + a.join(' · ') : '';
+  }
+  /** แถบ "ติดต่อเซิร์ฟเวอร์ไม่ได้" — ไม่บังหน้าจอ ไม่ล็อกการทำงาน */
+  var netOff = false;
+  function renderNetBar() {
+    var b = document.getElementById('net-bar');
+    if (!b) return;
+    b.hidden = !netOff;
+    b.className = netOff ? 'net-bar' : '';
+    b.innerHTML = !netOff ? '' : ic('x') +
+      '<span class="net-tx"><b>ตอนนี้ติดต่อเซิร์ฟเวอร์ไม่ได้</b> — สิ่งที่ท่านกรอกไว้ยังอยู่ครบ ' +
+      'กดบันทึกอีกครั้งเมื่อกลับมาออนไลน์</span>' +
+      '<button class="btn btn-sm bg-white-12 t-white bdc-white-20" data-act="net:retry">' + ic('retry') + ' ลองใหม่</button>';
+  }
   function save() {
     saveFail = false;       /* เริ่มการบันทึกครั้งใหม่ — ผลของครั้งก่อนหมดอายุ */
     try {
       DB.schema = SCHEMA;
       localStorage.setItem(KEY, JSON.stringify(DB));
+      /* บันทึกสำเร็จแล้วร่างหมดหน้าที่ — ถ้าปล่อยไว้ รอบหน้าจะเด้งให้กู้ของที่บันทึกไปแล้ว
+         (ล้มเหลวไม่เข้าเงื่อนไขนี้ ร่างจึงยังอยู่ครบ ซึ่งคือสิ่งที่ต้องการ) */
+      if (pendBackup) draftDrop(pendBackup.sc);
       pendBackup = null;
       return true;
     } catch (e) {
@@ -5081,7 +5142,9 @@ body.notes .note{display:block;}
       (o.foot === false ? '' : '<div class="modal-f">' + (o.foot || '<button class="btn btn-ghost" data-act="modal:close">ปิด</button>') + '</div>') +
       '</div>';
     document.body.appendChild(modalEl);
-    modalEl.addEventListener('click', function (e) { if (e.target === modalEl) closeModal(); });
+    /* 🔴 EC-04 · กล่อง "ต้องเข้าสู่ระบบอีกครั้ง" ต้องปิดด้วยการกดพื้นหลังไม่ได้
+       ไม่งั้นผู้ใช้กดพลาดแล้วกล่องหาย จะไม่รู้เลยว่าทำไมกดบันทึกไม่ผ่านสักที */
+    if (!o.sticky) modalEl.addEventListener('click', function (e) { if (e.target === modalEl) closeModal(); });
     modalEl.addEventListener('keydown', function (e) {
       if (e.key !== 'Tab') return;
       var items = [].slice.call(modalEl.querySelectorAll(
@@ -5155,6 +5218,63 @@ body.notes .note{display:block;}
             '<button class="btn ' + (o.danger ? 'btn-bad' : 'btn-pri') + '" data-act="confirm:yes">' + esc(o.yes || 'ยืนยัน') + '</button>' });
     pendingConfirm = yes;
   }
+  /* ═══════════════════════════════════════════════════════════════════════════
+     EC-04 · กล่องเรื่องเซสชัน — ออกแบบไว้ใน docs/EC04_FAILURE_UX.md หัวข้อ 7
+     ═══════════════════════════════════════════════════════════════════════════
+     🔴 หัวใจของทั้งเรื่อง: **ห้ามเด้งออกจากหน้าโดยทิ้งค่าที่กรอกไว้**
+        พฤติกรรมปริยายของ Laravel คือเด้งไปหน้าเข้าสู่ระบบ ซึ่งแปลว่า
+        ตารางคะแนนที่กรรมการกรอกมาสองชั่วโมงหายทั้งจอ
+        ⇒ ล็อกอินซ้ำ "ในที่เดิม" เป็นกล่องทับหน้าเดิม หน้าไม่ถูกนำทางไปไหนเลย
+           ค่าที่อยู่ใน DOM และใน pend จึงอยู่ครบโดยอัตโนมัติ */
+  /** ผู้ใช้ที่ทำงานค้างอยู่ตอนนี้ — ใช้ตรวจว่าล็อกอินซ้ำแล้วยังเป็นคนเดิมไหม
+      🔴 ยึด "บทบาทที่กำลังเปิดอยู่" ไม่ใช่ DB.session — ในโปรโตไทป์สลับบทบาทผ่าน
+         แถบด้านบนได้โดยไม่ผ่านหน้าเข้าสู่ระบบ ⇒ session ไม่ได้ถูกตั้งเสมอไป
+         และสิ่งที่ต้องเทียบจริง ๆ คือ "เจ้าของงานที่ค้างอยู่บนจอนี้" */
+  function meUser() {
+    var ns = { student: 'stu', supervisor: 'sup', committee: 'com', admin: 'adm' }[view.screen];
+    return ns ? meByNs(ns) : null;
+  }
+  /** เตือนที่ T−5 นาที — ถ้ามีค่าค้างต้องบอกจำนวนด้วย ไม่ใช่ขู่ลอย ๆ */
+  function sessionWarnBox() {
+    var n = 0;
+    Object.keys(pend).forEach(function (k) { n += pendCount(k); });
+    modal({ title: 'ใกล้ถึงเวลาออกจากระบบอัตโนมัติ', icon: 'bell',
+      body: ntSlot('guide', 'น้อง TIMS เตือนว่าใกล้หมดเวลา', 'sm') +
+        '<p class="m-0 lh-170">ระบบจะออกจากระบบให้เองใน <b>5 นาที</b> เพื่อความปลอดภัย' +
+        (n ? '<br>ท่านมีการแก้ไข <b>' + n + ' รายการ</b> ที่ยังไม่ได้บันทึก' : '') + '</p>',
+      /* ทางที่ปลอดภัยที่สุดวางไว้ซ้าย = ตำแหน่งที่สายตากวาดถึงก่อน
+         และโผล่เฉพาะตอนมีค่าค้างจริง ไม่ต้องขู่ผู้ใช้โดยไม่จำเป็น */
+      foot: (n ? '<button class="btn btn-pri" data-act="sess:saveStay">' + ic('check') + ' บันทึกแล้วทำงานต่อ</button>' : '') +
+            '<button class="btn btn-ghost" data-act="sess:stay">ทำงานต่อ</button>' });
+  }
+  /** หมดอายุไปแล้ว — ล็อกอินซ้ำในที่เดิม ห้ามเด้งออก */
+  function reauthBox() {
+    var u = meUser();
+    modal({ title: 'ต้องเข้าสู่ระบบอีกครั้ง', icon: 'key', sticky: true,
+      body: '<p class="mt-0 mx-0 mb-14 lh-170">ระบบออกจากระบบอัตโนมัติเพราะไม่มีการใช้งานนาน<br>' +
+        '<b class="t-ok-ink">สิ่งที่ท่านกรอกไว้ยังอยู่ครบ</b> — เข้าสู่ระบบแล้วจะกลับมาที่หน้าเดิมทันที</p>' +
+        /* ลำดับเดียวกับหน้าเข้าสู่ระบบหลัก (D-6) — Google ก่อน แล้วค่อยรหัสผ่าน */
+        '<button class="btn btn-google btn-block" data-act="reauth:google">' +
+          '<svg class="i w-19 h-19"><use href="#i-google"/></svg> เข้าสู่ระบบด้วยบัญชีมหาวิทยาลัย</button>' +
+        '<div class="login-or"><span>หรือ</span></div>' +
+        loginFields(false, 'reauth:pw') +
+        (u ? '<div class="hint text-center mt-11">กำลังทำงานค้างไว้ในชื่อ <b>' + esc(u.username || '') + '</b></div>' : ''),
+      foot: false });
+  }
+  /** เมนูจำลองความล้มเหลว (เฉพาะโปรโตไทป์) — ให้เคาะถ้อยคำและหน้าตาได้โดยไม่ต้องรอเซิร์ฟเวอร์ */
+  function failSimBox() {
+    modal({ title: 'จำลองความล้มเหลว (เฉพาะโปรโตไทป์)', icon: 'bell',
+      body: '<p class="mt-0 mx-0 mb-14 lh-170">ทั้งหมดนี้เป็นเรื่องฝั่งเซิร์ฟเวอร์และเครือข่าย ' +
+        'ซึ่งหน้าเว็บอย่างเดียวทำให้เกิดจริงไม่ได้ · ปุ่มเหล่านี้มีไว้ให้<b>ดูหน้าตาและถ้อยคำ</b> ' +
+        'ก่อนลงแรงเขียนฝั่งเซิร์ฟเวอร์ (ดู <code>docs/EC04_FAILURE_UX.md</code>)</p>' +
+        '<div class="fail-sim">' +
+        '<button class="btn btn-ghost" data-act="fail:save">บันทึกไม่สำเร็จ (เซิร์ฟเวอร์ขัดข้อง)</button>' +
+        '<button class="btn btn-ghost" data-act="fail:net">' + (netOff ? 'กลับมาออนไลน์' : 'ติดต่อเซิร์ฟเวอร์ไม่ได้ (เน็ตหลุด)') + '</button>' +
+        '<button class="btn btn-ghost" data-act="fail:warn">ใกล้ถึงเวลาออกจากระบบ (T−5 นาที)</button>' +
+        '<button class="btn btn-ghost" data-act="fail:expire">เซสชันหมดอายุแล้ว</button>' +
+        '</div>', foot: false });
+  }
+
   /** จุดที่ HTML ล้วนทำไม่ได้ — อธิบายว่าของจริงทำอะไร แล้วเดินต่อ */
   function bypass(what, then) {
     toast('จำลองการทำงาน: ' + what, 'ในระบบจริงขั้นตอนนี้ทำที่ฝั่งเซิร์ฟเวอร์', 'warn');
@@ -6327,8 +6447,15 @@ body.notes .note{display:block;}
     }).join('');
     var dv = '';
     if (opts.validations && opts.validations.length) {
-      dv = '<dataValidations count="' + opts.validations.length + '">' +
-        opts.validations.map(function (v) {
+      /* 🔴 Excel จำกัด "รายการที่ฝังมากับสูตร" ไว้ 255 ตัวอักษร — เกินแล้วเปิดไฟล์ไม่ได้/ซ่อมไฟล์
+         ⇒ ตัดตัวที่ยาวเกินทิ้งแทนที่จะส่งไฟล์เสียให้ผู้ใช้ (ยังกรอกเองได้ ระบบตรวจตอนอัปโหลดอยู่แล้ว)
+         (ตอนนี้รายการยาวสุดคือ 12 สาขา = 151 ตัวอักษร ยังปลอดภัย แต่ถ้าเพิ่มสาขาในอนาคตจะชนเพดาน
+          ถ้าไม่มีด่านนี้จะกลายเป็นไฟล์เปิดไม่ได้โดยไม่มีอะไรฟ้อง) */
+      var dvOk = opts.validations.filter(function (v) {
+        return v.col >= 0 && v.values.join(',').length <= 255;
+      });
+      dv = !dvOk.length ? '' : '<dataValidations count="' + dvOk.length + '">' +
+        dvOk.map(function (v) {
           var sq = colLetter(v.col) + ((v.from || 1) + 1) + ':' + colLetter(v.col) + 10000;
           return '<dataValidation type="list" allowBlank="1" showInputMessage="1" showErrorMessage="1" sqref="' + sq +
             '"><formula1>' + xmlEsc('"' + v.values.join(',') + '"') + '</formula1></dataValidation>';
@@ -6463,8 +6590,43 @@ body.notes .note{display:block;}
   var view = {
     screen: 'home',
     page: { stu: 'stu:home', sup: 'sup:home', com: 'com:home', adm: 'adm:home' },
-    week: null, tab: {}, pick: {}, q: {}, tbl: {}
+    week: null, tab: {}, pick: {}, q: {}, tbl: {},
+    /* 🔴 รอบสี่ ข้อ 10–11 (18 ก.ย. 69 · กฎ ก) — "เข้าดูได้หลายทาง เข้าแก้ได้ทางเดียว"
+       ทุกอย่างที่เพิ่ม/แก้/ลบข้อมูลของรายวิชา ต้องเข้าผ่าน **รายวิชาฝึก** เท่านั้น
+       เข้าจากเมนูซ้ายหรือทางลัดอื่น = ดูอย่างเดียว + ต้องมีปุ่มพาไปเส้นทางที่ถูก
+       🔴 ตัดสินจาก "คลิกมาจากตรงไหน" ไม่ใช่ให้ทุกปุ่มมาประกาศตัวเอง
+          ⇒ เพิ่มจุดเดียวที่ตัวจัดการคลิกกลาง ปุ่มที่เขียนใหม่ในอนาคตจึงเข้ากติกาเองอัตโนมัติ
+          (ถ้าให้แต่ละปุ่มติดธงเอง จะมีคนลืมติดแน่นอน — นั่นคือสาเหตุที่กติกา CR-32 หลุดมาตลอด) */
+    viaCourse: false,
+    lpRole: '',       /* ตัวกรองบทบาทบนหน้า "ขั้นตอนการฝึก" สาธารณะ (รอบสี่ ข้อ 5) */
+    lpCourse: '', lpMonth: '',   /* ปฏิทินสาธารณะ: รายวิชาที่เลือก + เดือนที่ดูอยู่ (รอบสี่ ข้อ 6) */
+    lpMan: 'stu'      /* แท็บคู่มือตามบทบาท (รอบสี่ ข้อ 7) */
   };
+  /** ตอนนี้ "แก้ได้" ไหม ตามกฎ ก — หน้ารายวิชาเองแก้ได้เสมอ · หน้าอื่นแก้ได้เมื่อเข้ามาทางรายวิชา
+      🔴 หน้ารายวิชาต้องแก้ได้แม้กดจากเมนูซ้าย เพราะมันคือ "ทางที่ถูกต้อง" อยู่แล้ว
+         (เมนู "รายวิชาของฉัน" ไม่ใช่ทางลัดข้ามขั้น — มันคือประตูหน้าของรายวิชา) */
+  function viaCourse() {
+    var ns = { student: 'stu', supervisor: 'sup', committee: 'com', admin: 'adm' }[view.screen];
+    var cur = ns ? String(view.page[ns] || '') : '';
+    /* 🔴 หน้าที่เป็น "ตัวงาน" เองแก้ได้เสมอ — ด่านอยู่ที่ "ทางเข้า" ไม่ใช่ที่ตัวหน้า
+       ถ้าไปตั้งด่านที่ตัวหน้าด้วย ธงจะหลุดระหว่างทาง (กด task:pick เป็น data-act
+       ไม่ใช่ data-page จึงไม่ผ่านตัวจัดการที่ตั้งธง) แล้วฟอร์มส่งงานจะเปิดไม่ได้ทั้งที่มาถูกทาง */
+    var tail = cur.split(':')[1] || '';
+    if (tail === 'course' || tail === 'task' || tail === 'form') return true;
+    return !!view.viaCourse;
+  }
+  /** แถบประกาศว่าหน้านี้ดูอย่างเดียว + ปุ่มพาไปเส้นทางที่ถูกต้อง (กฎ ก)
+      🔴 ต้องมีปุ่มเสมอ ห้ามบอกแค่ว่า "แก้ที่นี่ไม่ได้" แล้วปล่อยให้ผู้ใช้หาทางเอง
+         (มาตรฐานเดียวกับลำดับ 16 · สถานะว่างต้องไม่เป็นทางตัน) */
+  /* ⚠️ ห้ามตั้งชื่อ viewOnlyBar — ชนกับตัวที่มีอยู่แล้วของบทบาทอื่น (คนละลายเซ็น)
+     ประกาศทีหลังจะทับของเดิมเงียบ ๆ แล้วแถบไม่ขึ้นโดยไม่มีอะไรฟ้อง (เจอจริงรอบนี้) */
+  function courseOnlyBar(what, page, label) {
+    return '<div class="tip tip-warn ronly-bar">' + ic('eye') +
+      '<div><b>หน้านี้ดูอย่างเดียว</b> — ' + what +
+      ' ต้องทำในรายวิชาฝึก เพื่อไม่ให้ทำผิดรายวิชาโดยไม่รู้ตัว</div>' +
+      '<button class="btn btn-pri btn-sm" data-page="' + esc(page) + '">' +
+        ic('arr') + ' ' + esc(label || 'ไปทำในรายวิชาของฉัน') + '</button></div>';
+  }
   var ROLE_OF = { stu: 'student', sup: 'supervisor', com: 'committee', adm: 'admin' };
   var SCREEN_OF = { stu: 'student', sup: 'supervisor', com: 'committee', adm: 'admin' };
 
@@ -6634,7 +6796,56 @@ body.notes .note{display:block;}
         (ถ้าเก็บลงไปแล้วผู้ใช้ปิดเบราว์เซอร์ จะกลายเป็นบันทึกให้เองโดยไม่ได้กด)
      ⚠️ ตัวกรอง/ช่องค้นหา/ติ๊กเลือกแถว/สลับแท็บ ไม่ผ่านกลไกนี้ — ไม่ใช่ข้อมูล */
   var pend = {};
-  function pendSet(sc, k, v) { (pend[sc] = pend[sc] || {})[k] = v; }
+  /* ═══════════════════════════════════════════════════════════════════════════
+     EC-04 · ฉบับร่างในเครื่อง — กันงานหายตอนปิดแท็บ/รีเฟรช/เครื่องดับ
+     ═══════════════════════════════════════════════════════════════════════════
+     🔴 **ไม่ใช่การบันทึก** และต้องไม่มีทางถูกเข้าใจว่าเป็นการบันทึก
+        แถบ "ยังไม่บันทึก" ยังขึ้นตามเดิมทุกประการ
+     🔴 **กู้คืนต้องให้คนกดเอง** ห้ามเติมกลับให้อัตโนมัติ — ระหว่างที่ร่างค้างอยู่
+        คนอื่นอาจแก้ข้อมูลจริงไปแล้ว การเติมเงียบ ๆ คือการทับของใหม่โดยไม่มีใครรู้
+     🔴 **เก็บคนละคีย์กับข้อมูลหลัก** — ถ้าที่เก็บหลักเต็มจนบันทึกไม่ได้ (บั๊กในหัวข้อ 3
+        ของเอกสาร EC-04) ร่างต้องยังเขียนลงได้ ไม่งั้นจะพังพร้อมกันทั้งคู่
+     🔴 **PDPA** — ร่างอยู่ในเครื่องผู้ใช้และมีชื่อ/คะแนนของนักศึกษา
+        เครื่องส่วนกลางของคณะใช้ร่วมกันหลายคน ⇒ **ออกจากระบบต้องล้างทิ้งทั้งหมด**
+     ขอบเขตตามที่เจ้าของงานเคาะ: เฉพาะ "ตารางกรอกรวม" (สิ่งที่พิมพ์มานาน เสียแล้วเจ็บ)
+     ⇒ ผูกไว้ที่ pendBar() ซึ่งมีเฉพาะหน้ากรอกรวมอยู่แล้ว · ฟอร์มสั้นไม่เข้าเกณฑ์
+        (พิมพ์ใหม่เร็วกว่ากดกู้ · และกล่องเด้งบ่อยจะกลายเป็นเสียงที่ทุกคนกดผ่าน) */
+  var DRAFT_KEY = 'tims-draft', DRAFT_DAYS = 7;
+  var DRAFT_SKIP = { profile: 1 };
+  function draftOwner() {
+    var u = meUser();
+    return (view.screen || '-') + ':' + ((u && u.id) || 0);
+  }
+  function draftAll() {
+    try { return JSON.parse(localStorage.getItem(DRAFT_KEY) || '{}'); } catch (e) { return {}; }
+  }
+  function draftWrite(o) {
+    /* ร่างเขียนไม่ลงไม่ใช่เรื่องคอขาดบาดตาย (ของจริงยังอยู่ในหน้า) จึงไม่ต้องฟ้อง
+       แต่ก็ต้องไม่ทำให้การกรอกสะดุด ⇒ กลืนไว้ตรงนี้จุดเดียว */
+    try { localStorage.setItem(DRAFT_KEY, JSON.stringify(o)); } catch (e) {}
+  }
+  function draftPut(sc) {
+    if (DRAFT_SKIP[sc]) return;
+    var all = draftAll();
+    all[draftOwner() + '|' + sc] = { at: TODAY, v: pend[sc] || {} };
+    draftWrite(all);
+  }
+  function draftGet(sc) {
+    var all = draftAll(), d = all[draftOwner() + '|' + sc];
+    if (!d || !d.v || !Object.keys(d.v).length) return null;
+    /* หมดอายุ 7 วัน — ร่างเก่ากว่านั้นเสี่ยงทับของที่คนอื่นแก้ไปแล้วมากเกินไป */
+    if (daysAgo(d.at) > DRAFT_DAYS) { draftDrop(sc); return null; }
+    return d;
+  }
+  function draftDrop(sc) {
+    var all = draftAll();
+    delete all[draftOwner() + '|' + sc];
+    draftWrite(all);
+  }
+  /** ล้างร่างทั้งหมดในเครื่อง — ใช้ตอนออกจากระบบ (PDPA) */
+  function draftClearAll() { try { localStorage.removeItem(DRAFT_KEY); } catch (e) {} }
+
+  function pendSet(sc, k, v) { (pend[sc] = pend[sc] || {})[k] = v; draftPut(sc); }
   function pendGet(sc, k, fb) { return (pend[sc] && (k in pend[sc])) ? pend[sc][k] : fb; }
   function pendHas(sc, k) { return !!(pend[sc] && (k in pend[sc])); }
   function pendMap(sc) { return pend[sc] || {}; }
@@ -6649,7 +6860,18 @@ body.notes .note{display:block;}
   /** แถบบันทึกลอย — โผล่เมื่อมีการแก้ที่ยังไม่บันทึกเท่านั้น */
   function pendBar(sc, saveAct, extra) {
     var n = pendCount(sc);
-    if (!n) return '';
+    /* ไม่มีของค้างในหน่วยความจำ แต่มีร่างในเครื่อง = กลับเข้ามาหลังปิดแท็บ/รีเฟรช
+       ⇒ เสนอให้กู้ แต่ **ไม่เติมให้เอง** (ดูเหตุผลที่หัวข้อฉบับร่างด้านบน) */
+    if (!n) {
+      var d = draftGet(sc);
+      if (!d) return '';
+      return '<div class="pend-bar draft-bar">' + ic('bell') +
+        '<span class="pend-tx">พบสิ่งที่ท่านกรอกค้างไว้ <b>' + Object.keys(d.v).length + ' รายการ</b> · ' +
+        '<span class="muted">บันทึกไว้ในเครื่องเมื่อ ' + esc(thDate(d.at)) + ' — ยังไม่ได้ส่งเข้าระบบ</span></span>' +
+        '<button class="btn btn-ghost btn-sm" data-act="draft:drop" data-sc="' + esc(sc) + '">ทิ้งฉบับร่าง</button>' +
+        '<button class="btn btn-pri btn-sm" data-act="draft:use" data-sc="' + esc(sc) + '">' +
+          ic('retry') + ' ใช้ฉบับร่าง</button></div>';
+    }
     return '<div class="pend-bar">' + ic('pen') +
       '<span class="pend-tx">แก้ไข <b>' + n + '</b> รายการ · <span class="muted">ยังไม่บันทึก</span></span>' +
       '<button class="btn btn-ghost btn-sm" data-act="pend:cancel" data-sc="' + esc(sc) + '">ยกเลิกการแก้ไข</button>' +
@@ -7235,6 +7457,7 @@ body.notes .note{display:block;}
        จึงต้องเติมทุกรอบ — เรียกซ้ำได้ ไม่มีผลข้างเคียง (ตั้งค่าเดิมทับค่าเดิม) */
     renderBrandLogos();
     renderMascots();
+    renderNetBar();
   }
   /* เติมน้อง TIMS ลงช่องที่ปักไว้ในมาร์กอัป (data-nt="ท่าทาง")
      🔴 เติมช่องละครั้งเดียว ไม่วาดซ้ำทุกรอบเรนเดอร์ — วาดซ้ำเมื่อไรแอนิเมชันจะกระตุกเริ่มนับใหม่
@@ -7474,22 +7697,84 @@ body.notes .note{display:block;}
     faq: { eyebrow: 'ช่วยเหลือ', title: 'คำถามที่พบบ่อย' },
     privacy: { eyebrow: 'ความเป็นส่วนตัว', title: 'นโยบายความเป็นส่วนตัว' }
   };
+  /* ═══ ผัง 10 ขั้นฉบับหน้าสาธารณะ (รอบสี่ ข้อ 5 · 18 ก.ย. 2569 · เจ้าของงานเคาะ) ═══
+     🔴 เดิมหน้านี้เป็นผังย่อ 5 ขั้นคนละชุดกับผัง 10 ขั้นที่ใช้จริงในระบบ
+        ⇒ คนนอกกับคนในระบบพูดกันคนละภาษา และต้องเรียนรู้สองชุด
+     ⇒ ใช้ 10 ขั้นชุดเดียวกัน + บอกว่า **แต่ละบทบาททำอะไรในขั้นนั้น** + กรองดูเฉพาะบทบาทได้
+     ⚠️ ที่นี่เป็นคำอธิบายกระบวนการ ไม่ใช่สถานะของใคร จึงไม่ดึง courseSteps() มาใช้
+        (นั่นคำนวณจากข้อมูลจริงของรายวิชาหนึ่ง ๆ ซึ่งหน้าสาธารณะไม่มีบริบทนั้น) */
+  /* 🐛 เดือนตั้งต้นของปฏิทินสาธารณะต้องคิดจากสูตรเดียวกันทั้งตอนวาดและตอนกดปุ่มเลื่อนเดือน
+     เขียนรอบแรกแยกกัน (วาดใช้เดือนของกำหนดการแรก · ปุ่มใช้เดือนปัจจุบัน)
+     ⇒ กดถัดไปครั้งแรกกระโดดข้ามไป 2 เดือน (ก.ค. → ก.ย.) */
+  function lpCalEvents() {
+    var pick = String(view.lpCourse || '');
+    return DB.events.filter(function (e) { return !pick || String(e.courseId || 0) === pick; })
+      .slice().sort(function (a, b) { return a.d < b.d ? -1 : 1; });
+  }
+  function lpCalMonth() {
+    if (view.lpMonth) return view.lpMonth;
+    var e0 = lpCalEvents()[0];
+    return e0 ? e0.d.slice(0, 7) : TODAY.slice(0, 7);
+  }
+  var LP_ROLES = [['stu', 'นักศึกษา'], ['sup', 'อาจารย์นิเทศก์'],
+                  ['com', 'กรรมการสาขา'], ['adm', 'ฝ่ายฝึกประสบการณ์']];
+  var LP_FLOW = [
+    { n: 0, ic: 'book', t: 'เปิดรายวิชา + กำหนดแบบประเมิน',
+      by: { adm: 'เปิดรายวิชาของภาคเรียน กำหนดงานที่ต้องส่งและแบบประเมินทั้งหมด' } },
+    { n: 1, ic: 'users', t: 'ลงทะเบียนนักศึกษา',
+      by: { com: 'ลงทะเบียนนักศึกษาในสาขาเข้ารายวิชาฝึกของรุ่นนั้น' } },
+    { n: 2, ic: 'cal', t: 'เปิดรอบการเลือกโรงเรียน',
+      by: { com: 'เปิดรอบและกำหนดวิธีเลือก (นักศึกษาเลือกเอง หรือกรรมการจัดให้)' } },
+    { n: 3, ic: 'pin', t: 'นักศึกษาเลือกโรงเรียน',
+      by: { stu: 'เลือกโรงเรียนจากฐานข้อมูลเครือข่ายตามที่นั่งว่างของสาขาและรุ่นตัวเอง',
+            com: 'ดูแลลำดับคิว และยืนยันโรงเรียนให้เมื่อรอบเป็นแบบกรรมการจัดให้' } },
+    { n: 4, ic: 'shield', t: 'จัดสรรอาจารย์นิเทศก์',
+      by: { com: 'จัดสรรอาจารย์นิเทศก์วิชาเอกและวิชาชีพครูให้นักศึกษาแต่ละคน' } },
+    { n: 5, ic: 'check', t: 'ตรวจความพร้อม + อนุมัติออกฝึก',
+      by: { stu: 'กรอกข้อมูลการฝึกให้ครบ และส่งเอกสารก่อนออกฝึก',
+            com: 'ตรวจความพร้อม 6 ข้อแล้วอนุมัติ หรือตีกลับพร้อมเหตุผล' } },
+    { n: 6, ic: 'clip', t: 'ประกาศรายชื่อ + หนังสือส่งตัว',
+      by: { adm: 'ประกาศรายชื่อผู้ออกฝึก และออกหนังสือส่งตัวรายโรงเรียน',
+            stu: 'เปิด/พิมพ์หนังสือส่งตัวของตัวเองไปรายงานตัวที่โรงเรียน' } },
+    { n: 7, ic: 'pen', t: 'ระหว่างฝึก · ส่งงาน · รับการนิเทศ',
+      by: { stu: 'ส่งงานตามที่กำหนดไว้ในรายวิชา พร้อมลิงก์หลักฐาน และกรอกแบบสำรวจ',
+            sup: 'ตรวจงานที่ส่ง อนุมัติหรือตีกลับพร้อมเหตุผล และนัดลงพื้นที่นิเทศ' } },
+    { n: 8, ic: 'chart', t: 'กรอกคะแนนประเมิน',
+      by: { com: 'รวบรวมแบบประเมินจากผู้ประเมินทุกฝ่ายแล้วกรอกเข้าระบบ',
+            sup: 'ให้คะแนนในส่วนของอาจารย์นิเทศก์' } },
+    { n: 9, ic: 'cap', t: 'สรุปผล + ปิดรายวิชา',
+      by: { sup: 'ตัดสินผ่าน/ไม่ผ่านการฝึกครั้งนี้',
+            adm: 'ปิดรายวิชาเมื่อไม่มีงานค้าง แล้วล็อกผลทั้งรายวิชา',
+            stu: 'ดูผลการฝึกและคุณสมบัติการจบของตัวเอง' } }
+  ];
   function lpSubBody(kind) {
     if (kind === 'flow') {
-      var steps = [
-        ['book', 'var(--pine)', 'var(--pine-soft)', 'ลงทะเบียน', 'กรรมการสาขาลงทะเบียนนักศึกษาเข้ารายวิชา และจัดสรรอาจารย์นิเทศก์ให้แต่ละคน'],
-        ['pin', 'var(--terra)', 'var(--terra-soft)', 'เลือกสถานศึกษา', 'นักศึกษาเลือกโรงเรียนจากฐานข้อมูลเครือข่ายตามที่นั่งว่างของสาขาและรุ่นตัวเอง'],
-        ['pen', 'var(--amber-dark)', 'var(--amber-soft)', 'ฝึกสอน & ส่งงาน', 'นักศึกษาส่งงานตามที่ฝ่ายฝึกกำหนดไว้ในรายวิชา พร้อมลิงก์หลักฐาน'],
-        ['shield', 'var(--plum)', 'var(--accent-soft)', 'รับการนิเทศ', 'อาจารย์นิเทศก์ตรวจงาน อนุมัติหรือส่งกลับให้แก้ไข และนัดลงพื้นที่นิเทศ'],
-        ['check', 'var(--ok-ink)', 'var(--ok-soft)', 'ประเมิน & สรุป', 'กรรมการสาขากรอกคะแนนจากแบบประเมิน ระบบสรุปรายงานคุณสมบัติรายบุคคล']
-      ];
-      return '<div class="card card-pad"><div class="lp-steps">' + steps.map(function (s, i) {
-        return '<div class="lp-step">' +
-          '<div class="lp-step-ic" data-css="' + esc('color:' + s[1] + ';background:' + s[2] + ';') + '">' + ic(s[0]) +
-            '<span class="lp-step-no">' + (i + 1) + '</span></div>' +
-          '<div class="lp-step-tx"><b>' + esc(s[3]) + '</b><p>' + esc(s[4]) + '</p></div>' +
-        '</div>';
-      }).join('') + '</div></div>';
+      var pick = view.lpRole || '';
+      return ntSlot('guide', 'น้อง TIMS กำลังอธิบายขั้นตอนการฝึก', 'sm') +
+        '<div class="card card-pad mb-14">' +
+          '<div class="fs-2 t-ink-3 mb-10">' + ic('users') +
+            ' ดูเฉพาะสิ่งที่บทบาทนี้ต้องทำ — ขั้นที่บทบาทนั้นไม่มีหน้าที่จะจางลง</div>' +
+          '<div class="lp-rolebar">' +
+            '<button class="chip' + (pick ? '' : ' on') + '" data-act="lp:role" data-v="">ทุกบทบาท</button>' +
+            LP_ROLES.map(function (r) {
+              return '<button class="chip' + (pick === r[0] ? ' on' : '') +
+                '" data-act="lp:role" data-v="' + r[0] + '">' + esc(r[1]) + '</button>';
+            }).join('') +
+          '</div></div>' +
+        '<div class="card card-pad"><div class="lp-flow10">' + LP_FLOW.map(function (st) {
+          var mine = !pick || !!st.by[pick];
+          var lines = LP_ROLES.filter(function (r) { return st.by[r[0]]; })
+            .filter(function (r) { return !pick || r[0] === pick; });
+          return '<div class="lp-fstep' + (mine ? '' : ' dim') + '">' +
+            '<div class="lp-fno">' + st.n + '</div>' +
+            '<div class="lp-fbody"><b>' + ic(st.ic) + ' ' + esc(st.t) + '</b>' +
+            (mine
+              ? lines.map(function (r) {
+                  return '<div class="lp-fby"><span class="tag">' + esc(r[1]) + '</span>' +
+                    esc(st.by[r[0]]) + '</div>'; }).join('')
+              : '<div class="lp-fby muted">ขั้นนี้เป็นหน้าที่ของฝ่ายอื่น</div>') +
+            '</div></div>';
+        }).join('') + '</div></div>';
     }
     if (kind === 'news') {
       /* กดการ์ดประกาศ → รายละเอียดของประกาศนั้น (เจ้าของงานสั่ง 29 ส.ค. 69) */
@@ -7517,43 +7802,151 @@ body.notes .note{display:block;}
         : '<div class="card card-pad"><p class="muted m-0">ยังไม่มีข่าว</p></div>';
     }
     if (kind === 'cal') {
+      /* ═══ รอบสี่ ข้อ 6 (18 ก.ย. 69 · เจ้าของงานสั่ง) ═══
+         เดิมเป็นไทม์ไลน์รายการเดียวรวมทุกรายวิชา ⇒ กำหนดการกลางซ้ำกันเต็มหน้า
+         (ภาพที่เจ้าของงานส่งมา: "ปฐมนิเทศก่อนออกฝึก" ขึ้น 3 บรรทัดติดเพราะมี 3 รายวิชา)
+         ⇒ เป็นปฏิทินเดือนจริง + เลือกดูรายวิชาได้ · ยุบรายการซ้ำเมื่อดู "ทุกรายวิชา" */
       if (!DB.events.length) return '<div class="card card-pad"><p class="muted m-0">ยังไม่มีกำหนดการ</p></div>';
-      /* จัดกลุ่มตามเดือน + ไทม์ไลน์มีจุดบอกสถานะ (ผ่านแล้ว/กำลังอยู่ในช่วง/จะถึง) */
-      var evs = DB.events.slice().sort(function (a, b) { return a.d < b.d ? -1 : 1; });
-      var groups = [], seen = {};
-      evs.forEach(function (e) {
-        var mk = e.d.slice(0, 7);
-        if (!seen[mk]) { seen[mk] = { k: mk, items: [] }; groups.push(seen[mk]); }
-        seen[mk].items.push(e);
+      var cos = DB.courses.slice().sort(function (a, b) { return a.code < b.code ? -1 : 1; });
+      var pickCo = String(view.lpCourse || '');
+      var evAll = lpCalEvents();
+      /* ยุบรายการซ้ำ (ชื่อ+วันเดียวกัน) เมื่อดูรวมทุกรายวิชา — ของกลางถูกตั้งไว้ทีละรายวิชา */
+      var seenEv = {}, evs = [];
+      evAll.forEach(function (e) {
+        var k = e.d + '|' + e.t;
+        if (seenEv[k]) { seenEv[k].dup++; return; }
+        seenEv[k] = { dup: 1 }; evs.push(e);
       });
-      return '<div class="card card-pad">' + groups.map(function (g) {
-        var p = g.k.split('-');
-        return '<div class="tl-month">' + TH_MON[Number(p[1]) - 1] + ' ' + (Number(p[0]) + 543) + '</div>' +
-          '<div class="tl mb-20">' + g.items.map(function (e) {
-            var cls = isPast(e) ? ' past' : (inRange(e) ? ' next' : '');
-            return '<div class="tl-i' + cls + '"><b>' + thLong(e.d) + '</b>' +
-              '<div class="meta">' + esc(e.t) + '</div>' +
-              (e.place ? '<div class="place">' + ic('pin') + ' ' + esc(e.place) + '</div>' : '') + '</div>';
+      var cm = lpCalMonth();
+      var yy = Number(cm.split('-')[0]), mm = Number(cm.split('-')[1]);
+      var byDay = {};
+      evs.forEach(function (e) { (byDay[e.d] = byDay[e.d] || []).push(e); });
+      var first = new Date(yy, mm - 1, 1), dow = first.getDay();
+      var dim = new Date(yy, mm, 0).getDate();
+      var cells = '';
+      for (var pad = 0; pad < dow; pad++) cells += '<div class="lpc-d out"></div>';
+      for (var dd = 1; dd <= dim; dd++) {
+        var iso = yy + '-' + String(mm).padStart(2, '0') + '-' + String(dd).padStart(2, '0');
+        var list = byDay[iso] || [];
+        cells += '<div class="lpc-d' + (iso === TODAY ? ' today' : '') + '">' +
+          '<div class="lpc-n">' + dd + '</div>' +
+          list.map(function (e) {
+            var n2 = seenEv[e.d + '|' + e.t];
+            return '<div class="lpc-ev" title="' + esc(e.t) + '">' + esc(e.t) +
+              (!pickCo && n2 && n2.dup > 1 ? ' <span class="lpc-dup">×' + n2.dup + '</span>' : '') + '</div>';
           }).join('') + '</div>';
-      }).join('') + '</div>';
+      }
+      return ntSlot('guide', 'น้อง TIMS กำลังพาดูปฏิทินการฝึก', 'sm') +
+        '<div class="card card-pad mb-14">' +
+          '<div class="fs-2 t-ink-3 mb-10">' + ic('book') + ' เลือกดูกำหนดการของรายวิชา</div>' +
+          '<div class="lp-rolebar">' +
+            '<button class="chip' + (pickCo ? '' : ' on') + '" data-act="lp:course" data-v="">ทุกรายวิชา</button>' +
+            cos.map(function (c) {
+              return '<button class="chip' + (pickCo === String(c.id) ? ' on' : '') +
+                '" data-act="lp:course" data-v="' + c.id + '">' + esc(c.code) + '</button>';
+            }).join('') + '</div></div>' +
+        '<div class="card card-pad">' +
+          '<div class="lpc-head">' +
+            '<button class="icon-btn" data-act="lp:month" data-v="-1" aria-label="เดือนก่อนหน้า">' + ic('back') + '</button>' +
+            '<b>' + TH_MON[mm - 1] + ' ' + (yy + 543) + '</b>' +
+            '<button class="icon-btn" data-act="lp:month" data-v="1" aria-label="เดือนถัดไป">' + ic('arr') + '</button>' +
+          '</div>' +
+          '<div class="lpc-grid">' +
+            ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'].map(function (d) {
+              return '<div class="lpc-dow">' + d + '</div>'; }).join('') +
+            cells + '</div>' +
+          (evs.length ? '' : '<p class="muted mt-12 mb-0">รายวิชานี้ยังไม่มีกำหนดการ</p>') +
+        '</div>';
     }
     if (kind === 'manual') {
-      return '<div class="info-grid">' + DB.helps.map(function (h) {
-        return '<div class="info-tile"><div class="info-ic">' + ic('book') + '</div>' +
-          '<b>' + esc(h.t) + '</b><p>' + esc(h.b) + '</p></div>';
-      }).join('') + '</div>' +
-      '<div class="hint mt-14">' + bypassNote('ระบบจริงจะมีคู่มือแยกเล่มตามบทบาท 4 เล่ม (Phase 5)') + '</div>';
+      /* ═══ รอบสี่ ข้อ 7 (18 ก.ย. 69 · เจ้าของงานเคาะ "หน้าเดียว มีแท็บแยกตามบทบาท") ═══
+         เดิมเป็นการ์ด 3 ใบติดป้าย "จำลอง" ⇒ ดูเหมือนยังไม่ได้ทำ และไม่ได้ช่วยใครจริง
+         🔴 เลือกหน้าเดียวแท็บบทบาท ไม่ใช่แยก 4 เล่ม เพราะ **คนสวมหลายบทบาทได้**
+            (อาจารย์นิเทศก์ที่เป็นกรรมการสาขาด้วย) · ที่อยู่เดียวส่งลิงก์ง่าย
+         🔴 เนื้อหาอ้างชื่อหน้าและปุ่มจริงในระบบ ไม่ใช่คำบรรยายลอย ๆ */
+      var mrole = view.lpMan || 'stu';
+      var MAN = {
+        stu: { nt: 'hello', t: 'คู่มือสำหรับนักศึกษา', steps: [
+          ['เข้าระบบครั้งแรก', 'รับใบแจ้งรหัสจากกรรมการสาขา แล้วกด "เข้าสู่ระบบครั้งแรก" · กรอกชื่อผู้ใช้กับรหัสเปิดใช้งาน 8 ตัว · ตั้งรหัสผ่านของตัวเอง แล้วผูกบัญชี Google @' + DOMAIN],
+          ['ดูว่าตอนนี้อยู่ขั้นไหน', 'หน้าหลักมีแถบบอก "ตอนนี้ท่านอยู่ขั้นที่เท่าไรจาก 10" · กดเข้าไปที่ "รายวิชาของฉัน" จะเห็นผังทั้ง 10 ขั้น พร้อมป้าย "คุณอยู่ที่นี่"'],
+          ['เลือกโรงเรียน', 'เมื่อกรรมการเปิดรอบและถึงคิวของท่าน ให้เข้าที่ รายวิชาของฉัน → ขั้นที่ 3 → เลือกโรงเรียนที่ยังมีที่ว่างของสาขาและรุ่นท่าน'],
+          ['ส่งงาน', 'เข้าที่ รายวิชาของฉัน → ขั้นที่ 7 → เลือกงานที่จะส่ง · วางลิงก์หลักฐานจาก Google ไดรฟ์ของตัวเอง และ**ตั้งค่าแชร์เป็น "ผู้ที่มีลิงก์ → ผู้อ่าน"** ไม่งั้นอาจารย์เปิดไม่ได้'],
+          ['ดูผลและคะแนน', 'เมนู "คะแนนประเมิน" ดูคะแนนที่กรรมการกรอกให้ · ขั้นที่ 9 ของผังบอกว่าผ่านเงื่อนไขครบหรือยัง'] ],
+          note: 'เมนูซ้ายเป็นหน้า "ดูข้อมูล" — การลงมือทำทุกอย่างเข้าทาง รายวิชาของฉัน ทางเดียว เพื่อไม่ให้ทำผิดรายวิชาโดยไม่รู้ตัว' },
+        sup: { nt: 'work', t: 'คู่มือสำหรับอาจารย์นิเทศก์', steps: [
+          ['เข้าระบบ', 'กด "เข้าสู่ระบบด้วยบัญชีมหาวิทยาลัย" ได้เลยถ้าผูกบัญชีแล้ว · ครั้งแรกใช้ใบแจ้งรหัสจากเจ้าหน้าที่ฝ่ายฝึก'],
+          ['ตรวจงานที่ส่ง', 'เมนู "ตรวจงานที่ส่ง" เห็นคิวรวมทุกรายวิชา · กดเข้าไปตรวจทีละชิ้น อนุมัติหรือตีกลับ — **การตีกลับต้องระบุเหตุผทุกครั้ง** เพราะนักศึกษาต้องรู้ว่าต้องแก้อะไร'],
+          ['นัดนิเทศ', 'เมนู "ตารางนิเทศของฉัน" สร้างนัดลงพื้นที่ · ระบบรวมนัดที่อยู่ใกล้กันเป็นเที่ยวเดินทางให้'],
+          ['ให้คะแนน', 'เข้าทางรายวิชา → กรอกคะแนนในส่วนของอาจารย์นิเทศก์ · กรอกทีละหลายคนได้ด้วยตารางกรอกรวม'],
+          ['ตัดสินผ่าน/ไม่ผ่าน', 'ขั้นที่ 9 ของผังรายวิชา — กดผ่านได้เมื่อครบเงื่อนไขทุกข้อเท่านั้น'] ],
+          note: 'ท่านเห็นเฉพาะนักศึกษาที่ตนดูแล — ไม่เห็นของอาจารย์ท่านอื่น' },
+        com: { nt: 'guide', t: 'คู่มือสำหรับกรรมการสาขา', steps: [
+          ['ลงทะเบียนนักศึกษา', 'เข้าที่ รายวิชาฝึก → เลือกรายวิชา → ลงทะเบียนนักศึกษา · ลงยกชุดได้'],
+          ['เปิดรอบเลือกโรงเรียน', 'ในรายวิชา → รอบการเลือกโรงเรียน · เลือกว่าจะให้นักศึกษาเลือกเอง หรือกรรมการจัดให้'],
+          ['จัดสรรอาจารย์นิเทศก์', 'ในรายวิชา → จัดสรรอาจารย์นิเทศก์ · ตารางกรอกรวมเห็นภาระงานของอาจารย์แต่ละคนไปด้วย'],
+          ['อนุมัติออกฝึก', 'ในรายวิชา → อนุมัติการออกฝึก · ระบบตรวจความพร้อม 6 ข้อให้ก่อน คนที่ยังขาดจะกดอนุมัติไม่ได้'],
+          ['กรอกคะแนน', 'ในรายวิชา → กรอกคะแนน · กรอกบนตารางรวม หรือดาวน์โหลด Excel ไปกรอกแล้วอัปโหลดกลับ'] ],
+          note: 'ทุกงานเข้าทาง "รายวิชาฝึก" เสมอ จะได้เห็นตลอดว่ากำลังทำของรายวิชาไหน ครั้งที่เท่าไร' },
+        adm: { nt: 'cheer', t: 'คู่มือสำหรับฝ่ายฝึกประสบการณ์', steps: [
+          ['เปิดรายวิชาของภาคเรียน', 'รายวิชาฝึก → เปิดรายวิชา · กำหนดงานที่ต้องส่งและแบบประเมินให้ครบ ไม่งั้นนักศึกษาจะไม่มีอะไรให้ส่ง'],
+          ['สร้างบัญชีผู้ใช้', 'บัญชีผู้ใช้ → นำเข้าจากไฟล์ Excel · **บุคลากรใช้อีเมล @' + DOMAIN + ' เป็นชื่อผู้ใช้** ไม่ต้องตั้งชื่อผู้ใช้เอง · ช่องที่ต้องตรงกับค่าในระบบเป็นดรอปดาวน์ในไฟล์ให้แล้ว'],
+          ['ดูแลทะเบียนโรงเรียน', 'ทะเบียนโรงเรียนเครือข่าย → อัปเดตฐานข้อมูลรายปี · โรงเรียนที่ยังไม่ส่งข้อมูลปีนี้ นักศึกษาจะเลือกไม่ได้'],
+          ['ประกาศรายชื่อและหนังสือส่งตัว', 'เข้าทางรายวิชา → ประกาศรายชื่อ · ส่งออก Excel · พิมพ์ · หรือเผยแพร่เป็นข่าวบนหน้าสาธารณะ'],
+          ['ปิดรายวิชา / ขึ้นปีการศึกษาใหม่', 'ปิดรายวิชาเมื่อไม่มีงานค้างรอตรวจ · ขึ้นปีใหม่จะยกโครงรายวิชาไปให้ แต่ไม่ยกนักศึกษาและคะแนน'] ],
+          note: 'ฝ่ายฝึกเห็นทั้งระบบ แต่ไม่ได้เป็นผู้จัดสรรอาจารย์นิเทศก์ — กรรมการสาขาเป็นผู้ทำ' }
+      };
+      var man = MAN[mrole] || MAN.stu;
+      return ntSlot(man.nt, 'น้อง TIMS กำลังพาอ่านคู่มือ', 'sm') +
+        '<div class="card card-pad mb-14">' +
+          '<div class="fs-2 t-ink-3 mb-10">' + ic('users') + ' เลือกบทบาทของท่าน</div>' +
+          '<div class="lp-rolebar">' + LP_ROLES.map(function (r) {
+            return '<button class="chip' + (mrole === r[0] ? ' on' : '') +
+              '" data-act="lp:man" data-v="' + r[0] + '">' + esc(r[1]) + '</button>';
+          }).join('') + '</div></div>' +
+        '<div class="card card-pad">' +
+          '<div class="sec-h mx-0 mt-0 mb-12">' + ic('book') + ' ' + esc(man.t) + '</div>' +
+          '<div class="lp-flow10">' + man.steps.map(function (st, i2) {
+            return '<div class="lp-fstep"><div class="lp-fno">' + (i2 + 1) + '</div>' +
+              '<div class="lp-fbody"><b>' + esc(st[0]) + '</b>' +
+              '<div class="lp-fby">' + st[1] + '</div></div></div>';
+          }).join('') + '</div>' +
+          '<div class="tip tip-warn mt-14">' + ic('bell') + '<div>' + man.note + '</div></div>' +
+        '</div>';
     }
     if (kind === 'contact') {
-      return '<div class="info-grid">' +
-        '<div class="info-tile"><div class="info-ic bg-terra-soft t-terra-dark">' + ic('pin') + '</div>' +
-          '<b>ที่ตั้ง</b><p>คณะครุศาสตร์และการพัฒนามนุษย์<br>มหาวิทยาลัยราชภัฏศรีสะเกษ</p></div>' +
-        '<div class="info-tile"><div class="info-ic bg-pine-soft t-pine-deep">' + ic('clock') + '</div>' +
-          '<b>เวลาทำการ</b><p>จันทร์–ศุกร์ 08:30–16:30 น.<br>(เว้นวันหยุดราชการ)</p></div>' +
-        '<div class="info-tile"><div class="info-ic bg-amber-soft t-amber-dark">' + ic('bell') + '</div>' +
-          '<b>เรื่องบัญชีผู้ใช้</b><p>นักศึกษาติดต่อกรรมการสาขาของตน · อาจารย์นิเทศก์ติดต่อเจ้าหน้าที่ฝ่ายฝึก</p></div>' +
-        '</div>' +
-        '<div class="hint mt-14">' + bypassNote('เบอร์โทรและอีเมลจริงจะเติมตอนทำระบบจริง') + '</div>';
+      /* ═══ รอบสี่ ข้อ 8 — ดึงจากศูนย์ตั้งค่าทั้งหมด ไม่ฮาร์ดโค้ดที่อยู่/เบอร์ ═══
+         ของเดิมเขียนที่อยู่ไว้ในโค้ดและติดป้ายว่า "เบอร์จริงจะเติมตอนทำระบบจริง"
+         ทั้งที่ช่องเหล่านี้มีอยู่แล้วในศูนย์ตั้งค่าและบันทึกจริง */
+      var so = DB.settings;
+      var ways = [
+        ['pin', 'bg-terra-soft t-terra-dark', 'ที่ตั้ง',
+          esc(so.orgUnit || 'ฝ่ายฝึกประสบการณ์วิชาชีพครู') + '<br>' + esc(so.orgName || '') +
+          (so.orgAddr ? '<br>' + esc(so.orgAddr) : '')],
+        ['clock', 'bg-pine-soft t-pine-deep', 'เวลาทำการ',
+          esc(so.orgHours || 'จันทร์–ศุกร์ 08:30–16:30 น.') + '<br><span class="muted">เว้นวันหยุดราชการ</span>'],
+        ['bell', 'bg-amber-soft t-amber-dark', 'โทรศัพท์ / อีเมล',
+          (so.orgPhone ? ic('bell') + ' ' + esc(so.orgPhone) + '<br>' : '') +
+          (so.orgEmail ? ic('clip') + ' ' + esc(so.orgEmail) : '<span class="muted">ยังไม่ได้กรอกช่องทางติดต่อในศูนย์ตั้งค่า</span>')]
+      ];
+      return ntSlot('guide', 'น้อง TIMS ช่วยบอกว่าควรติดต่อใคร', 'sm') +
+        '<div class="info-grid">' + ways.map(function (w) {
+          return '<div class="info-tile"><div class="info-ic ' + w[1] + '">' + ic(w[0]) + '</div>' +
+            '<b>' + esc(w[2]) + '</b><p>' + w[3] + '</p></div>';
+        }).join('') + '</div>' +
+        /* 🔴 คำถามที่คนโทรมาถามบ่อยที่สุดคือ "เรื่องนี้ต้องติดต่อใคร" — ตอบไว้ตรงนี้เลย
+           จะได้ไม่โทรผิดฝ่ายแล้วถูกโอนไปมา */
+        '<div class="card card-pad mt-14">' +
+          '<div class="sec-h mx-0 mt-0 mb-10">' + ic('users') + ' เรื่องไหนติดต่อใคร</div>' +
+          [['นักศึกษา · ใบแจ้งรหัสหาย / เข้าระบบไม่ได้', 'กรรมการสาขาของตนเอง'],
+           ['นักศึกษา · งานถูกตีกลับ ไม่เข้าใจเหตุผล', 'อาจารย์นิเทศก์ที่ดูแลท่าน'],
+           ['นักศึกษา · โรงเรียนที่จะไปฝึก / ที่นั่งเต็ม', 'กรรมการสาขาของตนเอง'],
+           ['อาจารย์นิเทศก์ · กรรมการสาขา — บัญชีผู้ใช้', 'เจ้าหน้าที่' + esc(so.orgUnit || 'ฝ่ายฝึกประสบการณ์วิชาชีพครู')],
+           ['ทุกบทบาท · ระบบขัดข้อง', 'เจ้าหน้าที่' + esc(so.orgUnit || 'ฝ่ายฝึกประสบการณ์วิชาชีพครู') +
+             (so.orgPhone ? ' โทร ' + esc(so.orgPhone) : '')]
+          ].map(function (x) {
+            return '<div class="side-item"><span class="ic">' + ic('arr') + '</span>' +
+              '<div><b>' + esc(x[0]) + '</b><small>' + x[1] + '</small></div></div>';
+          }).join('') + '</div>';
     }
     if (kind === 'faq') {
       return '<div class="card card-pad">' + [
@@ -7707,7 +8100,10 @@ body.notes .note{display:block;}
       [DB.courses.filter(function (c) { return c.status === 'open'; }).length, 'รายวิชาที่เปิด']
     ].map(function (x) {
       return '<div class="lp-num"><div class="n">' + x[0] + '</div><div class="l">' + esc(x[1]) + '</div></div>';
-    }).join(''));
+    }).join('') +
+      /* บอกที่มาของตัวเลขไว้ตรงนี้ด้วย — คนที่สงสัยคือคนที่กำลังมองมันอยู่ */
+      '<div class="lp-num-note">' + ic('chart') +
+      ' ตัวเลขทั้งสี่คำนวณสดจากข้อมูลจริงในระบบ ไม่ใช่ค่าที่พิมพ์ไว้</div>');
   }
   /* ═══ ปฏิทินหน้าแรก (สาธารณะ) — รวมของฝ่ายฝึก: ส่วนกลาง (all) + รายวิชา (course) ═══
      🔴 ตัด major/sup/visit ออก = ไม่หลุดของเฉพาะสาขา/อาจารย์สู่สาธารณะ (เจ้าของงานเคาะ 29 ส.ค. 69)
@@ -7797,7 +8193,9 @@ body.notes .note{display:block;}
      isFirst = false → รหัสผ่านของตัวเอง (ในกล่องยุบบนหน้าเข้าสู่ระบบ)
      isFirst = true  → รหัสเปิดใช้งาน 8 ตัวจากใบแจ้ง (หน้า "เข้าสู่ระบบครั้งแรก" ของตัวเอง)
      🔴 ต้องเป็นตัวสร้างเดียวกัน ไม่งั้นแก้ที่หนึ่งแล้วอีกที่เพี้ยนตามไม่รู้ตัว */
-  function loginFields(isFirst) {
+  /* 🔴 รับ act มาทับได้ เพื่อให้กล่อง "ล็อกอินซ้ำในที่เดิม" ใช้ **ตัวสร้างเดียวกัน**
+     กับหน้าเข้าสู่ระบบ — ช่องกรอกสองที่จึงไม่มีทางเพี้ยนตามกันภายหลัง (EC-04) */
+  function loginFields(isFirst, act) {
     return '<div class="field"><label>ชื่อผู้ใช้</label>' +
         '<input class="inp" data-login="user" placeholder="' +
         (isFirst ? 'รหัสนักศึกษา หรือชื่อผู้ใช้จากใบแจ้ง' : 'รหัสนักศึกษา หรืออีเมลมหาวิทยาลัย') + '"></div>' +
@@ -7806,7 +8204,7 @@ body.notes .note{display:block;}
         (isFirst ? '8 ตัวอักษรจากใบแจ้ง' : '••••••••') + '">' +
         '<button type="button" class="pw-eye" data-act="pw:toggle" title="แสดง/ซ่อนรหัสผ่าน">' + ic('eye') + '</button>' +
         '</div></div>' +
-      '<button class="btn ' + (isFirst ? 'btn-terra' : 'btn-pri') + ' btn-block" data-act="login:pw">' +
+      '<button class="btn ' + (isFirst ? 'btn-terra' : 'btn-pri') + ' btn-block" data-act="' + (act || 'login:pw') + '">' +
         ic(isFirst ? 'key' : 'shield') + ' ' + (isFirst ? 'เปิดใช้งานบัญชี' : 'เข้าสู่ระบบ') + '</button>' +
       '<div class="hint text-center mt-11">' +
         (isFirst ? 'ทำใบแจ้งหาย?' : 'ลืมรหัสผ่าน?') +
@@ -7986,7 +8384,12 @@ body.notes .note{display:block;}
         (view.task === t.id ? ' on' : '') + '"' +
         /* task:pick = นักศึกษาเลือกงานที่จะส่ง · task:open = อาจารย์เปิดดูงานที่ส่งมาแล้ว
            คนละความหมาย ต้องคนละชื่อ ไม่งั้นกดของนักศึกษาแล้วไปเปิดกล่องตรวจงานของอาจารย์ */
-        ' data-act="task:pick" data-id="' + t.id + '">' +
+        /* กฎ ก (รอบสี่ ข้อ 10 · เจ้าของงานเคาะ): อยู่ในเส้นทางรายวิชา = เปิดฟอร์มได้เลย
+           อยู่บนหน้าดู (เมนูซ้าย/หน้าหลัก) = เป็น **ปุ่มลัดที่พาเข้าเส้นทางรายวิชาให้**
+           🔴 ไม่ใช่พาไปหน้ารายวิชาเฉย ๆ แล้วให้ไล่หางานชิ้นเดิมเอง —
+              นั่นคือปัญหาเดิมที่ WF-02 เพิ่งแก้ไป (ทุกแถวไปปลายทางเดียวกัน เสียเพิ่ม 2 คลิก) */
+        (viaCourse() ? ' data-act="task:pick" data-id="' + t.id + '"'
+                     : ' data-act="task:goWork" data-id="' + t.id + '"') + '>' +
         '<span class="tkrow-n">' + t.no + '</span>' +
         '<span class="tkrow-body">' +
           /* 17 ก.ย. 69 · ผลการตรวจที่เพิ่งลงหลังจากนักศึกษาเปิดดูหน้างานครั้งล่าสุด = "ผลใหม่"
@@ -8167,7 +8570,11 @@ body.notes .note{display:block;}
             row('รอตรวจ', n.submitted + ' งาน', n.submitted ? 'warn' : 'draft') +
             row('ตีกลับให้แก้ไข', n.rejected + ' งาน', n.rejected ? 'bad' : 'draft') +
             row('ยังไม่ส่ง', (n.empty + n.draft) + ' งาน', (n.empty + n.draft) ? 'warn' : 'ok')),
+        /* 🔴 รอบสี่ ข้อ 10 (กฎ ก): เมื่อเมนูซ้ายกลายเป็นหน้าดู ผังต้องมีทางเข้างานให้ครบ
+           ไม่งั้นแบบสำรวจจะกลายเป็นทางตัน — เห็นว่ามีให้กรอกแต่เข้าไปกรอกไม่ได้เลย
+           (มาตรฐานลำดับ 16: ห้ามมีทางตัน) */
         acts: [['stu:logs', 'ส่งงาน · ดูงานทั้งหมด' + (n.total ? ' ' + n.total + ' ชิ้น' : '')],
+               ['stu:forms', 'กรอกแบบสำรวจ'],
                ['stu:visits', 'ตารางนิเทศของฉัน']] };
       case 8: return { mine: false, t: 'กรรมการสาขากรอกคะแนนจากกระดาษที่ผู้ประเมินส่งมา',
         acts: [['stu:scores', 'ดูคะแนนของฉัน']] };
@@ -8396,6 +8803,11 @@ body.notes .note{display:block;}
     return head('โรงเรียนเครือข่าย',
       'ฐานข้อมูลโรงเรียนที่รับนักศึกษาฝึกประสบการณ์ · ปีการศึกษา ' + esc(DB.settings.year) +
       ' · สาขา' + esc(majorName(s.major))) +
+      /* กฎ ก (รอบสี่ ข้อ 10) — เข้าจากเมนูซ้าย = ดูอย่างเดียว
+         การเลือกโรงเรียนคือการเขียนข้อมูลของรายวิชา ต้องเข้าผ่านรายวิชาฝึกทางเดียว */
+      (myTurn && !viaCourse()
+        ? courseOnlyBar('การเลือกโรงเรียน', 'stu:course', 'ไปเลือกในรายวิชาของฉัน')
+        : '') +
       (round
         ? '<div class="tip ' + (myTurn ? '' : 'tip-warn') + ' mb-14">' + ic(myTurn ? 'check' : 'clock') +
           '<div>' + (round.mode === 'byStudent'
@@ -8446,7 +8858,8 @@ body.notes .note{display:block;}
                   : '<span class="badge ' + (i.left ? 'ok' : 'bad') + '">สาขาของท่าน: ' +
                     (i.left ? 'ว่าง ' + i.left + '/' + i.cap + ' ที่' : 'เต็มแล้ว (' + i.cap + ')') + '</span>') +
                 /* ปุ่มเลือกเอง — เฉพาะเมื่อรอบเปิดแบบ "นักศึกษาเลือกเอง" · ถึงคิว · ยังมีที่ว่าง */
-                (myTurn && !isMine && !i.pending && i.cap > 0 && i.left > 0
+                /* กฎ ก · ปุ่มนี้เขียนข้อมูลจริง ⇒ กดได้เฉพาะตอนเข้ามาทางรายวิชาฝึก */
+                (myTurn && !isMine && !i.pending && i.cap > 0 && i.left > 0 && viaCourse()
                   ? '<button class="btn btn-pri btn-sm mt-10 w-100p" ' +
                     'data-act="school:pickMine" data-code="' + esc(sc.code) + '">' + ic('check') + ' เลือกโรงเรียนนี้</button>'
                   : '') +
@@ -8708,6 +9121,10 @@ body.notes .note{display:block;}
           ? statusChip('submitted', { text: 'ยังต้องส่งอีก ' + (n.empty + n.draft + n.rejected) + ' ชิ้น', big: true })
           : statusChip('approved', { text: 'ส่งครบแล้ว', big: true })
       }) +
+      /* กฎ ก (รอบสี่ ข้อ 10 · เจ้าของงานเคาะ): เมนูซ้ายเป็นหน้าดู — การส่งงานต้องทำในรายวิชา
+         🔴 ยอมให้คลิกยาวขึ้นตามที่เจ้าของงานตัดสิน แต่ต้องมีปุ่มลัดพาไปเส้นทางที่ถูกต้อง
+            ไม่ใช่บอกว่าทำไม่ได้แล้วปล่อยให้หาเอง */
+      (!viaCourse() ? courseOnlyBar('การส่งงาน', 'stu:course', 'ไปส่งงานในรายวิชาของฉัน') : '') +
       /* 🔴 เอกสารก่อนออกฝึกเป็นคนละหมวดกับงานระหว่างฝึก — ต้องครบก่อนจึงเริ่มส่งงานอื่น
          (COURSE_ITEMS หัวข้อ 2 · เจ้าของงานยืนยันให้แยกหมวด 20 ส.ค. 69) */
       card('เอกสารก่อนออกฝึก' +
@@ -8957,6 +9374,8 @@ body.notes .note{display:block;}
     /* ⚠️ ไม่ใช่แบบประเมินผลการฝึก — ชุดที่มีคะแนนอยู่ที่หน้า "คะแนนประเมิน" */
     return head('แบบสำรวจ', 'แบบสำรวจและแบบประเมินตนเอง · ไม่มีผลกับคะแนนการฝึก',
       left ? '<span class="badge warn">รอกรอก ' + left + ' รายการ</span>' : '<span class="badge ok">กรอกครบแล้ว</span>') +
+      /* กฎ ก (รอบสี่ ข้อ 10) — แบบสำรวจผูกกับรายวิชา การกรอกคือการเขียนข้อมูล */
+      (left && !viaCourse() ? courseOnlyBar('การกรอกแบบสำรวจ', 'stu:course') : '') +
       '<div class="g-3">' + fs.map(function (f) {
         var r = responded(f.id, it.id, 'student', s.id);
         return '<div class="card card-pad d-flex flex-col">' +
@@ -8967,7 +9386,10 @@ body.notes .note{display:block;}
           '<p class="muted fs-2 lh-160 mt-7 mx-0 mb-14 flex-1">' + esc(f.desc) + '</p>' +
           '<p class="hint mt-0 mx-0 mb-12">' + f.qs.length + ' คำถาม</p>' +
           (r ? '<button class="btn btn-ghost btn-block" data-act="form:view" data-id="' + f.id + '">' + ic('check') + ' ดูคำตอบที่ส่งไป</button>'
-             : '<button class="btn btn-pri btn-block" data-act="form:open" data-id="' + f.id + '">' + ic('pen') + ' กรอกแบบสำรวจ</button>') +
+             : viaCourse()
+               ? '<button class="btn btn-pri btn-block" data-act="form:open" data-id="' + f.id + '">' + ic('pen') + ' กรอกแบบสำรวจ</button>'
+               /* เข้าจากเมนูซ้าย: เห็นว่ามีอะไรต้องทำ แต่ลงมือต้องเข้าทางรายวิชา */
+               : '<button class="btn btn-ghost btn-block" data-page="stu:course">' + ic('arr') + ' ไปกรอกในรายวิชา</button>') +
           '</div>';
       }).join('') + '</div>';
   }
@@ -15169,7 +15591,11 @@ body.notes .note{display:block;}
     var its = ctxInternships('adm').filter(function (it) { return it.courseId === co.id; });
     var gv = (DB.settings.rosterGreeting || '');
     return top +
-      '<a class="back-link" data-act="roster:repick">' + ic('back') + ' เลือกรายวิชาอื่น</a>' +
+      /* 🔴 รอบสี่ ข้อ 11 (18 ก.ย. 69): ถอดปุ่ม "เลือกรายวิชาอื่น" ออก
+         ทุกอย่างของรายวิชาต้องเข้าผ่านรายวิชาฝึกทางเดียว — ปุ่มนี้พาข้ามไปเลือกรายวิชา
+         จากกลางหน้างาน ซึ่งคือช่องที่ทำให้คนทำงานผิดรายวิชาโดยไม่รู้ตัว
+         ทางกลับที่ถูกต้องคือ "กลับหน้ารายวิชา" ซึ่งมีอยู่แล้วด้านบน */
+      '' +
       pageHero({ sub: true, eyebrow: 'ประกาศรายชื่อนักศึกษาออกฝึก', title: co.name,
         chips: [{ ic: 'book', t: co.code }, { ic: 'users', t: its.length + ' คน' }, { ic: 'cal', t: 'ครั้งที่ ' + (co.round || '—') }] }) +
       rosterMetaHtml(co, its.length) +
@@ -15618,6 +16044,14 @@ body.notes .note{display:block;}
             fld('ข้อความปุ่มรอง', '<input class="inp" name="heroCta2" data-lv="heroCta2" value="' + esc(lh.cta2) + '">') +
           '</div>' +
           '<div class="hint">ชิปบริบท (ภาคเรียน/ปีการศึกษา) และโดเมนอีเมลใต้ปุ่ม คำนวณจาก "ตั้งค่าทั่วไป" ให้อัตโนมัติเสมอ ไม่ต้องพิมพ์ซ้ำ</div>' +
+          /* 🔴 รอบสี่ ข้อ 4 (18 ก.ย. 69): เจ้าของงานถามว่า "คำในกรอบสีเขียวแก้ได้ไหม"
+             ⇒ ของแก้ได้อยู่แล้วทั้งหมด แต่**แอดมินไม่มีทางรู้ว่าอะไรแก้ได้และอะไรแก้ไม่ได้**
+                (บทเรียนรอบสาม: ของที่แก้ได้แต่หาไม่เจอ เท่ากับไม่มี)
+             ⇒ บอกให้ครบตรงนี้ทีเดียว ทั้งของที่แก้ได้ที่อื่น และของที่ตั้งใจไม่ให้แก้ */
+          srcNote('<b>ตัวเลข 4 ช่องบนหน้าแรก</b> (นักศึกษา · อาจารย์นิเทศก์ · สถานศึกษา · รายวิชาที่เปิด) ' +
+            '<b>คำนวณสดจากข้อมูลจริงเสมอ — แก้ด้วยมือไม่ได้และไม่ควรแก้ได้</b> ' +
+            'เพราะถ้าพิมพ์เองได้เมื่อไร ตัวเลขบนหน้าสาธารณะจะเพี้ยนจากความจริงทันที<br>' +
+            'ส่วน<b>ชื่อระบบและหน่วยงานในส่วนท้าย</b> แก้ที่ <b>ศูนย์ตั้งค่า › ข้อมูลหน่วยงาน</b>') +
           '<div class="sec-h mt-18 mx-0 mb-10">' + ic('play') + ' การ์ดวิดีโอแนะนำ</div>' +
           '<label class="switch-row mb-10"><input type="checkbox" name="videoOn" data-lv="videoOn"' + (lv.on ? ' checked' : '') + '>' +
             '<div class="sw-l">แสดงการ์ดวิดีโอบนหน้าแรก<small>ปิดถ้ายังไม่มีวิดีโอแนะนำ — การ์ดจะหายไปทั้งใบ ไม่ใช่ขึ้นเป็นการ์ดว่าง</small></div></label>' +
@@ -17698,14 +18132,17 @@ body.notes .note{display:block;}
           '<div><strong>คลิกเพื่อเลือกไฟล์</strong><small>.xlsx (Excel) — อ่านและตรวจได้จริงที่นี่</small></div>' +
           '<input type="file" data-act="import:file" accept=".xlsx" hidden></label>' +
         fileHelpPanel('วิธีกรอกไฟล์นำเข้า' + label, [
-          { c: kind === 'student' ? 'รหัสนักศึกษา' : 'ชื่อผู้ใช้', req: true,
-            d: 'ต้องไม่ซ้ำกันในไฟล์ และไม่ซ้ำกับที่มีในระบบ' },
-          { c: 'คำนำหน้า', req: false, d: 'เช่น นาย / นางสาว (เว้นว่าง = นางสาว)' },
+          (kind === 'student'
+            ? { c: 'รหัสนักศึกษา', req: true, d: 'ต้องไม่ซ้ำกันในไฟล์ และไม่ซ้ำกับที่มีในระบบ' }
+            : { c: 'อีเมล', req: true, d: 'โดเมน @' + DOMAIN + ' เท่านั้น — ใช้เป็นชื่อผู้ใช้ไปในตัว ไม่ต้องตั้งชื่อผู้ใช้แยก' }),
+          { c: 'คำนำหน้า', req: false, d: 'เลือกจากดรอปดาวน์ในไฟล์ (เว้นว่าง = นางสาว)' },
           { c: 'ชื่อ', req: true, d: 'ชื่อจริง' },
           { c: 'นามสกุล', req: true, d: 'นามสกุล' },
-          { c: 'สาขา', req: false, d: 'ต้องตรงชื่อสาขาในระบบ เช่น "' + DB.majors[0].n + '" (พิมพ์ผิด = ข้ามแถวนั้น)' },
-          { c: 'อีเมล', req: false, d: 'ต้องเป็นโดเมน @' + DOMAIN + ' เท่านั้น' }
-        ], 'กรอกต่อจากแถวตัวอย่างในไฟล์ได้เลย · รองรับไฟล์ Excel (.xlsx) โดยตรง — แก้ใน Excel แล้วอัปโหลดกลับได้เลย');
+          { c: 'สาขา', req: false, d: 'เลือกจากดรอปดาวน์ในไฟล์ — ไม่ต้องพิมพ์เอง จะได้ไม่พิมพ์ผิด' }
+        ].concat(kind === 'student'
+          ? [{ c: 'อีเมล', req: false, d: 'ต้องเป็นโดเมน @' + DOMAIN + ' เท่านั้น' }]
+          : []),
+          'กรอกต่อจากแถวตัวอย่างในไฟล์ได้เลย · ช่องที่ต้องตรงกับค่าในระบบเป็น<b>ดรอปดาวน์ให้เลือก</b>แล้ว · รองรับไฟล์ Excel (.xlsx) โดยตรง');
       foot = '<button class="btn btn-ghost btn-sm" data-act="import:tpl">' + ic('clip') + ' ดาวน์โหลดไฟล์ตัวอย่าง</button>' +
         '<button class="btn btn-ghost btn-sm" data-page="' + backTo + '">กลับ</button>';
     } else if (r.fatal) {
@@ -17787,9 +18224,16 @@ body.notes .note{display:block;}
     if (rec.email && rec.email.indexOf('@' + DOMAIN) < 0) errs.push('อีเมลไม่ใช่โดเมน @' + DOMAIN);
     return errs;
   }
+  /* 🔴 รอบสี่ ข้อ 1 (18 ก.ย. 69 · เจ้าของงานเคาะ): **บุคลากรใช้อีเมลเป็นชื่อผู้ใช้**
+     เดิมไฟล์นำเข้าบังคับกรอก "ชื่อผู้ใช้" ให้อาจารย์นิเทศก์/กรรมการทุกคน
+     ⇒ แอดมินต้องนั่งตั้งชื่อผู้ใช้ทีละคนเป็นร้อย ทั้งที่ทุกคนมี @sskru.ac.th ครบอยู่แล้ว
+        และ **กรรมการสาขาไม่มีช่อง username ในระบบมาตั้งแต่ต้น** อยู่แล้ว
+     ⇒ ไฟล์ของบุคลากรใช้ "อีเมล" เป็นช่องบังคับแทน แล้วใช้เป็นชื่อผู้ใช้ไปเลย
+     (นักศึกษายังใช้รหัสนักศึกษาตามเดิม — เป็นรหัสที่มหาวิทยาลัยออกให้ ไม่ต้องตั้งเอง) */
+  function importIsStaff(kind) { return kind === 'supervisor' || kind === 'committee'; }
   function checkImport(rows, kind) {
     var head = rows[0] || [], map = mapHeader(head);
-    var needed = ['username', 'first', 'last'];
+    var needed = importIsStaff(kind) ? ['email', 'first', 'last'] : ['username', 'first', 'last'];
     var missing = needed.filter(function (f) { return map[f] === undefined; });
     if (missing.length) {
       return { fatal: 'ไฟล์ไม่มีคอลัมน์ที่จำเป็น: ' +
@@ -17800,6 +18244,9 @@ body.notes .note{display:block;}
       var g = function (f) { return map[f] === undefined ? '' : String(r[map[f]] || '').trim(); };
       var rec = { line: i + 2, username: g('username'), prefix: g('prefix'), first: g('first'),
                   last: g('last'), major: g('major'), email: g('email'), errs: [] };
+      /* บุคลากร: อีเมลคือชื่อผู้ใช้ — เติมให้ตั้งแต่ตรงนี้ เพื่อให้ด่านตรวจซ้ำ
+         และตัวสร้างบัญชีปลายทางทำงานได้เหมือนเดิมโดยไม่ต้องแก้สองที่ */
+      if (importIsStaff(kind)) { rec.username = rec.email; rec.emailRequired = true; }
       rec.errs = checkAccount(rec, kind);
       if (rec.username && seen[rec.username]) rec.errs.push('รหัสซ้ำกับแถวที่ ' + seen[rec.username]);
       if (rec.username) seen[rec.username] = rec.line;
@@ -18070,7 +18517,8 @@ body.notes .note{display:block;}
         body: 'ทิ้งการแก้ไข ' + pendCount(sc) + ' รายการที่ยังไม่ได้บันทึก กลับไปใช้ค่าเดิม' }, function () {
         /* โปรไฟล์แก้ค่าในหน่วยความจำไปแล้ว (ช่องที่ขึ้นกับกันต้องใช้ค่าสด) — ล้างด้วยการอ่านจากที่เก็บจริงกลับมา */
         if (sc === 'profile') DB = load();
-        pendClear(sc); closeModal(); renderAll();
+        /* ตั้งใจทิ้ง ⇒ ทิ้งร่างในเครื่องด้วย ไม่งั้นรอบหน้าจะเด้งให้กู้ของที่เพิ่งทิ้งไปเอง */
+        pendClear(sc); draftDrop(sc); closeModal(); renderAll();
         toast('ยกเลิกการแก้ไขแล้ว', 'กลับไปใช้ค่าที่บันทึกไว้เดิม', 'warn');
       });
     },
@@ -18145,7 +18593,6 @@ body.notes .note{display:block;}
       bypass('สั่งพิมพ์ประกาศรายชื่อ (ระบบจริงจัดหน้าเป็น PDF พร้อมหัวกระดาษราชการ)');
     },
     /* กลับไปเลือกรายวิชาอื่น (ล้างวิชาที่เลือกไว้ในหน้าประกาศ) */
-    'roster:repick': function () { view.pick['course:adm'] = null; goPage('adm:rosters'); },
     /* บันทึกคำอวยพร (ใช้บนการ์ดประกาศทุกใบ · เว้นว่าง = ใช้ข้อความระบบ) */
     'roster:greetSave': function () {
       var ta = $('[data-view="adm"] [name="rgreet"]');
@@ -19734,7 +20181,22 @@ body.notes .note{display:block;}
     },
     'view:site': function () { goScreen('home'); view.lp = null; renderHome(); window.scrollTo(0, 0); },
     'logout': function () {
-      confirmBox({ title: 'ออกจากระบบ', body: 'ต้องการออกจากระบบใช่หรือไม่', yes: 'ออกจากระบบ', icon: 'power' }, function () {
+      /* 🐛 EC-04 (17 ก.ย. 69): ของเดิมออกจากระบบได้เลยโดย **ไม่ผ่านด่านเตือน "ยังไม่บันทึก"**
+         ⇒ กรอกตารางค้างไว้แล้วกดออกจากระบบ งานหายเงียบ ๆ ทั้งที่ทุกทางออกอื่น
+            (เดินไปหน้าอื่น · ปิดแท็บ · รีเฟรช) เตือนหมดแล้วตั้งแต่ MS-06
+            เจอเพราะเทสต์ฉบับร่างต้องกดออกจากระบบ แล้วค่าที่ค้างไปขวางเทสต์ถัดไป */
+      var nPend = 0;
+      Object.keys(pend).forEach(function (k) { nPend += pendCount(k); });
+      confirmBox({ title: 'ออกจากระบบ', icon: 'power',
+        danger: !!nPend, yes: nPend ? 'ออกโดยไม่บันทึก' : 'ออกจากระบบ',
+        body: nPend
+          ? 'ท่านมีการแก้ไข <b>' + nPend + ' รายการ</b> ที่ยังไม่ได้บันทึก — ' +
+            'ถ้าออกตอนนี้การแก้ไขเหล่านั้นจะหายทั้งหมด'
+          : 'ต้องการออกจากระบบใช่หรือไม่' }, function () {
+        /* 🔴 PDPA — ฉบับร่างอยู่ในเครื่องผู้ใช้และมีชื่อ/คะแนนของนักศึกษา
+           เครื่องส่วนกลางของคณะใช้ร่วมกันหลายคน ⇒ ออกจากระบบต้องล้างทิ้งทั้งหมด */
+        draftClearAll();
+        pend = {};
         closeModal(); goScreen('login'); toast('ออกจากระบบแล้ว', 'ระบบจริงจะล้าง session ของทุก guard');
       });
     },
@@ -19992,6 +20454,78 @@ body.notes .note{display:block;}
     'lp:privacy': function () { view.lp = 'privacy'; renderHome(); window.scrollTo(0, 0); },
     'lp:manual': function () { view.lp = 'manual'; renderHome(); window.scrollTo(0, 0); },
 
+    /* ═══ EC-04 · ตัวจัดการชุดจำลองความล้มเหลว (เฉพาะโปรโตไทป์) ═══ */
+    'lp:role': function (el) { view.lpRole = el.getAttribute('data-v') || ''; renderAll(); },
+    'lp:course': function (el) { view.lpCourse = el.getAttribute('data-v') || ''; view.lpMonth = ''; renderAll(); },
+    'lp:month': function (el) {
+      var step = Number(el.getAttribute('data-v')) || 0;
+      var cur = lpCalMonth();
+      var y = Number(cur.split('-')[0]), m = Number(cur.split('-')[1]) + step;
+      if (m < 1) { m = 12; y--; } if (m > 12) { m = 1; y++; }
+      view.lpMonth = y + '-' + String(m).padStart(2, '0');
+      renderAll();
+    },
+    'lp:man': function (el) { view.lpMan = el.getAttribute('data-v') || 'stu'; renderAll(); },
+    'fail:sim': function () { failSimBox(); },
+    /* 🔴 กู้ร่างต้องให้คนกดเอง — ดูเหตุผลที่หัวข้อฉบับร่างในโค้ด */
+    'draft:use': function (el) {
+      var sc = el.getAttribute('data-sc'), d = draftGet(sc);
+      if (!d) { toast('ไม่พบฉบับร่างแล้ว', 'อาจถูกทิ้งไปหรือหมดอายุ', 'warn'); return; }
+      pend[sc] = d.v;
+      renderAll();
+      toast('กู้ฉบับร่างแล้ว', 'ยังไม่ได้บันทึกเข้าระบบ — ตรวจแล้วกดบันทึกอีกครั้ง', 'warn');
+    },
+    'draft:drop': function (el) {
+      var sc = el.getAttribute('data-sc');
+      confirmBox({ title: 'ทิ้งฉบับร่าง', danger: true, yes: 'ทิ้งฉบับร่าง', icon: 'trash',
+        nt: 'think', ntLabel: 'น้อง TIMS ขอให้แน่ใจก่อนทิ้ง',
+        body: 'สิ่งที่ท่านกรอกค้างไว้ในเครื่องจะถูกลบทิ้ง และกู้กลับไม่ได้' }, function () {
+        draftDrop(sc); closeModal(); renderAll();
+        toast('ทิ้งฉบับร่างแล้ว', '', 'warn');
+      });
+    },
+    'fail:save': function () {
+      closeModal();
+      /* ใช้ถ้อยคำชุดเดียวกับที่ระบบจริงจะใช้ — ช่องทางติดต่ออ่านจากศูนย์ตั้งค่า */
+      toast('ระบบขัดข้องชั่วคราว',
+        'ไม่ใช่ความผิดของท่าน ลองอีกครั้งในอีกสักครู่ — สิ่งที่ท่านกรอกไว้ยังอยู่ในหน้านี้' + orgContact(), 'bad');
+    },
+    'fail:net': function () { closeModal(); netOff = !netOff; renderNetBar();
+      if (!netOff) toast('กลับมาออนไลน์แล้ว', 'กดบันทึกอีกครั้งได้เลย', 'ok'); },
+    'net:retry': function () { netOff = false; renderNetBar();
+      toast('ติดต่อเซิร์ฟเวอร์ได้แล้ว', 'กดบันทึกอีกครั้งได้เลย', 'ok'); },
+    'fail:warn': function () { closeModal(); sessionWarnBox(); },
+    'fail:expire': function () { closeModal(); reauthBox(); },
+    'sess:stay': function () { closeModal(); toast('ต่อเวลาให้แล้ว', 'ทำงานต่อได้ตามปกติ', 'ok'); },
+    'sess:saveStay': function () { closeModal(); toast('บันทึกแล้วและต่อเวลาให้', 'ทำงานต่อได้ตามปกติ', 'ok'); },
+    'reauth:google': function () {
+      bypass('เข้าสู่ระบบด้วย Google (เปิดหน้าต่างแยก ไม่พาหน้านี้ออกไป)', function () {
+        closeModal();
+        toast('เข้าสู่ระบบอีกครั้งแล้ว', 'ระบบส่งคำสั่งที่ค้างไว้ให้ใหม่เรียบร้อย', 'ok');
+      });
+    },
+    'reauth:pw': function () {
+      var box = document.querySelector('.modal-back');
+      var uEl = box && box.querySelector('[data-login="user"]');
+      var typed = uEl ? String(uEl.value || '').trim().toLowerCase() : '';
+      var u = meUser();
+      /* 🔴 ต้องรับ "ทุกชื่อที่ล็อกอินได้จริง" ไม่ใช่ username อย่างเดียว —
+         กรรมการสาขาไม่มีช่อง username เลย ใช้อีเมล/Google เป็นตัวระบุตัวตน (D-6)
+         เขียนเทียบเฉพาะ username รอบแรก ⇒ ด่านไม่เคยทำงานกับกรรมการและฝ่ายฝึก */
+      var ids = !u ? [] : [u.username, u.email, u.google].filter(Boolean)
+        .map(function (x) { return String(x).toLowerCase(); });
+      if (!typed) { toast('กรอกชื่อผู้ใช้ก่อน', '', 'bad'); return; }
+      /* 🔴 ล็อกอินซ้ำได้เป็นคนละบัญชี ⇒ ห้ามยิงคำสั่งที่ค้างไว้ต่อเด็ดขาด
+         ไม่งั้นจะกลายเป็นคนใหม่บันทึกงานในนามของคนเก่า (EC-04 หัวข้อ 7.3 ข้อ 4) */
+      if (ids.length && ids.indexOf(typed) < 0) {
+        toast('บัญชีไม่ตรงกับที่ทำงานค้างไว้',
+          'งานที่ค้างอยู่เป็นของ ' + esc(u.fullName || ids[0]) +
+          ' — เพื่อไม่ให้บันทึกในนามผิดคน โปรดเข้าสู่ระบบด้วยบัญชีเดิม', 'bad');
+        return;
+      }
+      closeModal();
+      toast('เข้าสู่ระบบอีกครั้งแล้ว', 'ระบบส่งคำสั่งที่ค้างไว้ให้ใหม่เรียบร้อย', 'ok');
+    },
     'proto:reset': function () {
       confirmBox({ title: 'รีเซ็ตข้อมูลตัวอย่าง', body: 'ล้างสิ่งที่ทดลองกดไว้ทั้งหมด แล้วกลับไปเป็นข้อมูลตั้งต้น', yes: 'รีเซ็ต', danger: true }, function () {
         reset(); closeModal(); view.task = null; view.tab = {}; renderAll(); toast('รีเซ็ตข้อมูลตัวอย่างแล้ว');
@@ -20979,22 +21513,35 @@ body.notes .note{display:block;}
     'import:tpl': function () {
       var kind = importState.kind;
       /* xlsxDownload รับ rows[][] (array ต่อแถว) — ไม่ใช่สตริง CSV */
+      /* บุคลากรไม่มีช่อง "ชื่อผู้ใช้" แล้ว — ใช้อีเมลเป็นชื่อผู้ใช้ (รอบสี่ ข้อ 1) */
       var head = kind === 'student'
         ? ['รหัสนักศึกษา', 'คำนำหน้า', 'ชื่อ', 'นามสกุล', 'สาขา', 'อีเมล']
-        : ['ชื่อผู้ใช้', 'คำนำหน้า', 'ชื่อ', 'นามสกุล', 'สาขา', 'อีเมล'];
+        : ['อีเมล', 'คำนำหน้า', 'ชื่อ', 'นามสกุล', 'สาขา'];
       /* เรื่อง 2 (14 ก.ย. 69): ตัวอย่าง 2 แถว — แถวแรกกรอกครบทุกช่อง · แถวสองเว้นอีเมล (ช่องที่ใส่ก็ได้)
          + ใช้คนละสาขาให้เห็นว่าชื่อสาขาต้องตรงกับในระบบ */
       var m2 = (DB.majors[1] || DB.majors[0]).n;
       var sample = kind === 'student'
         ? ['69100001', 'นางสาว', 'ตัวอย่าง', 'นามสมมติ', DB.majors[0].n, '69100001@' + DOMAIN]
-        : ['somchai.k', 'นาย', 'ตัวอย่าง', 'นามสมมติ', DB.majors[0].n, 'somchai.k@' + DOMAIN];
+        : ['somchai.k@' + DOMAIN, 'นาย', 'ตัวอย่าง', 'นามสมมติ', DB.majors[0].n];
       var sample2 = kind === 'student'
         ? ['69100002', 'นาย', 'สมชาย', 'ใจดี', m2, '']
-        : ['nida.p', 'นางสาว', 'นิดา', 'พอดี', m2, ''];
-      xlsxDownload('tims-import-' + kind + '.xlsx', [head, sample, sample2]);
+        : ['nida.p@' + DOMAIN, 'นางสาว', 'นิดา', 'พอดี', m2];
+      /* 🔴 รอบสี่ ข้อ 2 (18 ก.ย. 69): ช่องที่ต้องตรงกับค่าในระบบ **ต้องเป็นดรอปดาวน์ในไฟล์**
+         เจ้าของงานเจอเองว่าคอลัมน์สาขาพิมพ์เอาเอง ⇒ พิมพ์ผิดแล้วระบบข้ามแถวนั้นเงียบ ๆ
+         ผู้ใช้เสียเวลากรอกแล้วของหายโดยไม่รู้ตัว ซึ่งแย่กว่าไฟล์ถูกปฏิเสธทั้งไฟล์
+         (ตัวเขียน .xlsx รองรับ data-validation อยู่แล้ว แต่ใช้อยู่ที่เดียวคือไฟล์โรงเรียน) */
+      xlsxDownload('tims-import-' + kind + '.xlsx', [head, sample, sample2], {
+        validations: [
+          { col: head.indexOf('คำนำหน้า'), from: 2, values: ['นาย', 'นาง', 'นางสาว'] },
+          { col: head.indexOf('สาขา'), from: 2, values: DB.majors.map(function (x) { return x.n; }) }
+        ]
+      });
       toast('ดาวน์โหลดไฟล์ตัวอย่างแล้ว', 'กรอกต่อจากแถวตัวอย่างได้เลย · แถวที่ 2 เว้นอีเมลไว้เป็นตัวอย่างช่องที่ไม่บังคับ');
     },
     'import:reset': function () { importState.result = null; importState.fileName = ''; renderAll(); },
+    /* กฎ ก · ปุ่มลัดจากหน้าดู — พาเข้าเส้นทางรายวิชาแล้วเปิดงานชิ้นนั้นให้เลย
+       (เจ้าของงานสั่งไว้ตรง ๆ ว่าเมนูบาร์ "มีปุ่มที่สามารถลัดเข้าไปหน้าทำงานที่อยู่ในรายวิชาได้") */
+    'task:goWork': function (el) { view.viaCourse = true; A['task:pick'](el); },
 
     'assign:set': null,
     'assign:setPed': null,
@@ -21470,8 +22017,16 @@ body.notes .note{display:block;}
             ['', 'ข้อเสนอแนะเพิ่มเติม', 'ข้อความยาว', '', 'ไม่ใช่'],
             ['', 'ชื่อเล่นที่โรงเรียนเรียก', 'ข้อความสั้น', '', 'ไม่ใช่']
           ]);
-      xlsxDownload(exportName('คำถาม-' + (d.title || 'แบบสำรวจใหม่'), 'adm'), rows);
-      toast('ดาวน์โหลดไฟล์คำถามแล้ว', 'เพิ่มแถวใหม่ต่อท้ายได้เลย (เว้นรหัสข้อว่างไว้) แล้วบันทึกใน Excel ก่อนอัปโหลดกลับ');
+      /* 🔴 กฎ ข (รอบสี่ ข้อ 2): "ชนิดคำตอบ" กับ "จำเป็น" เป็นค่าตายตัวของระบบ
+         พิมพ์ผิดแล้วระบบอ่านไม่ออก ⇒ ต้องเป็นดรอปดาวน์ในไฟล์ ไม่ใช่ให้พิมพ์เอง */
+      xlsxDownload(exportName('คำถาม-' + (d.title || 'แบบสำรวจใหม่'), 'adm'), rows, {
+        validations: [
+          { col: head0.indexOf('ชนิดคำตอบ'), from: 1,
+            values: Object.keys(QTYPE_LABEL).map(function (k) { return QTYPE_LABEL[k]; }) },
+          { col: head0.indexOf('จำเป็น'), from: 1, values: ['ใช่', 'ไม่ใช่'] }
+        ]
+      });
+      toast('ดาวน์โหลดไฟล์คำถามแล้ว', 'ชนิดคำตอบและช่อง "จำเป็น" เป็นดรอปดาวน์ให้เลือกแล้ว · เพิ่มแถวใหม่ต่อท้ายได้เลย (เว้นรหัสข้อว่างไว้)');
     },
     'formdraft:file': function (el) {
       var d = view.formDraft;
@@ -22144,6 +22699,9 @@ body.notes .note{display:block;}
       e.preventDefault();
       /* 14 ก.ย. 69: เลิกบันทึกอัตโนมัติแล้ว การเดินออกจากหน้าโดยยังไม่กดบันทึกต้องเตือนก่อน */
       var pKey = p.getAttribute('data-page');
+      /* กฎ ก · ลิงก์ที่กดมาจากในผังขั้นตอน/การ์ดงานของรายวิชา = เข้ามาทางรายวิชา ⇒ แก้ได้
+         กดจากเมนูซ้าย · แถบน้อง TIMS · ปุ่มในสถานะว่าง = ดูอย่างเดียว */
+      view.viaCourse = !!(p.closest('.stepper') || p.closest('.step-acts') || p.closest('.job-card'));
       leaveGuard(function () { goPage(pKey); });
       return;
     }
