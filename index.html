@@ -13937,16 +13937,19 @@ body.notes .note{display:block;}
     }).join('') + '</ol>';
   }
   function courseJobs(ns, co, s) {
-    /* prog: [ทำแล้ว, ทั้งหมด] — ใช้บอก "ทำแล้ว/ยังไม่ทำ/ค้างเท่าไร" บนการ์ดงานทุกใบ */
+    /* prog: [ทำแล้ว, ทั้งหมด] — ใช้บอก "ทำแล้ว/ยังไม่ทำ/ค้างเท่าไร" บนการ์ดงานทุกใบ
+       🔴 19 ก.ย. 69 — ถอดช่อง `p` (ปลายทาง) ออกทั้ง 13 รายการ · ตั้งแต่ CR-32 การ์ดงานเป็น
+          "แผงข้อมูลล้วน" ไม่ใช่ปุ่ม (ทางลงมือทำอยู่ในผังขั้นตอน) ⇒ ไม่มีใครอ่านช่องนี้อีกเลย
+          ค้างไว้เป็นข้อมูลตาย และหลอกให้เข้าใจผิดว่าการ์ดยังพาไปหน้าอื่นได้ (R-1 ข้อ 6) */
     if (ns === 'adm') {
       var by = majorProgress(co);
       return [
-        { p: 'adm:courseEdit', ic: 'gear', t: 'รายละเอียดรายวิชา',
+        { ic: 'gear', t: 'รายละเอียดรายวิชา',
           d: 'รหัส ชื่อ ครั้งที่ รุ่น ภาคเรียน สถานะรับลงทะเบียน',
           /* ADD-21: ค่าที่ตั้งไว้จริง ๆ — เดิมต้องกดเข้าไปในฟอร์มถึงจะเห็นว่าตั้งอะไรไว้ */
           lines: [['ครั้งที่', (co.round || '—') + '/4'], ['รหัสรุ่น', String(co.prefix || '—')],
                   ['ระยะเวลาฝึก', courseDurText(co) || 'ยังไม่กำหนด'], ['รับลงทะเบียน', co.status === 'open' ? 'เปิดรับ' : 'ปิดรับ']] },
-        { p: 'adm:tasks', ic: 'pen', t: 'กำหนดงานที่ต้องส่ง',
+        { ic: 'pen', t: 'กำหนดงานที่ต้องส่ง',
           /* A-6 (12 ก.ย. 69): รายวิชาที่เพิ่งยกโครงมาจากปีก่อนไม่มีกำหนดส่งติดมา (ล้างตอน rollover:go แล้ว)
              บอกตรง ๆ ว่า "ยังไม่กำหนด" แทนเงียบ — แนวเดียวกับที่ทำกับเกณฑ์ผ่านที่ยังไม่ตั้ง */
           d: tasksOf(co.id).length
@@ -13961,7 +13964,7 @@ body.notes .note{display:block;}
                   ['ยังไม่กำหนดวันส่ง', tasksOf(co.id).filter(function (t) { return !t.due; }).length + ' งาน']],
           /* เทียบกับจำนวนที่หลักสูตรกำหนด (COURSE_ITEMS 12.1) — บอกได้ว่าใส่ครบหรือยัง */
           prog: [tasksOf(co.id, 'during').length, co.tasks || tasksOf(co.id, 'during').length] },
-        { p: 'adm:evals', ic: 'clip', t: 'กำหนดแบบประเมิน',
+        { ic: 'clip', t: 'กำหนดแบบประเมิน',
           d: evalFormsOf(co.id).length
             ? evalFormsOf(co.id).length + ' ชุด · รวม ' +
               evalFormsOf(co.id).reduce(function (a, f) { return a + f.items.length; }, 0) + ' ข้อ · ' +
@@ -13980,14 +13983,14 @@ body.notes .note{display:block;}
         (function () {
           var evs = courseEvents(co.id);
           var passed = evs.filter(isPast).length;
-          return { p: 'adm:courseCal', ic: 'cal', t: 'ปฏิทินของรายวิชานี้',
+          return { ic: 'cal', t: 'ปฏิทินของรายวิชานี้',
             d: evs.length
               ? evs.length + ' กำหนดการ · ผ่านมาแล้ว ' + passed
               : 'ยังไม่ได้วางปฏิทินให้รุ่นนี้',
             prog: [passed, evs.length] };
         })(),
         /* หัวใจของบทบาทฝ่ายฝึก: ไม่ลงมือจัดสรรเอง แต่ต้องรู้ว่าสาขาไหนยังค้าง */
-        { p: 'adm:progress', ic: 'chart', t: 'ติดตามความคืบหน้ารายสาขา',
+        { ic: 'chart', t: 'ติดตามความคืบหน้ารายสาขา',
           d: by.late ? by.late + ' สาขายังจัดสรรไม่ครบ' : 'ทุกสาขาจัดสรรครบแล้ว',
           lines: [['สาขาที่มีนักศึกษา', by.majors + ' สาขา'],
                   ['จัดสรรครบแล้ว', by.doneMajors + ' สาขา'],
@@ -13998,12 +14001,12 @@ body.notes .note{display:block;}
     if (ns === 'sup') {
       var sv = supCourseStat(co);
       return [
-        { p: 'sup:review', ic: 'check', t: 'ตรวจงานที่ส่ง',
+        { ic: 'check', t: 'ตรวจงานที่ส่ง',
           d: sv.pend ? 'รอตรวจ ' + sv.pend + ' ชิ้น' : 'ตรวจครบแล้ว',
           lines: [['รอตรวจ', sv.pend + ' ชิ้น'], ['ผ่านแล้ว', sv.subsOk + ' ชิ้น'],
                   ['งานทั้งหมดของคนที่ท่านดูแล', sv.subsTotal + ' ชิ้น']],
           prog: [sv.subsOk, sv.subsTotal] },
-        { p: 'sup:plan', ic: 'cal', t: 'นัดและบันทึกการนิเทศ',
+        { ic: 'cal', t: 'นัดและบันทึกการนิเทศ',
           d: !sv.need ? 'ฝ่ายฝึกยังไม่ได้กำหนดจำนวนครั้งที่ต้องนิเทศ'
             : (sv.noPlan ? 'ยังไม่ได้นัด ' + sv.noPlan + ' คน'
                          : 'นัดครบทุกคนแล้ว · ต้องนิเทศคนละ ' + sv.need + ' ครั้ง'),
@@ -14011,22 +14014,22 @@ body.notes .note{display:block;}
                   ['นิเทศครบแล้ว', sv.doneAll + '/' + sv.n + ' คน'],
                   ['ยังไม่ได้นัด', (sv.noPlan || 0) + ' คน']],
           prog: [sv.doneAll, sv.n] },
-        { p: 'sup:roster', ic: 'cap', t: 'นักศึกษาในรายวิชานี้',
+        { ic: 'cap', t: 'นักศึกษาในรายวิชานี้',
           d: sv.n + ' คนในความดูแลของท่าน', prog: [sv.n, sv.n] }
       ];
     }
     return [
-      { p: 'com:assign', ic: 'users', t: 'จัดสรรอาจารย์นิเทศก์',
+      { ic: 'users', t: 'จัดสรรอาจารย์นิเทศก์',
         d: s.waiting ? 'ค้าง ' + s.waiting + ' คน' : 'ครบแล้ว',
         lines: [['จัดสรรแล้ว', s.assigned + ' คน'], ['รอจัดสรร', s.waiting + ' คน'],
                 ['นักศึกษาในรายวิชา', s.n + ' คน']],
         prog: [s.assigned, s.n] },
-      { p: 'com:enroll', ic: 'book', t: 'ลงทะเบียนนักศึกษา',
+      { ic: 'book', t: 'ลงทะเบียนนักศึกษา',
         d: s.n ? 'ลงทะเบียนแล้ว ' + s.n + ' คน' : 'ยังไม่มีนักศึกษา',
         lines: [['ลงทะเบียนแล้ว', s.n + ' คน'], ['อนุมัติออกฝึกแล้ว', (s.approved || 0) + ' คน'],
                 ['ผ่านการฝึกแล้ว', (s.passed || 0) + ' คน']],
         prog: [s.n, s.n] },
-      { p: 'com:schools', ic: 'pin', t: 'โรงเรียนที่ฝึก',
+      { ic: 'pin', t: 'โรงเรียนที่ฝึก',
         d: s.n - s.withSchool ? 'ยังไม่ระบุ ' + (s.n - s.withSchool) + ' คน' : 'ครบแล้ว',
         lines: [['ระบุโรงเรียนแล้ว', s.withSchool + ' คน'],
                 ['ยังไม่ระบุ', (s.n - s.withSchool) + ' คน'],
@@ -14039,7 +14042,7 @@ body.notes .note{display:block;}
           var it = byId(DB.internships, x.internshipId);
           return it && it.courseId === co.id && x.total !== null;
         }).length;
-        return { p: 'com:scores', ic: 'clip', t: 'กรอกคะแนนประเมิน',
+        return { ic: 'clip', t: 'กรอกคะแนนประเมิน',
           d: !fs.length ? 'ฝ่ายฝึกยังไม่ได้กำหนดแบบประเมิน'
             : (need - done > 0 ? 'ยังขาด ' + (need - done) + ' ชุด' : 'กรอกครบแล้ว'),
           prog: [done, need], soon: !fs.length };
@@ -14051,7 +14054,7 @@ body.notes .note{display:block;}
           var it = byId(DB.internships, x.internshipId);
           return it && it.courseId === co.id && x.total !== null;
         }).length;
-        return { p: 'com:results', ic: 'chart', t: 'สรุปผลคะแนน',
+        return { ic: 'chart', t: 'สรุปผลคะแนน',
           d: !fs.length ? 'ยังไม่มีแบบประเมินให้สรุปผล'
             : (done ? 'ดูการกระจาย/เฉลี่ย/อันดับ (กรอกแล้ว ' + done + '/' + need + ')' : 'ยังไม่มีคะแนนให้สรุป'),
           prog: [done, need], soon: !fs.length };
