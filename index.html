@@ -1746,6 +1746,12 @@ body.notes .note{display:block;}
 @media(min-width:901px){.set-2col-cls>.set-side{position:sticky;top:14px;}}
 /* ป้าย "แสดงที่:" ใต้ช่องกรอก — บอกว่าค่านี้ไปโผล่ที่ไหนบ้าง */
 .shown-at{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:-8px;margin-bottom:2px;font-size:var(--fs-1);}
+/* 🔴 18 ก.ย. 69 — ป้าย "แสดงที่:" ใช้ได้ 2 ตำแหน่ง และระยะห่างของสองที่นั้นไม่เท่ากัน
+   · วางต่อจาก .field (8 จุด) — .field มี margin-bottom 18px ⇒ ดึงขึ้น 8px แล้วเหลือ 10px กำลังดี
+   · วางไว้ "ข้างใน" .field (1 จุด) — .field เป็น flex column gap 7px ⇒ ดึงขึ้น 8px แล้วเหลือ **-1px**
+     คือทับขอบล่างของช่องกรอกพอดี (เจ้าของงานเห็นจากภาพจริงที่ "โดเมนอีเมลที่อนุญาต")
+   ⇒ ล้างค่าดึงขึ้นเมื่ออยู่ในกล่องที่จัดระยะให้เองอยู่แล้ว · แก้ที่นี่ที่เดียวครอบทุกจุดที่จะเขียนใหม่ */
+.field > .shown-at{margin-top:0;}
 .shown-at .sa-lead{color:var(--ink-3);font-weight:700;}
 .sa-chip{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:999px;
   background:var(--plum-soft);color:var(--plum);font-weight:600;font-size:var(--fs-1);white-space:nowrap;}
@@ -10641,6 +10647,23 @@ body.notes .note{display:block;}
      🔴 ตั้งใจไม่ผ่าน ctxStudents — "รหัสบนแถบบริบท" เป็นเครื่องมือของการ *ดูข้อมูล*
         ส่วน "รหัสที่รายวิชารับ" เป็นกติกาของตัวรายวิชาเอง คนละเรื่องกัน ถ้าเอามาตัดซ้ำ
         พอผู้ใช้เลือกบริบทเป็นรหัสอื่น หน้าลงทะเบียนจะว่างเปล่าโดยไม่มีอะไรอธิบาย */
+  /** ด่านกันรุ่น+ครั้งที่ซ้ำ — ใช้ร่วมทุกทางที่ "สร้าง" หรือ "แก้" รายวิชา
+      🔴 หนึ่งรุ่นฝึกครั้งละหนหนึ่งตลอดหลักสูตร ⇒ คู่ (รหัสรุ่น, ครั้งที่) ต้องไม่ซ้ำ **ทั้งระบบ**
+         ไม่ใช่แค่ในปีเดียว — ถ้าซ้ำ เงื่อนไขจบ "ฝึกครบ 4 ครั้ง" จะนับผิด
+      ⚠️ เดิมด่านนี้เขียนอยู่ในตัวจัดการ course:saveDetail ตัวเดียว ⇒ ฟอร์ม "เปิดรายวิชาใหม่" ไม่มีด่าน
+         (ความไม่เท่ากันคลาสเดียวกับ A-3 ที่สร้างบัญชีทีละคนตรวจน้อยกว่าตอนนำเข้าไฟล์) */
+  function courseRoundDup(prefix, round, selfId) {
+    return DB.courses.filter(function (x) {
+      return x.id !== selfId && String(x.prefix) === String(prefix) && String(x.round) === String(round);
+    })[0] || null;
+  }
+  function courseRoundGuard(prefix, round, selfId) {
+    var dup = courseRoundDup(prefix, round, selfId);
+    if (!dup) return true;
+    toast('ครั้งที่ซ้ำกับรายวิชาอื่น',
+      'รหัส ' + prefix + ' มีครั้งที่ ' + round + ' อยู่แล้ว (' + dup.code + ')', 'bad');
+    return false;
+  }
   function enrollCandidates(co, major) {
     return DB.students.filter(function (s) {
       return s.major === major && enrollAllowed(co, s);
@@ -10653,6 +10676,13 @@ body.notes .note{display:block;}
   /** ตรวจก่อนบันทึก + บอกเหตุผลเมื่อไม่ผ่าน (คืน false = หยุด) */
   function enrollCheck(co, s) {
     if (!co || !s) return false;
+    /* 🔴 18 ก.ย. 69 — เดิมหน้าลงทะเบียนขึ้นแถบ "ยังไม่เปิดรับลงทะเบียน" แล้ว **ยังเรนเดอร์ปุ่มครบ**
+       และตัวจัดการไม่เคยดู co.status เลย ⇒ ด่านความปลอดภัยที่ตั้งไว้ตอนสร้าง/ยกโครงรายวิชา
+       (status:'closed' = ยังตั้งไม่เสร็จ) ไม่ถูกบังคับจริงสักครั้ง */
+    if (co.status !== 'open') {
+      toast('รายวิชายังไม่เปิดรับลงทะเบียน', esc(co.code) + ' — เปิดรับที่หน้ารายละเอียดรายวิชาก่อน', 'bad');
+      return false;
+    }
     if (!enrollAllowed(co, s)) {
       toast('ลงทะเบียนไม่ได้', 'รายวิชานี้รับเฉพาะรหัส ' + co.prefix + ' — ' +
         stuName(s) + ' เป็นรหัส ' + prefixOf(s), 'bad');
@@ -12204,9 +12234,11 @@ body.notes .note{display:block;}
     var its = kind === 'student'
       ? DB.internships.filter(function (it) { return it.studentId === u.id; })
       : [];
-    var rounds = its.map(function (it) {
-      var co = byId(DB.courses, it.courseId); return co ? co.round : null;
-    }).filter(Boolean);
+    /* 🔴 18 ก.ย. 69 — เดิมนับ "จำนวนการลงทะเบียน" แล้วแสดงเป็น N/4
+       ซึ่งคนละหลักกับ roundProgress() ที่หน้ารายงานคุณสมบัติและเงื่อนไขจบใช้ (นับ "ครั้งที่ไม่ซ้ำกัน")
+       ⇒ คนเดียวกันขึ้นตัวเลขไม่เท่ากันสองหน้า และหน้าบัญชีขึ้นเกิน 4 ได้
+       (บทเรียนเดิม CR-33 ก้อน 2: ตัวเลขสองชุดที่คิดแยกกันจะเพี้ยนคนละทางเสมอ) */
+    var rp = kind === 'student' ? roundProgress(u) : null;
 
     return backLink(backTo, 'กลับรายการบัญชี') +
       head(acctName(kind, u), acctRoleLabel(kind) +
@@ -12216,7 +12248,7 @@ body.notes .note{display:block;}
         stat('shield', 'var(--plum)', u.google ? 'ผูกแล้ว' : (u.pwSet ? 'ยังไม่ผูก' : 'ยังไม่เข้าระบบ'), 'บัญชี Google') +
         stat('key', 'var(--amber)', u.activation ? 'มี' : 'ไม่มี', 'รหัสเปิดใช้งานค้างอยู่') +
         (kind === 'student'
-          ? stat('cap', 'var(--terra)', rounds.length + '/4', 'ฝึกไปแล้ว') +
+          ? stat('cap', 'var(--terra)', rp.enrolled + '/4', 'ฝึกไปแล้ว') +
             stat('check', 'var(--ok)', u.updated ? 'ครบ' : 'ยังไม่ครบ', 'ข้อมูลส่วนตัว')
           : stat('power', 'var(--ok)', u.active ? 'ปฏิบัติหน้าที่' : 'ยุติแล้ว', 'สถานะ') +
             stat('users', 'var(--terra)',
@@ -12319,7 +12351,9 @@ body.notes .note{display:block;}
       return !assignDone(it, !!coX && coX.round === 4);
     }).length;
     var notUpdated = ss.filter(function (s) { return !s.updated; }).length;
-    return head('ภาพรวมสาขา' + esc(majorName(c.major)), 'กรรมการสาขา · ภาคเรียนที่ ' + DB.meta.semester + '/' + DB.meta.year) +
+    return head('ภาพรวมสาขา' + esc(majorName(c.major)), 'กรรมการสาขา · ภาคเรียนที่ ' + DB.meta.semester + '/' + DB.meta.year,
+        actorActive('com') ? '' : '<span class="badge bad">โหมดอ่านอย่างเดียว</span>') +
+      readOnlyNote('com') +
       ntHome('com') +
       '<div class="stats">' +
         stat('cap', 'var(--amber)', ss.length, 'นักศึกษาในสาขา', 'com:students') +
@@ -15023,7 +15057,9 @@ body.notes .note{display:block;}
     var c0 = ctxOf('adm'), meA = meAdm();
     return head('สวัสดี ' + esc(meA.nickname || meA.fullName || 'ผู้ดูแลระบบ'),
       'ยินดีต้อนรับสู่หลังบ้าน · ภาคเรียนที่ ' + c0.semester + '/' + c0.year +
-      (c0.prefix ? ' · รหัส ' + c0.prefix : '') + ' · ' + esc(DB.settings.siteName)) +
+      (c0.prefix ? ' · รหัส ' + c0.prefix : '') + ' · ' + esc(DB.settings.siteName),
+      actorActive('adm') ? '' : '<span class="badge bad">โหมดอ่านอย่างเดียว</span>') +
+      readOnlyNote('adm') +
       ntHome('adm') +
       '<div class="stats">' +
         stat('cap', 'var(--plum)', ctxIts.length, 'นักศึกษาที่ออกฝึก', 'adm:accounts', 'adm:accounts|student') +
@@ -15652,9 +15688,54 @@ body.notes .note{display:block;}
   }
   /* ── รอบปีการศึกษา (item 2 · 8 ก.ย. 69) ── */
   /* ตัวช่วยขึ้นปีการศึกษาใหม่ — ยกโครงรายวิชา/งาน/แบบประเมิน (ไม่แตะโควตาโรงเรียน · ไม่ยกนักศึกษา/คะแนน) */
+  /* ═══ ยกโครงขึ้นปีการศึกษาใหม่ — กติกาที่เจ้าของงานเคาะ 18 ก.ย. 69 ═══
+     "ปีถัดไป **รุ่นเดิมเลื่อนไปครั้งถัดไป**" ⇒ รุ่น 66 ครั้งที่ 1 ของปีนี้ กลายเป็น รุ่น 66 ครั้งที่ 2 ของปีหน้า
+     🔴 รุ่นที่ฝึกครั้งที่ 4 แล้ว **ไม่ยกไป** — ฝึกครบตามหลักสูตรแล้ว ไม่มีครั้งที่ 5
+     🔴 รุ่นใหม่ที่เข้ามาที่ครั้งที่ 1 **ฝ่ายฝึกเปิดเอง** ไม่ใช่งานของปุ่มนี้
+        (ระบบไม่รู้ว่ารุ่นถัดไปชื่ออะไรและจะรับสาขาไหนบ้าง — เดาแทนคนไม่ได้)
+     🔴 ข้ามรายวิชาที่ปลายทางมีอยู่แล้ว ⇒ กดยกซ้ำไม่สร้างของซ้ำ
+        (รุ่น+ครั้งที่ ต้องไม่ซ้ำกันทั้งระบบ เป็นเกณฑ์เดียวกับด่านที่ course:saveDetail ใช้) */
+  function rolloverTarget(co) { return { prefix: String(co.prefix), round: Number(co.round) + 1 }; }
+  function rolloverHas(t) {
+    return DB.courses.some(function (x) {
+      return String(x.prefix) === t.prefix && Number(x.round) === t.round;
+    });
+  }
+  function rolloverSrc(from) {
+    return DB.courses.filter(function (co) {
+      return String(co.year) === String(from) && Number(co.round) < 4 && !rolloverHas(rolloverTarget(co));
+    });
+  }
+  /** สิ่งที่จะไม่ถูกยก พร้อมเหตุผล — ต้องบอกก่อนกด ไม่ใช่ให้ไปเดาเองว่าทำไมหายไป */
+  function rolloverSkipped(from) {
+    return DB.courses.filter(function (co) { return String(co.year) === String(from); })
+      .map(function (co) {
+        if (Number(co.round) >= 4) return { co: co, why: 'ฝึกครบ 4 ครั้งแล้ว' };
+        if (rolloverHas(rolloverTarget(co))) return { co: co, why: 'ครั้งที่ ' + (co.round + 1) + ' ของรหัส ' + co.prefix + ' มีอยู่แล้ว' };
+        return null;
+      }).filter(Boolean);
+  }
+  function rolloverBody(from, to) {
+    var src = rolloverSrc(from), skip = rolloverSkipped(from);
+    return 'สร้างรายวิชาใหม่ <b>' + src.length + '</b> รายวิชาในปี ' + to +
+      ' พร้อมคัดลอกงานที่ต้องส่ง (รวมคะแนนของงาน) · แบบประเมิน · เกณฑ์ตัดเกรด' +
+      '<br>ตั้งเป็น "ยังไม่เปิดรับ" · ไม่ยกนักศึกษา/คะแนนที่กรอกแล้ว/โควตาโรงเรียน' +
+      (src.length
+        ? '<div class="hint mt-10">' + src.map(function (co) {
+            return 'รหัส ' + esc(String(co.prefix)) + ' ครั้งที่ ' + co.round + ' → <b>ครั้งที่ ' + (co.round + 1) + '</b>';
+          }).join('<br>') + '</div>'
+        : '') +
+      (skip.length
+        ? '<div class="hint mt-10"><b>ไม่ยกไป ' + skip.length + ' รายวิชา</b><br>' + skip.map(function (x) {
+            return esc(x.co.code) + ' (รหัส ' + esc(String(x.co.prefix)) + ' ครั้งที่ ' + x.co.round + ') — ' + esc(x.why);
+          }).join('<br>') + '</div>'
+        : '') +
+      '<div class="hint mt-10">' + ic('pin') + ' รุ่นใหม่ที่เข้ามาฝึกครั้งที่ 1 ต้องเปิดรายวิชาเองที่หน้ารายวิชาฝึก</div>';
+  }
   function admRollover() {
     var cur = String(DB.meta.year), next = String(Number(cur) + 1);
-    var src = DB.courses.filter(function (c) { return String(c.year) === cur; });
+    var src = rolloverSrc(cur);
+    var skip = rolloverSkipped(cur);
     var dst = DB.courses.filter(function (c) { return String(c.year) === next; });
     return backLink('adm:settings', 'กลับศูนย์ตั้งค่า') +
       head('ขึ้นปีการศึกษาใหม่', 'ยกโครงรายวิชา/งาน/แบบประเมินจากปี ' + cur + ' ไปตั้งต้นปี ' + next) +
@@ -15664,22 +15745,39 @@ body.notes .note{display:block;}
           { n: next, l: 'ปีปลายทาง', tone: 'draft' },
           { n: dst.length, l: 'มีในปี ' + next + ' แล้ว', tone: dst.length ? 'warn' : 'ok' }
         ]) +
-        '<div class="tip mt-12">' + ic('pin') + '<div>จะคัดลอก <b>รายวิชา + งานที่ต้องส่ง + แบบประเมิน + จำนวนนัดนิเทศ</b> ' +
-          '(ไม่รวมนักศึกษา · การลงทะเบียน · คะแนน) · รายวิชาใหม่ตั้งเป็น <b>"ยังไม่เปิดรับ"</b> รอเปิดทีหลัง</div></div>' +
+        '<div class="tip mt-12">' + ic('pin') + '<div>จะคัดลอก <b>รายวิชา + งานที่ต้องส่ง (รวมคะแนนของงาน) + แบบประเมิน + เกณฑ์ตัดเกรด + จำนวนนัดนิเทศ</b> ' +
+          '(ไม่รวมนักศึกษา · การลงทะเบียน · คะแนนที่กรอกแล้ว) · รายวิชาใหม่ตั้งเป็น <b>"ยังไม่เปิดรับ"</b> รอเปิดทีหลัง</div></div>' +
+        '<div class="tip mt-12">' + ic('cr') + '<div><b>รุ่นเดิมเลื่อนไปครั้งถัดไป</b> — รหัส 66 ครั้งที่ 1 ของปีนี้ ' +
+          'จะกลายเป็นรหัส 66 <b>ครั้งที่ 2</b> ของปี ' + next + ' · รุ่นที่ฝึกครบ 4 ครั้งแล้วไม่ถูกยกไป ' +
+          'และ<b>รุ่นใหม่ที่เข้ามาฝึกครั้งที่ 1 ต้องเปิดรายวิชาเอง</b></div></div>' +
+        (skip.length
+          ? '<div class="hint mt-10">' + ic('bell') + ' ไม่ยกไป ' + skip.length + ' รายวิชา — ' +
+            skip.map(function (x) { return esc(x.co.code) + ' (' + esc(x.why) + ')'; }).join(' · ') + '</div>'
+          : '') +
         '<div class="src-note mt-12 mb-12 mx-0">' + ic('shield') + '<div><b>ไม่แตะโควตาโรงเรียน</b> — ' +
           'การอัปเดตฐานข้อมูล/โควตาโรงเรียนทำที่ "ทะเบียนโรงเรียน › อัปเดตฐานข้อมูลรายปี" ตามรอบของมันเอง (ช่วง พ.ย.–ธ.ค. ปิดเทอม) คนละจังหวะกับการขึ้นปี</div></div>' +
         (src.length
           ? '<button class="btn btn-pri" data-act="rollover:go" data-from="' + cur + '" data-to="' + next + '">' + ic('cr') + ' ยกโครงไปปีการศึกษา ' + next + '</button>'
           /* A-8 (12 ก.ย. 69): หน้านี้อ่านปีจาก DB.meta.year (ปีปัจจุบันของระบบ) ไม่ใช่จากแถบบริบท (DB.ctx.year)
              ⇒ ชี้ทางแก้ให้ตรงจุดจริง — ศูนย์ตั้งค่า › ตั้งค่าทั่วไป คือที่ตั้ง DB.meta.year ผ่าน settings:save */
-          : empty('ปี ' + cur + ' ยังไม่มีรายวิชาให้ยก', 'ตั้งปีการศึกษาปัจจุบันที่ ศูนย์ตั้งค่า › ตั้งค่าทั่วไป ให้ตรงกับปีที่มีรายวิชาก่อน', emptyGo('adm:settings', 'ไปศูนย์ตั้งค่า', 'gear'))) +
-        (dst.length ? '<div class="hint mt-10">' + ic('bell') + ' ปี ' + next + ' มี ' + dst.length + ' รายวิชาแล้ว — ยกซ้ำจะ<b>เพิ่มเข้าไปอีก</b> (ไม่ทับ/ไม่ลบของเดิม)</div>' : ''), 'mb') +
+          : empty('ไม่มีรายวิชาที่ยกไปปี ' + next + ' ได้',
+              skip.length ? 'รายวิชาของปี ' + cur + ' ถูกยกไปแล้วหรือฝึกครบ 4 ครั้งแล้วทั้งหมด'
+                          : 'ตั้งปีการศึกษาปัจจุบันที่ ศูนย์ตั้งค่า › ตั้งค่าทั่วไป ให้ตรงกับปีที่มีรายวิชาก่อน',
+              emptyGo('adm:settings', 'ไปศูนย์ตั้งค่า', 'gear'))) +
+        (dst.length ? '<div class="hint mt-10">' + ic('check') + ' ปี ' + next + ' มี ' + dst.length + ' รายวิชาแล้ว — ' +
+          'กดยกซ้ำได้ ระบบข้ามรายวิชาที่มีอยู่แล้วให้เอง</div>' : ''), 'mb') +
       card('ด่านเตือนก่อนเปิดปี ' + next, 'shield',
         (function () {
           var chk = [
             [dst.length > 0, 'มีรายวิชาปี ' + next + ' แล้ว', 'ยังไม่มีรายวิชาปี ' + next + ' — กดยกโครงด้านบน'],
             [dst.some(function (c) { return c.status === 'open'; }), 'มีรายวิชาที่เปิดรับลงทะเบียนแล้ว', 'ยังไม่มีรายวิชาไหนเปิดรับ — เปิดที่หน้ารายละเอียดรายวิชา'],
-            [!DB.closedYears || DB.closedYears.indexOf(next) < 0, 'ปี ' + next + ' ยังไม่ถูกปิด', 'ปี ' + next + ' ถูกปิดอยู่ — เปิดที่หน้าปิดปีการศึกษา']
+            [!DB.closedYears || DB.closedYears.indexOf(next) < 0, 'ปี ' + next + ' ยังไม่ถูกปิด', 'ปี ' + next + ' ถูกปิดอยู่ — เปิดที่หน้าปิดปีการศึกษา'],
+            /* 🔴 18 ก.ย. 69 — "ปีปัจจุบันของระบบ" (DB.meta.year) กับ "ปีบนแถบบริบท" เป็นคนละค่า
+               ยกโครงเสร็จแล้วปีปัจจุบันยังค้างที่ปีเก่า ⇒ หน้านี้จะเสนอให้ยกโครงปีเดิมซ้ำอีก
+               ⚠️ ไม่ทำปุ่มตั้งปีตรงนี้โดยตั้งใจ — DB.meta.year ต้องมีทางเขียนทางเดียว (ศูนย์ตั้งค่า)
+                  เพิ่มทางที่สองเมื่อไร ก็จะกลายเป็นปัญหาเดียวกับที่รายงานฉบับนี้เพิ่งไล่แก้ */
+            [String(DB.meta.year) === next, 'ปีปัจจุบันของระบบคือ ' + next + ' แล้ว',
+              'ปีปัจจุบันของระบบยังเป็น ' + cur + ' — ตั้งเป็น ' + next + ' ที่ ศูนย์ตั้งค่า › ตั้งค่าทั่วไป']
           ];
           return chk.map(function (c) {
             return '<div class="trow"><span class="trow-ic" data-css="' + esc('background:' + (c[0] ? 'var(--ok-soft)' : 'var(--warn-soft)') + ';color:' + (c[0] ? 'var(--ok-ink)' : 'var(--warn-ink)') + ';') + '">' + ic(c[0] ? 'check' : 'bell') + '</span>' +
@@ -15918,10 +16016,24 @@ body.notes .note{display:block;}
       '</div></div>';
   }
   /** ด่านของตัวจัดการ — คืน true แปลว่า "ห้ามทำต่อ" (ตรวจซ้ำฝั่งตัวจัดการ ไม่เชื่อแค่ปุ่มที่ปิดไว้) */
+  /* 🔴 18 ก.ย. 69 — ด่านนี้ถูกวางไว้ที่ "จุดเขียนข้อมูลของรายวิชา" ครบแล้ว 30+ จุด
+     ⇒ เป็นที่ที่เหมาะที่สุดสำหรับด่านอีกสองชนิดที่เคยมีแต่การปิดปุ่มบนจอ:
+       · ปีที่ถูกปิด / ปีย้อนหลัง — เดิมมีแต่ lockPast() ที่ปิดปุ่มตอนเรนเดอร์
+       · บัญชีที่ถูกยุติหน้าที่ — เดิมกันเฉพาะอาจารย์นิเทศก์ (guardActive ไม่มีใครเรียกฝั่งกรรมการ/ฝ่ายฝึกเลย)
+     บทเรียนเดิม 15 ก.ย. 69: **ด่านต้องอยู่ที่ตัวจัดการที่เขียนข้อมูล ไม่ใช่ที่ตัวเปิดฟอร์มหรือที่หน้าจอ**
+     ⚠️ คงข้อความแยกกันสามแบบ — ผู้ใช้ต้องรู้ว่าติดด้วยเหตุผลไหน ไม่ใช่ "ทำไม่ได้" ลอย ๆ */
   function finishedGuard(co) {
-    if (!courseFinished(co)) return false;
-    toast('รายวิชาปิดแล้ว', 'สรุปจบรอบไปแล้ว — ฝ่ายฝึกต้องเปิดรายวิชากลับก่อนจึงแก้ผลได้', 'bad');
-    return true;
+    if (courseFinished(co)) {
+      toast('รายวิชาปิดแล้ว', 'สรุปจบรอบไปแล้ว — ฝ่ายฝึกต้องเปิดรายวิชากลับก่อนจึงแก้ผลได้', 'bad');
+      return true;
+    }
+    var ns = curNs();
+    if (co && yearClosed(co.year)) {
+      toast('ปีการศึกษา ' + co.year + ' ปิดแล้ว', 'ข้อมูลปีที่ปิดเป็นอ่านอย่างเดียว — เปิดปีกลับที่ศูนย์ตั้งค่าก่อน', 'bad');
+      return true;
+    }
+    if (!guardActive(ns)) return true;
+    return false;
   }
   function finishedGuardIt(it) {
     return finishedGuard(it ? byId(DB.courses, it.courseId) : null);
@@ -19037,22 +19149,31 @@ body.notes .note{display:block;}
        ส่งปุ่มที่กดจริงต่อมาให้ callback แล้ว (แก้คู่กับ B-3) จึงเรียก busy(btn) ตรง ๆ ได้ */
     'rollover:go': function (el) {
       var from = el.getAttribute('data-from'), to = el.getAttribute('data-to');
-      var src = DB.courses.filter(function (c) { return String(c.year) === from; });
+      var src = rolloverSrc(from);
       confirmBox({ title: 'ยกโครงไปปีการศึกษา ' + to, yes: 'ยกโครง', icon: 'cr',
         nt: 'think', ntLabel: 'น้อง TIMS ขอให้ตรวจปีการศึกษาให้ดีก่อน เพราะยกโครงแล้วต้องไล่ลบทีละรายวิชา',
-        body: 'สร้างรายวิชาใหม่ <b>' + src.length + '</b> รายวิชาในปี ' + to + ' พร้อมคัดลอกงานที่ต้องส่ง/แบบประเมิน · ตั้งเป็น "ยังไม่เปิดรับ" · ไม่ยกนักศึกษา/คะแนน/โควตาโรงเรียน' }, function (btn) {
+        body: rolloverBody(from, to) }, function (btn) {
         if (!busy(btn)) return;
         setTimeout(function () {
           var base = Date.now();
           src.forEach(function (co, ci) {
             var newId = base + ci * 1000;
-            DB.courses.push({ id: newId, code: co.code, name: co.name, round: co.round, semester: co.semester,
-              year: to, prefix: co.prefix, durN: co.durN, durUnit: co.durUnit, visits: co.visits || 0, tasks: 0, passMark: null, status: 'closed' });
+            /* 🔴 18 ก.ย. 69 (เจ้าของงานเคาะ) — ปีถัดไป "รุ่นเดิมเลื่อนไปครั้งถัดไป"
+               ของเดิมคัดลอก round มาตรง ๆ ⇒ ปีใหม่ได้ "รุ่น 66 ครั้งที่ 1" ซ้ำกับปีเก่าทุกตัว
+               ซึ่งผิดตามความหมาย (หนึ่งรุ่นฝึกครั้งละหนหนึ่งตลอดหลักสูตร) และทำให้ด่านกันซ้ำ
+               ที่ course:saveDetail ปฏิเสธการบันทึกรายวิชาที่เพิ่งยกมาทุกตัว — แก้รายวิชาปีใหม่ไม่ได้เลย */
+            DB.courses.push({ id: newId, code: co.code, name: co.name, round: co.round + 1, semester: co.semester,
+              year: to, prefix: co.prefix, durN: durDefaultFor(co.round + 1).n, durUnit: durDefaultFor(co.round + 1).u,
+              visits: co.visits || 0, tasks: 0, passMark: null, status: 'closed',
+              /* เกณฑ์ตัดเกรดที่ฝ่ายฝึกตั้งเอง ต้องตามไปด้วย ไม่งั้นปีใหม่ถอยไปใช้ค่าปริยายเงียบ ๆ */
+              gradeCuts: co.gradeCuts ? co.gradeCuts.map(function (x) { return { g: x.g, min: x.min }; }) : undefined });
             tasksOf(co.id).forEach(function (t, ti) {
               /* A-6 (12 ก.ย. 69): กำหนดส่งของปีเก่าไม่มีความหมายกับปีใหม่ — ต้องล้าง ไม่ใช่ยกมาทั้งดุ้น
-                 (แพตเทิร์นเดียวกับ task:copy2 ที่ล้าง due อยู่แล้วตอนคัดลอกงานข้ามรายวิชา) */
+                 (แพตเทิร์นเดียวกับ task:copy2 ที่ล้าง due อยู่แล้วตอนคัดลอกงานข้ามรายวิชา)
+                 🔴 18 ก.ย. 69 — แต่ **คะแนนของงานต้องยกมา** ของเดิมตกหล่นไป ⇒ scoredTasks() ได้ศูนย์รายการ
+                    ⇒ gradeBase() เป็น 0 ⇒ ทุกคนของปีใหม่ขึ้น "ยังตัดสินไม่ได้" ตลอดโดยไม่มีอะไรฟ้อง */
               DB.taskDefs.push({ id: base + ci * 1000 + ti + 1, courseId: newId, no: t.no, title: t.title,
-                phase: t.phase, by: t.by, hint: t.hint, due: '' });
+                phase: t.phase, by: t.by, hint: t.hint, score: t.score, due: '' });
             });
             evalFormsOf(co.id).forEach(function (f, fi) {
               DB.evalForms.push({ id: base + ci * 1000 + 500 + fi, courseId: newId, no: f.no, title: f.title,
@@ -19060,10 +19181,10 @@ body.notes .note{display:block;}
                 items: (f.items || []).map(function (x) { return { q: x.q, group: x.group, aspect: x.aspect }; }), copiedFrom: from });
             });
           });
-          audit('rollover', 'ปี ' + from + ' -> ' + to, 'ยกโครงรายวิชา ' + src.length + ' รายวิชา');
+          audit('rollover', 'ปี ' + from + ' -> ' + to, 'ยกโครงรายวิชา ' + src.length + ' รายวิชา (เลื่อนครั้งที่ขึ้น 1)');
           idle(btn);
           save(); closeModal(); renderAll();
-          toast('ยกโครงไปปี ' + to + ' แล้ว', src.length + ' รายวิชา (ยังไม่เปิดรับ — เปิดทีหลัง)', 'ok');
+          toast('ยกโครงไปปี ' + to + ' แล้ว', src.length + ' รายวิชา · เลื่อนเป็นครั้งถัดไปแล้ว (ยังไม่เปิดรับ — เปิดทีหลัง)', 'ok');
         }, 600);
       });
     },
@@ -19509,12 +19630,15 @@ body.notes .note{display:block;}
       var co = pickedCourse('adm'), src = byId(DB.courses, val('src'));
       if (!co || !src) return;
       var added = 0;
-      ['before', 'during'].forEach(function (ph) {
+      /* 🔴 18 ก.ย. 69 — เดิมวนแค่ 2 หมวด ⇒ **งานหมวด "คะแนนอื่น ๆ" หายไปเงียบ ๆ ทุกครั้งที่คัดลอก**
+         และเดิมไม่ยก score มาด้วย ⇒ รายวิชาปลายทางมีงานครบแต่ฐานคะแนนเป็น 0 ตัดเกรดไม่ได้
+         (คลาสเดียวกับที่เจอใน rollover:go) */
+      ['before', 'during', 'extra'].forEach(function (ph) {
         var base = tasksOf(co.id, ph).length;
         tasksOf(src.id, ph).forEach(function (t, i) {
           DB.taskDefs.push({ id: Date.now() + Math.floor(Math.random() * 9999) + i,
             courseId: co.id, no: base + i + 1, title: t.title, phase: ph,
-            by: t.by || '', hint: t.hint || '', due: '' });
+            by: t.by || '', hint: t.hint || '', score: t.score, due: '' });
           added++;
         });
       });
@@ -22226,6 +22350,8 @@ body.notes .note{display:block;}
     'course:create': function () {
       if (!val('code') || !val('name')) { toast('กรอกข้อมูลไม่ครบ', 'ต้องมีรหัสวิชาและชื่อรายวิชา', 'bad'); return; }
       if (!val('round')) { toast('ยังไม่เลือกครั้งที่', 'ต้องเลือกครั้งที่ของการฝึก (1–4) — ใช้กำหนดฐานคะแนนและเงื่อนไขจบ', 'bad'); return; }
+      /* ด่านเดียวกับฟอร์มแก้ไข — ทางเข้าไหนก็ต้องเจอเกณฑ์ชุดเดียวกัน */
+      if (!courseRoundGuard(val('prefix'), val('round'), null)) return;
       var scCr = formScope();
       var semEl = scCr && scCr.querySelector('[name="semester"]');
       var cCode = val('code');
@@ -22238,22 +22364,11 @@ body.notes .note{display:block;}
         visits: Number(val('visits')) || 0, tasks: 0, passMark: null, status: 'closed' });
       save(); closeForm(); toast('เปิดรายวิชาแล้ว', cCode + ' ครั้งที่ ' + val('round') + ' (ยังไม่เปิดรับ — กดปุ่มเปิดรับอีกที)');
     },
-    'course:edit': function (el) {
-      var c = byId(DB.courses, el.getAttribute('data-id'));
-      goForm({ ns: curNs(), title: 'แก้ไขรายวิชา', icon: 'pen', act: 'course:update',
-        sub: esc(c.code), extra: ' data-id="' + c.id + '"',
-        body:
-        '<div class="grid2">' + fld('รหัสวิชา', '<input class="inp" name="code" value="' + esc(c.code) + '">', true) +
-        fld('ชื่อรายวิชา', '<input class="inp" name="name" value="' + esc(c.name) + '">', true) +
-        fld('ปีการศึกษา', '<input class="inp" name="year" value="' + esc(c.year) + '">', true) +
-        fld('ระยะเวลาการฝึก', durFieldHtml(c.durN || durDefaultFor(c.round).n, c.durUnit || durDefaultFor(c.round).u), true) + '</div>' });
-    },
-    'course:update': function (el) {
-      var c = byId(DB.courses, el.getAttribute('data-id'));
-      c.code = val('code'); c.name = val('name'); c.year = val('year');
-      c.durN = Number(val('durN')) || c.durN; c.durUnit = val('durUnit') || c.durUnit;
-      save(); closeForm(); toast('บันทึกรายวิชาแล้ว', c.code);
-    },
+    /* 🔴 18 ก.ย. 69 — ถอด course:edit / course:update ออก (ไม่มีปุ่มไหนในระบบเรียกทั้งคู่)
+       ตกค้างจากตอนย้ายการแก้รายวิชาเข้าหน้ารายวิชาตามกติกา CR-32 ⇒ เป็นโค้ดตาย (R-1 ข้อ 6)
+       🔴 และเป็น**ทางเดียวที่แก้ปีการศึกษาของรายวิชาได้โดยไม่ผ่านด่านกันซ้ำใด ๆ**
+          ถ้าวันหนึ่งมีคนต่อปุ่มกลับเข้าไป จะย้ายรายวิชาที่มีคะแนนแล้วข้ามปีได้เงียบ ๆ
+       ⇒ แก้รายวิชาทำที่หน้ารายละเอียดรายวิชา (course:saveDetail) ที่เดียว */
     /** บันทึกรายละเอียดรายวิชาจากหน้าแก้ไข (คนละทางกับ modal เดิมที่ใช้ตอนสร้างใหม่) */
     'course:saveDetail': function (el) {
       var c = byId(DB.courses, el.getAttribute('data-id'));
@@ -22262,13 +22377,7 @@ body.notes .note{display:block;}
       var g = function (n) { var i = f.querySelector('[name="' + n + '"]'); return i ? i.value.trim() : ''; };
       if (!g('code') || !g('name')) { toast('กรอกข้อมูลไม่ครบ', 'ต้องมีรหัสวิชาและชื่อรายวิชา', 'bad'); return; }
       /* กันครั้งที่ซ้ำในรุ่นเดียวกัน — "ฝึกครบ 4 ครั้ง" เป็นเงื่อนไขจบ ถ้าซ้ำจะนับผิด */
-      var dup = DB.courses.filter(function (x) {
-        return x.id !== c.id && String(x.prefix) === g('prefix') && String(x.round) === g('round');
-      })[0];
-      if (dup) {
-        toast('ครั้งที่ซ้ำกับรายวิชาอื่น', 'รหัส ' + g('prefix') + ' มีครั้งที่ ' + g('round') + ' อยู่แล้ว (' + dup.code + ')', 'bad');
-        return;
-      }
+      if (!courseRoundGuard(g('prefix'), g('round'), c.id)) return;
       c.code = g('code'); c.name = g('name'); c.round = Number(g('round')) || c.round;
       c.prefix = g('prefix'); c.semester = g('semester'); c.year = g('year');
       c.durN = Number(g('durN')) || c.durN; c.durUnit = g('durUnit') || c.durUnit;
@@ -23056,11 +23165,33 @@ body.notes .note{display:block;}
               (id != null ? ' data-id="' + esc(String(id)) + '"' : '') + '>' + ic('clip') + ' ไปหน้าพิมพ์ใบแจ้ง</button>' });
   }
 
-  /** อาจารย์ที่ถูกยุติหน้าที่ = โหมดอ่านอย่างเดียว — กันที่ชั้นการกระทำ ไม่ใช่แค่ซ่อนปุ่ม */
-  function guardActive() {
-    if (meSup().active) return true;
-    toast('บัญชีอยู่ในโหมดอ่านอย่างเดียว', 'อาจารย์ที่ยุติหน้าที่แล้วแก้ไขข้อมูลไม่ได้', 'bad');
+  /** บัญชีที่ถูกยุติหน้าที่ = โหมดอ่านอย่างเดียว — กันที่ชั้นการกระทำ ไม่ใช่แค่ซ่อนปุ่ม
+      🔴 18 ก.ย. 69 — เดิมกันเฉพาะอาจารย์นิเทศก์ (อ่าน meSup() ตายตัว)
+         ทั้งที่กรรมการสาขาและฝ่ายฝึกก็มีวันหมดหน้าที่เหมือนกัน และหน้าบัญชีขึ้นป้าย "ยุติหน้าที่" ให้เห็นอยู่แล้ว
+         ⇒ กรรมการที่ถูกยุติหน้าที่ยังอนุมัติออกฝึก ลงทะเบียน และกรอกคะแนนได้ตามปกติ
+      ⇒ รับบทบาทเป็นพารามิเตอร์ ใช้ด่านชุดเดียวกันทั้ง 3 บทบาทที่มีวันหมดหน้าที่
+         (ไม่ส่งมา = อาจารย์นิเทศก์ ตามผู้เรียกเดิมทั้งหมด) */
+  var ROLE_ACTOR = {
+    sup: { me: function () { return meSup(); }, l: 'อาจารย์ที่ยุติหน้าที่แล้วแก้ไขข้อมูลไม่ได้' },
+    com: { me: function () { return meCom(); }, l: 'กรรมการสาขาที่ยุติหน้าที่แล้วแก้ไขข้อมูลไม่ได้' },
+    adm: { me: function () { return meAdm(); }, l: 'ผู้ดูแลระบบที่ยุติหน้าที่แล้วแก้ไขข้อมูลไม่ได้' }
+  };
+  function actorActive(ns) {
+    var a = ROLE_ACTOR[ns || 'sup'];
+    var u = a && a.me();
+    /* ไม่มีฟิลด์ active = บัญชีรุ่นเก่าที่ยังไม่เคยถูกยุติหน้าที่ ⇒ ถือว่าใช้งานได้ตามปกติ */
+    return !u || u.active === undefined || !!u.active;
+  }
+  function guardActive(ns) {
+    if (actorActive(ns)) return true;
+    toast('บัญชีอยู่ในโหมดอ่านอย่างเดียว', (ROLE_ACTOR[ns || 'sup'] || ROLE_ACTOR.sup).l, 'bad');
     return false;
+  }
+  /** แถบแจ้ง "โหมดอ่านอย่างเดียว" บนหน้าหลัก — ต้องเห็นก่อนกด ไม่ใช่รู้ตอนกดแล้วไม่ได้ */
+  function readOnlyNote(ns) {
+    if (actorActive(ns)) return '';
+    return '<div class="tip bg-bad-soft t-bad-ink mb-16">' + ic('shield') +
+      '<div><b>บัญชีนี้ถูกยุติหน้าที่</b><br>ยังเข้าดูข้อมูลย้อนหลังได้ แต่แก้ไขหรืออนุมัติอะไรไม่ได้</div></div>';
   }
 
   function saveLog(status) {
