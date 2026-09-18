@@ -145,7 +145,7 @@
   --sh-2:0 2px 6px rgba(31,36,51,.06), 0 6px 18px rgba(31,36,51,.08);
   --sh-3:0 4px 12px rgba(31,36,51,.08), 0 14px 36px rgba(31,36,51,.12);
   /* ── เลย์เอาต์ + ฟอนต์ ── */
-  --rail:268px;
+  --rail:268px; --rail-icon:72px;   /* ADD-19 · แถบเมนูแบบไอคอนช่วงแท็บเล็ต */
   --accent:var(--pine); --accent-dark:var(--pine-dark); --accent-soft:var(--pine-soft);
   /* ค-1 (15 ก.ย. 69): พื้นปุ่มหลักต้องแยกจากสีประจำบทบาท
      บทบาทอาจารย์นิเทศก์ใช้สีส้ม (--terra) เป็น --accent ซึ่งขาวบนพื้นนี้ได้แค่ 3.49:1
@@ -187,7 +187,8 @@
 
 /* ⭐ จุดเปลี่ยนขนาดจอ — ใช้ได้เฉพาะ 3 ค่านี้เท่านั้น (UI-07 · ลำดับ 18 · 18 ก.ย. 69)
    560px  โทรศัพท์ · 700px  โทรศัพท์ใหญ่/แท็บเล็ตแนวตั้ง · 900px  แท็บเล็ต/โน้ตบุ๊กเล็ก
-   (และ min-width:901px คือด้านตรงข้ามของ 900 เท่านั้น)
+   แต่ละขั้นมี "ด้านตรงข้าม" ได้หนึ่งตัวคือ ขั้น+1 (min-width:561 / 701 / 901)
+   ใช้ตอนต้องการกฎที่ทำงานเฉพาะเหนือขั้นนั้นขึ้นไป เช่นแถบเมนูแบบไอคอนช่วง 701–900 (ADD-19)
    🔴 เดิมมี 10 ค่ากระจัดกระจาย (430/560/600/640/700/820/860/900/920/921) ซึ่งไม่ได้ตั้งใจออกแบบ
       แต่เกิดจากการเติมทีละจุดจนไม่มีใครรู้ว่าหน้าจอขนาดไหนจะเปลี่ยนอะไรบ้าง
    ⚠️ รวบโดย "ปัดขึ้น" เสมอ — กฎเกือบทั้งหมดเป็นกฎยุบคอลัมน์/ซ่อนของ
@@ -501,7 +502,10 @@ svg.i{width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:1.9;stroke
   display:inline-flex;align-items:center;gap:6px;transition:.15s;}
 .seg:hover{color:var(--ink-2);}
 .seg.on{background:var(--surface);color:var(--ink);box-shadow:var(--sh-1);}
-@media(max-width:700px){.seg{min-height:40px;}}
+/* 🔴 ADD-19 (18 ก.ย. 69): เดิมครอบแค่ ≤700 (โทรศัพท์) — แต่แท็บเล็ตก็เป็นจอสัมผัส
+   เกณฑ์เป้ากด 40px จึงต้องครอบถึง 900 ด้วย · เจอจากการเพิ่มขนาดแท็บเล็ตเข้าชุดตรวจจอ
+   (ก่อนหน้านี้ไม่มีใครเคยเปิดดูที่ 820px เลยสักครั้ง จึงไม่มีใครเห็นว่าสวิตช์นี้เหลือ 28px) */
+@media(max-width:900px){.seg{min-height:40px;}}
 .cal-list{display:flex;flex-direction:column;gap:10px;}
 .cal-lc{display:flex;align-items:center;gap:14px;padding:13px 16px;background:var(--surface);
   border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:var(--r2);box-shadow:var(--sh-1);}
@@ -1319,6 +1323,25 @@ textarea.inp{resize:vertical;min-height:76px;}
 .lp-links a{font-size:var(--fs-3);font-weight:500;color:var(--ink-2);padding:7px 13px;border-radius:var(--r2);transition:.15s;cursor:pointer;}
 .lp-links a:hover{background:var(--surface-2);color:var(--ink);}
 .lp-links a.on{color:var(--pine-dark);background:var(--pine-soft);font-weight:600;}
+/* UI-06 · ADD-14 (18 ก.ย. 69): แพตเทิร์นเมนูจอแคบของหน้าสาธารณะ
+   🔴 ปุ่มเปิดเมนูซ่อนไว้บนจอกว้างด้วย display:none — ไม่ใช่ซ่อนด้วย visibility
+      เพราะแป้นพิมพ์จะแท็บไปโดนปุ่มที่มองไม่เห็น (บทเรียนเดียวกับชุดรหัสผ่านยุบได้ของหน้าเข้าสู่ระบบ) */
+.lp-burger{display:none;flex:0 0 auto;}
+/* ADD-15 — ช่องในแถบสรุปที่กรองได้ ต้องดูกดได้และมีเป้ากดพอ (เกณฑ์ 40px เหมือนปุ่มอื่น) */
+button.sumbar-i{font-family:inherit;border:1px solid transparent;cursor:pointer;min-height:40px;
+  transition:.15s;text-align:left;}
+button.sumbar-i:hover{border-color:var(--line);background:var(--surface-2);}
+.sumbar-i.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset;}
+@media(max-width:700px){
+  .lp-nav .lp-wrap{position:relative;}
+  .lp-burger{display:inline-flex;}
+  /* เมนูกางลงมาทับเนื้อหา ไม่ดันหน้าลง — ปิดแล้วตำแหน่งที่อ่านค้างไว้ไม่เลื่อน */
+  .lp-links{display:none;position:absolute;left:0;right:0;top:100%;z-index:41;
+    flex-direction:column;gap:2px;background:var(--surface);
+    border-bottom:1px solid var(--line);box-shadow:var(--sh-2);padding:8px 28px 14px;}
+  .lp-nav.open .lp-links{display:flex;}
+  .lp-links a{padding:11px 13px;}
+}
 .lp-hero{position:relative;overflow:hidden;}
 .lp-hero::before{content:'';position:absolute;top:-180px;right:-160px;width:520px;height:520px;border-radius:50%;
   background:radial-gradient(circle,var(--pine-soft) 0%,transparent 68%);opacity:.85;z-index:0;}
@@ -1584,12 +1607,37 @@ body.notes .note{display:block;}
 .screen{display:none;} .screen.on{display:block;}
 
 @media(max-width:900px){ .lp-hero-split{grid-template-columns:1fr;gap:30px;padding-top:38px;} }
-@media(max-width:900px){
+/* ═══ ADD-19 (18 ก.ย. 69) — แถบเมนูแบบไอคอนช่วงแท็บเล็ต (701–900px) ═══
+   🔴 ของเดิม "ซ่อนแถบเมนูทั้งแถบ" ตั้งแต่ 900px ลงมา ⇒ แท็บเล็ตแนวตั้งที่มีที่ว่างเหลือเฟือ
+      กลับต้องกดเปิดลิ้นชักทุกครั้งที่จะเปลี่ยนหน้า เหมือนใช้บนโทรศัพท์
+      ผลตรวจจัดข้อนี้ไว้ที่ "รอดูว่ามีคนใช้แท็บเล็ตจริงแค่ไหน" — แต่ของจริงคือ
+      อาจารย์นิเทศก์พกแท็บเล็ตออกไปนิเทศที่โรงเรียน (ระบุไว้ในสมมติฐานของผลตรวจเอง)
+   ⇒ 3 ช่วงตามสเกลจุดเปลี่ยนจอ: ≥901 แถบเต็ม · 701–900 แถบไอคอน · ≤700 ลิ้นชัก
+   ⚠️ ข้อความของรายการเมนูเป็น "ข้อความเปล่า" ไม่ได้ห่อแท็กไว้ ⇒ เลือกซ่อนด้วย CSS ตรง ๆ ไม่ได้
+      ใช้ font-size:0 ที่ตัวรายการ แล้วให้ไอคอน/ป้ายมีขนาดของตัวเอง (ทั้งคู่กำหนดขนาดไว้แล้ว)
+      🔴 ข้อความยังอยู่ใน DOM ครบ ⇒ โปรแกรมอ่านหน้าจอยังอ่านชื่อเมนูได้เหมือนเดิมทุกประการ
+         และ applyRailTips() เติม title ให้ทุกปุ่ม ⇒ คนที่เห็นภาพก็ยังรู้ว่าไอคอนไหนคืออะไร */
+@media(min-width:701px) and (max-width:900px){
+  .shell{grid-template-columns:var(--rail-icon) 1fr;}
+  .rail-brand{padding:14px 0;justify-content:center;}
+  .rail-brand > div{display:none;}          /* ชื่อระบบ/ชื่อพื้นที่ — เหลือแต่ตรา */
+  .rail-search{display:none;}               /* ช่องค้นเมนู พิมพ์ไม่ได้ในความกว้างนี้ */
+  .rail-sec{display:none;}                  /* หัวข้อหมวด อ่านไม่ออกถ้าบีบ */
+  .rail-foot{display:none;}
+  .rail-nav{padding:12px 8px;gap:4px;}
+  .nav-i{font-size:0;justify-content:center;padding:11px 0;gap:0;}
+  .nav-i.on::before{left:-8px;}
+  /* ป้ายตัวเลขย้ายไปเกาะมุมบนขวาของไอคอน — วางในแถวเดิมจะดันไอคอนหลุดกรอบ */
+  .nav-i .tag{position:absolute;top:3px;right:8px;margin-left:0;padding:0 5px;min-width:17px;text-align:center;}
+}
+@media(max-width:700px){
   .shell{grid-template-columns:1fr;}
   .rail{position:fixed;top:0;left:0;bottom:0;width:min(280px,82vw);z-index:1200;transform:translateX(-100%);
     transition:transform .26s cubic-bezier(.4,0,.2,1);box-shadow:var(--sh-3);}
   .shell.nav-open .rail{transform:translateX(0);}
   .rail-toggle{display:inline-flex;}
+}
+@media(max-width:900px){
   .topbar{padding:0 16px;gap:10px;} .page{padding:20px 16px 60px;}
   .g-83,.grid2,.lp-research-grid,.lp-foot .cols{grid-template-columns:1fr;}
   .lp-flow{flex-direction:column;align-items:stretch;gap:14px;} .lp-flow-arr{transform:rotate(90deg);align-self:center;}
@@ -2616,6 +2664,13 @@ body.notes .note{display:block;}
       <nav class="lp-links">
         <a class="on" data-jump="home">หน้าแรก</a><a data-act="lp:flow">ขั้นตอนการฝึก</a><a data-act="lp:news">ข่าวสาร</a><a data-act="lp:cal">ปฏิทิน</a><a data-act="lp:manual">คู่มือ</a><a data-act="lp:contact">ติดต่อ</a>
       </nav>
+      <!-- UI-06 · ADD-14 (18 ก.ย. 69): จอแคบไม่มีแพตเทิร์นเมนูเลย — เมนู 6 รายการเรียงตั้งกิน 257px
+           และส่วนหัวกินเกือบ 60% ของจอแรก ⇒ ผู้ใช้เลื่อนผ่านส่วนหัวก่อนถึงจะเจอเนื้อหา
+           🔴 ต้องเป็นปุ่มจริง ไม่ใช่กล่องข้อความที่ผูกการกระทำไว้ (ตัวตรวจข้อ 13 · แป้นพิมพ์ต้องเข้าถึงได้)
+           ⚠️ ห้ามยกรูปแบบแท็กจริงมาแปะในคอมเมนต์ — ตัวตรวจข้อ 6 อ่านคอมเมนต์ HTML ด้วย
+              แล้วจะนับคอมเมนต์นี้เองว่าเป็นปุ่มที่ยังไม่ต่อสาย (รอยเดิม 17 ก.ย. 69 เรื่องแอตทริบิวต์สไตล์) -->
+      <button class="icon-btn lp-burger" data-act="lp:menu" aria-expanded="false" aria-label="เปิดเมนู">
+        <svg class="i"><use href="#i-menu"/></svg></button>
       <button class="btn btn-pri btn-sm" data-jump="login"><svg class="i"><use href="#i-shield"/></svg> เข้าสู่ระบบ</button>
     </div>
   </div>
@@ -4977,12 +5032,22 @@ body.notes .note{display:block;}
 
   /** แถบสรุปตัวเลขสถานะ — แทนข้อความบรรทัดเดียวคั่นด้วยจุดที่อ่านยาก
       items: [{ n: 3, l: 'ผ่านแล้ว', tone: 'ok' }, ...] */
-  function summaryBar(items, note) {
+  /* ADD-15 — แถบสรุปกลายเป็น "ตัวกรอง" ได้เมื่อส่ง key มา (ผู้เรียกเดิมที่ไม่ส่งได้ผลเหมือนเดิมทุกตัวอักษร)
+     🔴 ตัวเลขที่กดไม่ได้ทั้งที่เป็นสัดส่วนของรายการข้างล่าง คือการบอกคำตอบแล้วไม่ให้ทาง
+        ⇒ ช่องไหนมีค่า k ให้กลายเป็นปุ่มจริง (ไม่ใช่ div ที่ผูกการกระทำ — ตัวตรวจข้อ 13)
+     ⚠️ ช่องที่ไม่มี k ยังเป็นกล่องข้อความเฉย ๆ — ไม่ทำให้ทุกช่องดูกดได้ทั้งที่กดไม่ได้ */
+  function summaryBar(items, note, o) {
+    o = o || {};
     return '<div class="sumbar">' +
       items.map(function (x) {
-        return '<div class="sumbar-i sumbar-' + (x.tone || 'draft') + '">' +
-          '<span class="sumbar-n">' + x.n + '</span>' +
-          '<span class="sumbar-l">' + esc(x.l) + '</span></div>';
+        var on = o.key && x.k && o.cur === x.k;
+        var cls = 'sumbar-i sumbar-' + (x.tone || 'draft') + (on ? ' on' : '');
+        var inner = '<span class="sumbar-n">' + x.n + '</span>' +
+          '<span class="sumbar-l">' + esc(x.l) + '</span>';
+        if (!o.key || !x.k) return '<div class="' + cls + '">' + inner + '</div>';
+        return '<button class="' + cls + '" data-act="tab:set" data-key="' + esc(o.key) + '"' +
+          ' data-v="' + esc(on ? 'all' : x.k) + '" title="' +
+          esc(on ? 'เลิกกรอง · แสดงทั้งหมด' : 'กรองเฉพาะ ' + x.l) + '">' + inner + '</button>';
       }).join('') +
       (note ? '<div class="sumbar-note">' + esc(note) + '</div>' : '') +
       '</div>';
@@ -5478,10 +5543,18 @@ body.notes .note{display:block;}
    *    ⚠️ ห้ามเขียนชื่อแท็กเป็นมาร์กอัปจริงในคอมเมนต์นี้ — ตัวตรวจข้อ 6ข กวาดทั้งไฟล์หา
    *       ลิงก์ที่ไม่มีปลายทาง แล้วจับคอมเมนต์ของตัวเองเป็นบั๊ก (บทเรียนเดิมของโปรเจกต์)
    */
-  function stat(icon, color, n, label, page) {
+  /* ADD-15 (18 ก.ย. 69) — การ์ดตัวเลขต้องพาไป "หน้าที่กรองไว้ให้แล้ว"
+     🔴 ผลตรวจจัดข้อนี้เป็น "ทำครึ่งเดียว" — การ์ดกดได้ตั้งแต่ระยะที่ 1 แต่ปลายทางเป็นหน้าเต็ม
+        ⇒ กด "รอตรวจ 13" แล้วไปเจอรายการทั้งหมด 40 ชิ้น ต้องไล่หาเองว่า 13 ชิ้นนั้นคืออันไหน
+        = ตัวเลขบนการ์ดกับสิ่งที่เห็นหลังกดไม่ตรงกัน ซึ่งแย่กว่าการ์ดที่กดไม่ได้
+     ⇒ `tab` = 'คีย์แท็บ|ค่า' · ตั้งแท็บให้ก่อนแล้วค่อยเปลี่ยนหน้า (ทำที่ตัวกระจายคลิกจุดเดียว)
+     🔴 ยังใช้ data-page เหมือนเดิม ไม่เปลี่ยนไปใช้ data-act — ไม่งั้นตัวตรวจข้อ 3 (หน้าตาย)
+        จะมองไม่เห็นปลายทางของการ์ดเหล่านี้อีกเลย */
+  function stat(icon, color, n, label, page, tab) {
     var tone = MEANING_COLORS[color] ? ' data-css="' + esc('color:' + MEANING_COLORS[color]) + '"' : '';
     var tag = page ? 'a' : 'div';
     return '<' + tag + ' class="stat"' + (page ? ' data-page="' + page + '"' : '') +
+      (page && tab ? ' data-stat-tab="' + esc(tab) + '"' : '') +
       '><div class="ic" data-css="' + esc('background:' + color) + '">' + ic(icon) + '</div>' +
       '<div class="n"' + tone + '>' + n + '</div><div class="l">' + esc(label) + '</div></' + tag + '>';
   }
@@ -7695,8 +7768,25 @@ body.notes .note{display:block;}
        จึงต้องเติมทุกรอบ — เรียกซ้ำได้ ไม่มีผลข้างเคียง (ตั้งค่าเดิมทับค่าเดิม) */
     renderBrandLogos();
     renderMascots();
+    applyRailTips();
     renderNetBar();
   }
+  /* ADD-19 (18 ก.ย. 69) — ช่วงแท็บเล็ตแถบเมนูเหลือแต่ไอคอน ⇒ ต้องมีคำอธิบายตอนชี้เมาส์
+     🔴 อ่านชื่อจากข้อความของรายการเอง ไม่ใช่เขียน title ซ้ำไว้ในมาร์กอัปทั้ง 40 กว่าจุด
+        (เขียนซ้ำเมื่อไรก็จะมีวันที่ข้อความสองที่ไม่ตรงกัน แล้วไม่มีอะไรฟ้อง)
+     ⚠️ ตัดตัวเลขป้ายท้ายชื่อออก — ไม่งั้นคำอธิบายจะกลายเป็น "ตรวจงานที่ส่ง 13" ซึ่งเก่าทันทีที่ตัวเลขเปลี่ยน
+     เติมครั้งเดียวต่อรายการ (เหมือน renderMascots) — ข้อความเมนูไม่เปลี่ยนระหว่างใช้งาน */
+  function applyRailTips(root) {
+    (root || document).querySelectorAll('.nav-i').forEach(function (a) {
+      if (a.getAttribute('title')) return;
+      var tag = a.querySelector('.tag');
+      var txt = (a.textContent || '');
+      if (tag) txt = txt.replace(tag.textContent || '', '');
+      txt = txt.replace(/\s+/g, ' ').trim();
+      if (txt) a.setAttribute('title', txt);
+    });
+  }
+
   /* เติมน้อง TIMS ลงช่องที่ปักไว้ในมาร์กอัป (data-nt="ท่าทาง")
      🔴 เติมช่องละครั้งเดียว ไม่วาดซ้ำทุกรอบเรนเดอร์ — วาดซ้ำเมื่อไรแอนิเมชันจะกระตุกเริ่มนับใหม่
         ต่างจาก renderBrandLogos() ที่เขียนทับได้ไม่มีผลข้างเคียงเพราะเป็นภาพนิ่ง */
@@ -8298,6 +8388,14 @@ body.notes .note{display:block;}
   }
   function renderHome() {
     syncHash();   /* จุดเดียวที่เขียนที่อยู่ — renderAll() ก็ผ่านตรงนี้ (ดูโมดูลที่อยู่ของหน้า) */
+    /* UI-06 · ADD-14 — เลือกเมนูแล้วต้องปิดเอง · ทุกรายการในเมนูจบด้วยการเรนเดอร์หน้าแรกใหม่
+       ⇒ ปิดที่นี่ที่เดียวครอบทุกทาง ไม่ต้องให้แต่ละรายการจำไปปิดเอง (รายการใหม่ในอนาคตได้ตามไปเอง) */
+    var lpNav = document.querySelector('.lp-nav');
+    if (lpNav && lpNav.classList.contains('open')) {
+      lpNav.classList.remove('open');
+      var bg = lpNav.querySelector('[data-act="lp:menu"]');
+      if (bg) { bg.setAttribute('aria-expanded', 'false'); bg.setAttribute('aria-label', 'เปิดเมนู'); }
+    }
     renderLpSub();
     fill('home:head', landingHead());
     fill('home:hero', landingHero());
@@ -8611,6 +8709,16 @@ body.notes .note{display:block;}
       return !phase || (t.phase || 'during') === phase;
     });
     if (!all.length) return '<p class="muted fs-2 m-0">ฝ่ายฝึกยังไม่ได้กำหนดงานของรายวิชานี้</p>';
+    /* ADD-15 — กรองตามสถานะ (มาจากแถบสรุปหรือจากการ์ดตัวเลขบนหน้าหลัก)
+       'todo' = ยังไม่ส่ง รวมทั้งที่ยังไม่เริ่มและที่ร่างค้างไว้ — ผู้ใช้มองเป็นเรื่องเดียวกัน */
+    if (opts.status && opts.status !== 'all') {
+      var want = opts.status;
+      all = all.filter(function (t) {
+        var x = subAt(it.id, t.id), st0 = x ? x.status : 'empty';
+        return want === 'todo' ? (st0 === 'empty' || st0 === 'draft') : st0 === want;
+      });
+      if (!all.length) return '<p class="muted fs-2 m-0">ไม่มีงานในสถานะนี้ — กดที่ตัวเลขด้านบนอีกครั้งเพื่อดูทั้งหมด</p>';
+    }
     var ts = all;
     if (opts.limit && all.length > opts.limit) {
       ts = all.slice().sort(function (a, b) { return taskUrgency(it, a) - taskUrgency(it, b); })
@@ -8718,8 +8826,8 @@ body.notes .note{display:block;}
             : ' — ข้อมูลครบแล้ว รอการอนุมัติ') + '</div></div>';
       })() +
       '<div class="stats">' +
-        stat('check', 'var(--ok)', n.approved + '/' + n.total, 'งานที่ผ่านแล้ว', 'stu:logs') +
-        stat('clock', 'var(--warn)', n.submitted, 'รอตรวจ', 'stu:logs') +
+        stat('check', 'var(--ok)', n.approved + '/' + n.total, 'งานที่ผ่านแล้ว', 'stu:logs', 'stu:logs|approved') +
+        stat('clock', 'var(--warn)', n.submitted, 'รอตรวจ', 'stu:logs', 'stu:logs|submitted') +
         stat('cal', 'var(--terra)', DB.visits.filter(function (x) { return x.internshipId === it.id && x.status === 'scheduled'; }).length, 'นัดนิเทศที่จะถึง', 'stu:visits') +
         stat('clip', 'var(--pine)', left, 'แบบสำรวจรอกรอก', 'stu:forms') +
       '</div>' +
@@ -9346,6 +9454,8 @@ body.notes .note{display:block;}
         empty('ฝ่ายฝึกยังไม่ได้กำหนดงานของรายวิชานี้',
           'เมื่อฝ่ายฝึกกำหนดรายการงานแล้ว งานทั้งหมดจะขึ้นที่หน้านี้', emptyEnd('ฝ่ายฝึกเป็นผู้กำหนดรายการงาน นักศึกษาทำเองไม่ได้'));
     }
+    /* ADD-15 — สถานะที่กรองอยู่ตอนนี้ · การ์ดตัวเลขบนหน้าหลักตั้งค่านี้ให้ก่อนพามา */
+    var logTab = tabOf('stu:logs', 'all');
     var beforeTs = ts.filter(function (t) { return t.phase === 'before'; });
     var beforeDone = beforeTs.filter(function (t) {
       var x = subAt(it.id, t.id); return x && x.status === 'approved'; }).length;
@@ -9376,18 +9486,35 @@ body.notes .note{display:block;}
         '<p class="muted fs-2 mt-0 mx-0 mb-12">' + ic('pin') +
           ' ต้องมีครบก่อนเริ่มออกฝึก · หนังสือแต่งตั้งครูพี่เลี้ยง<b>โรงเรียนเป็นผู้ออก</b> ' +
           'ไม่ใช่เอกสารที่ท่านทำเอง จึงอาจมาช้ากว่าฉบับแรก</p>' +
-        taskGrid({ phase: 'before' }), 'mb') +
+        /* 🔴 ADD-15 (18 ก.ย. 69) — ตัวกรองเป็นของ "ทั้งหน้า" ไม่ใช่ของการ์ดเดียว
+           ตัวเลขบนแถบสรุปนับงานทั้งการฝึก (ก่อนออกฝึก + ระหว่างฝึก) ถ้ากรองแต่การ์ดล่าง
+           เลขกับสิ่งที่เห็นจะไม่ตรงกันทันทีที่มีเอกสารก่อนออกฝึกอยู่ในสถานะนั้น
+           ⇒ กรองทั้งสองรายการด้วยค่าเดียวกัน · ป้าย "ครบแล้ว/ยังขาด" บนหัวการ์ดยังนับจากของจริงทั้งหมด */
+        taskGrid({ phase: 'before', status: logTab }), 'mb') +
 
       card('งานระหว่างฝึก', 'chart',
         summaryBar([
-          { n: n.approved, l: 'ผ่านแล้ว', tone: n.approved ? 'ok' : 'draft' },
-          { n: n.submitted, l: 'รอตรวจ', tone: n.submitted ? 'warn' : 'draft' },
-          { n: n.rejected, l: 'ตีกลับให้แก้ไข', tone: n.rejected ? 'bad' : 'draft' },
-          { n: n.empty + n.draft, l: 'ยังไม่ส่ง', tone: (n.empty + n.draft) ? 'warn' : 'ok' }
-        ], 'ทั้งหมด ' + n.total + ' รายการ') +
-        taskGrid({ phase: 'during' }) +
+          { n: n.approved, l: 'ผ่านแล้ว', tone: n.approved ? 'ok' : 'draft', k: 'approved' },
+          { n: n.submitted, l: 'รอตรวจ', tone: n.submitted ? 'warn' : 'draft', k: 'submitted' },
+          { n: n.rejected, l: 'ตีกลับให้แก้ไข', tone: n.rejected ? 'bad' : 'draft', k: 'rejected' },
+          { n: n.empty + n.draft, l: 'ยังไม่ส่ง', tone: (n.empty + n.draft) ? 'warn' : 'ok', k: 'todo' }
+        ], logTab === 'all' ? 'ทั้งหมด ' + n.total + ' รายการ'
+                            : 'กรองอยู่ · กดช่องเดิมซ้ำเพื่อดูทั้งหมด ' + n.total + ' รายการ',
+        { key: 'stu:logs', cur: logTab }) +
+        taskGrid({ phase: 'during', status: logTab }) +
         '<p class="hint mt-12">' + ic('pin') +
-          ' กดที่งานเพื่อเปิดหน้าส่งงานของชิ้นนั้น</p>', 'mb');
+          ' กดที่งานเพื่อเปิดหน้าส่งงานของชิ้นนั้น</p>', 'mb') +
+
+      /* 🔴 ADD-15 (18 ก.ย. 69) — งานหมวด "คะแนนอื่น ๆ" เคยไม่มีที่อยู่ในหน้านี้เลย
+         ทั้งที่แถบสรุปด้านบนนับรวมไว้ และหน้าหลักก็หยิบมาแสดงในรายการเร่งด่วนได้
+         ⇒ กดตัวเลข "ผ่านแล้ว 10" แล้วเห็นแค่ 8 แถว · งานอีก 2 ชิ้นหาจากหน้านี้ไม่เจอเลย
+         ⇒ ต้องมีการ์ดของตัวเอง (โผล่เฉพาะรายวิชาที่มีงานหมวดนี้จริง) */
+      (ts.some(function (x) { return (x.phase || 'during') === 'extra'; })
+        ? card('งานที่มีคะแนนอื่น ๆ', 'chart',
+            '<p class="muted fs-2 mt-0 mx-0 mb-12">' + ic('pin') +
+              ' อบรม · นิทรรศการ · กิจกรรม ที่มีคะแนนแยกจากงานระหว่างฝึก</p>' +
+            taskGrid({ phase: 'extra', status: logTab }), 'mb')
+        : '');
   }
 
   /** หน้าส่งงานของ "งานชิ้นเดียว" — ชื่องานอยู่บนหัวตลอดเวลา กันส่งผิดชิ้น */
@@ -10176,7 +10303,7 @@ body.notes .note{display:block;}
       ntHome('sup') +
       '<div class="stats">' +
         stat('cap', 'var(--terra)', mine.length, 'นักศึกษาในความดูแล', 'sup:students') +
-        stat('clock', 'var(--warn)', pend.length, 'งานรอตรวจ', 'sup:tasks') +
+        stat('clock', 'var(--warn)', pend.length, 'งานรอตรวจ', 'sup:tasks', 'sup:tasks|submitted') +
         stat('cal', 'var(--pine)', vs.length, 'นัดนิเทศที่จะถึง', 'sup:visits') +
         /* ⚠️ เดิมเป็น "แบบประเมินค้าง" ที่นับจากแบบฟอร์มเก่า — ถอดออกแล้ว
            อาจารย์นิเทศก์ไม่ได้กรอกคะแนนเอง (กรรมการสาขากรอกแทน) จึงไม่มีอะไรค้างให้นับ
@@ -12186,7 +12313,11 @@ body.notes .note{display:block;}
   function comInternships() { return ctxInternships('com'); }
   function comHome() {
     var c = meCom(), ss = comStudents_(), its = comInternships();
-    var noSup = its.filter(function (it) { return !it.supervisorId; }).length;
+    /* ใช้เกณฑ์เดียวกับหน้าจัดสรรและการ์ดในรายวิชา (ดูหมายเหตุที่ courseStat) */
+    var noSup = its.filter(function (it) {
+      var coX = courseOf(it.id);
+      return !assignDone(it, !!coX && coX.round === 4);
+    }).length;
     var notUpdated = ss.filter(function (s) { return !s.updated; }).length;
     return head('ภาพรวมสาขา' + esc(majorName(c.major)), 'กรรมการสาขา · ภาคเรียนที่ ' + DB.meta.semester + '/' + DB.meta.year) +
       ntHome('com') +
@@ -12194,7 +12325,7 @@ body.notes .note{display:block;}
         stat('cap', 'var(--amber)', ss.length, 'นักศึกษาในสาขา', 'com:students') +
         stat('check', 'var(--ok)', ss.length - notUpdated, 'อัปเดตข้อมูลแล้ว', 'com:students') +
         stat('bell', 'var(--warn)', notUpdated, 'ยังไม่ปรับปรุงข้อมูล', 'com:students') +
-        stat('users', 'var(--terra)', noSup, 'ยังไม่มีอาจารย์นิเทศก์', 'com:assign') +
+        stat('users', 'var(--terra)', noSup, 'ยังไม่มีอาจารย์นิเทศก์', 'com:assign', 'assign:com|no') +
       '</div>' +
       '<div class="g-83">' +
         card('นักศึกษาที่ต้องดำเนินการ', 'bell',
@@ -12804,7 +12935,11 @@ body.notes .note{display:block;}
   }
   function courseStat(co, ns) {
     var its = ns ? courseIts(ns, co) : DB.internships.filter(function (it) { return it.courseId === co.id; });
-    var assigned = its.filter(function (it) { return it.supervisorId; }).length;
+    /* 🔴 ADD-15 (18 ก.ย. 69) — ต้องใช้เกณฑ์เดียวกับหน้าจัดสรร (assignDone) ไม่ใช่แค่ "มีอาจารย์วิชาเอก"
+       การฝึกครั้งที่ 4 ต้องมีอาจารย์วิชาชีพครูด้วย ⇒ ของเดิมนับว่า "จัดสรรแล้ว" ทั้งที่หน้าจัดสรรยังขึ้นว่าค้าง
+       เห็นทันทีเมื่อการ์ด "รอจัดสรร" พาไปหน้าที่กรองไว้แล้ว: การ์ดบอก 4 แต่ในหน้าเห็น 5
+       (คอมเมนต์เหนือ assignDone สั่งไว้แต่แรกว่าป้ายหัว · แท็บ · ตัวกรอง · ผังขั้นตอน ต้องใช้เกณฑ์เดียวกัน) */
+    var assigned = its.filter(function (it) { return assignDone(it, co.round === 4); }).length;
     var withSchool = its.filter(function (it) { return schoolNameOf(it); }).length;
     var schools = {}; its.forEach(function (it) { if (schoolNameOf(it)) schools[schoolNameOf(it)] = 1; });
     /* ADD-21 (CR-32): การ์ดต้องบอกได้ว่า "ในรายวิชานี้เดินไปถึงไหนแล้ว" โดยไม่ต้องกดเข้าไปดู
@@ -13873,8 +14008,8 @@ body.notes .note{display:block;}
              (ของฝ่ายฝึกยังไม่มีหน้าจัดสรร/ทะเบียนโรงเรียนระดับรายวิชา จึงคงเป็นการ์ดแสดงผล) */
           : stat('cap', 'var(--plum)', s.n, 'นักศึกษาในรายวิชา', ns === 'com' ? 'com:enroll' : null) +
             (ns === 'com'
-              ? stat('users', 'var(--ok)', s.assigned + '/' + s.n, 'จัดสรรอาจารย์แล้ว', 'com:assign') +
-                stat('clock', 'var(--warn)', s.waiting, 'รอจัดสรร', 'com:assign')
+              ? stat('users', 'var(--ok)', s.assigned + '/' + s.n, 'จัดสรรอาจารย์แล้ว', 'com:assign', 'assign:com|yes') +
+                stat('clock', 'var(--warn)', s.waiting, 'รอจัดสรร', 'com:assign', 'assign:com|no')
               : stat('check', 'var(--ok)', doneJobs, 'งานที่ครบแล้ว') +
                 stat('clock', 'var(--warn)', openJobs, 'งานที่ยังค้าง')) +
             stat('pin', 'var(--terra)', s.schools, 'โรงเรียนที่ไปฝึก',
@@ -14891,8 +15026,8 @@ body.notes .note{display:block;}
       (c0.prefix ? ' · รหัส ' + c0.prefix : '') + ' · ' + esc(DB.settings.siteName)) +
       ntHome('adm') +
       '<div class="stats">' +
-        stat('cap', 'var(--plum)', ctxIts.length, 'นักศึกษาที่ออกฝึก', 'adm:accounts') +
-        stat('users', 'var(--terra)', DB.supervisors.filter(function (v) { return v.active; }).length, 'อาจารย์นิเทศก์ที่ปฏิบัติหน้าที่', 'adm:accounts') +
+        stat('cap', 'var(--plum)', ctxIts.length, 'นักศึกษาที่ออกฝึก', 'adm:accounts', 'adm:accounts|student') +
+        stat('users', 'var(--terra)', DB.supervisors.filter(function (v) { return v.active; }).length, 'อาจารย์นิเทศก์ที่ปฏิบัติหน้าที่', 'adm:accounts', 'adm:accounts|supervisor') +
         stat('book', 'var(--pine)', ctxCourses('adm').filter(function (c) { return c.status === 'open'; }).length, 'รายวิชาที่เปิด', 'adm:courses') +
         stat('clock', 'var(--warn)', pend, 'งานรอตรวจในภาคเรียนนี้', 'adm:reports') +
       '</div>' +
@@ -20744,6 +20879,15 @@ body.notes .note{display:block;}
     },
     /* ── หน้าสาธารณะ — ป๊อบอัปเดิมเปลี่ยนเป็น "หน้าย่อยของตัวเอง" (CR-1 หน้าแรก) ── */
     'lp:open': function (el) { view.lp = el.getAttribute('data-sub'); view.lpItem = null; renderHome(); window.scrollTo(0, 0); },
+    /* UI-06 · ADD-14 — สลับเมนูจอแคบ · ไม่เรียก renderHome() เพราะแถบนำทางเป็นมาร์กอัปนิ่ง
+       ไม่ได้ถูกวาดใหม่ทุกรอบ · และการเรนเดอร์ใหม่จะปิดเมนูทันทีตามกติกาด้านล่าง */
+    'lp:menu': function (el) {
+      var nav = document.querySelector('.lp-nav');
+      if (!nav) return;
+      var on = nav.classList.toggle('open');
+      el.setAttribute('aria-expanded', on ? 'true' : 'false');
+      el.setAttribute('aria-label', on ? 'ปิดเมนู' : 'เปิดเมนู');
+    },
     'lp:home': function () { view.lp = null; view.lpItem = null; renderHome(); window.scrollTo(0, 0); },
     'lp:flow': function () { view.lp = 'flow'; renderHome(); window.scrollTo(0, 0); },
     'lp:newsOpen': function (el) { view.lp = 'news'; view.lpItem = Number(el.getAttribute('data-id')); renderHome(); window.scrollTo(0, 0); },
@@ -23126,6 +23270,13 @@ body.notes .note{display:block;}
       /* กฎ ก · ลิงก์ที่กดมาจากในผังขั้นตอน/การ์ดงานของรายวิชา = เข้ามาทางรายวิชา ⇒ แก้ได้
          กดจากเมนูซ้าย · แถบน้อง TIMS · ปุ่มในสถานะว่าง = ดูอย่างเดียว */
       view.viaCourse = !!(p.closest('.stepper') || p.closest('.step-acts') || p.closest('.job-card'));
+      /* ADD-15 — การ์ดตัวเลขที่ระบุแท็บปลายทางไว้ ต้องตั้งแท็บ "ก่อน" เปลี่ยนหน้า
+         ไม่งั้นหน้าปลายทางจะวาดด้วยแท็บเดิมก่อนแล้วค่อยกระโดด ซึ่งเห็นเป็นการกระพริบ */
+      var stTab = p.getAttribute('data-stat-tab');
+      if (stTab && stTab.indexOf('|') > 0) {
+        var tp = stTab.split('|');
+        view.tab[tp[0]] = tp[1];
+      }
       leaveGuard(function () { goPage(pKey); });
       return;
     }
