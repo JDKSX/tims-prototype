@@ -24,10 +24,12 @@ cp -R "$SRC/fonts" "$DST/fonts"
 cp -R "$SRC/logos" "$DST/logos"
 
 # ── ตัวปรับแต่งโลโก้ + มาสคอต "น้อง TIMS" ────────────────────────────────
-#  ยังทำอยู่ในอีกเซสชันหนึ่ง (17 ก.ย. 2569) — เมื่อเสร็จแล้วให้เอาคอมเมนต์ 2 บรรทัดนี้ออก
-#  แล้วทีมงานจะเปิดดูได้ที่  <ลิงก์ Pages>/logo.html
-# cp "$SRC/tims-logo-maker.html" "$DST/logo.html"
-# cp "$SRC/logo-fonts.js"        "$DST/logo-fonts.js"
+#  เปิดให้ทีมงานดูแล้ว 19 ก.ย. 2569 — ฝ่ายฝึกใช้พิจารณาว่าจะเลือกโลโก้/มาสคอตแบบไหน
+#  ดูได้ที่  https://jdksx.github.io/tims-prototype/logo.html
+#  🔴 ไฟล์นี้อ้าง logo-fonts.js ไฟล์เดียว (ฟอนต์ฝังเป็น base64 ในตัว ไม่ดึงจากเน็ต)
+#     และไม่อ้าง logos/ เลย ⇒ คัดลอกแค่สองไฟล์นี้พอ
+cp "$SRC/tims-logo-maker.html" "$DST/logo.html"
+cp "$SRC/logo-fonts.js"        "$DST/logo-fonts.js"
 
 # กัน GitHub Pages เอาไฟล์ไปผ่าน Jekyll (ไฟล์ใหญ่ 2 MB ไม่ต้องให้มันประมวลผล)
 touch "$DST/.nojekyll"

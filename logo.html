@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TIMS — ตัวปรับแต่งโลโก้ระบบ</title>
+<script src="logo-fonts.js"></script>
+<style>
+:root{
+  /* สีจาก Prototype_TIMS.html (ชุดเดียวกับระบบจริง) */
+  --paper:#eef1f8; --paper-2:#e1e6f1; --surface:#fbfcff; --surface-2:#f3f6fc;
+  --line:#dce1ee; --line-2:#eaeef7;
+  --ink:#1f2433; --ink-2:#454d66; --ink-3:#7e869f;
+  --pine:#3a4a77; --pine-dark:#2b3759; --pine-soft:#e7eaf2;
+  --terra:#eb5a26; --terra-dark:#c8431a; --terra-soft:#fce4da;
+  --r1:8px; --r2:12px; --r3:16px; --r4:22px;
+  --sh-1:0 1px 2px rgba(31,36,51,.06), 0 1px 3px rgba(31,36,51,.05);
+  --sh-2:0 2px 6px rgba(31,36,51,.06), 0 6px 18px rgba(31,36,51,.08);
+  --serif:'Trirong', Georgia, serif;
+  --sans:'IBM Plex Sans Thai', system-ui, -apple-system, sans-serif;
+  --mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;}
+.wrap{max-width:1240px;margin:0 auto;padding:clamp(24px,4vw,52px) clamp(16px,3vw,34px) 60px;}
+
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--terra);font-weight:600;margin:0 0 10px;}
+h1{font-family:var(--serif);font-size:clamp(26px,4vw,40px);margin:0 0 10px;font-weight:700;letter-spacing:-.01em;}
+.lede{color:var(--ink-2);max-width:70ch;margin:0;font-size:clamp(15px,1.6vw,16.5px);}
+
+.conf{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:20px;margin:28px 0 10px;align-items:start;}
+@media (max-width:900px){.conf{grid-template-columns:1fr;}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r4);padding:22px;box-shadow:var(--sh-1);}
+.stage{background:var(--surface-2);border-radius:var(--r3);padding:26px 20px;display:grid;place-items:center;min-height:270px;}
+.stage.dark{background:#151b2d;}
+.stage svg{width:100%;max-width:420px;height:auto;display:block;}
+
+/* มาสคอต — ตัวใหญ่ซ้าย · แผงควบคุมขวา */
+.mascot-hero{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:18px;align-items:start;margin-top:16px;}
+.mascot-hero .stage{min-height:380px;gap:14px;align-content:center;}
+.mascot-cap{font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;color:var(--ink-3);text-align:center;max-width:34ch;}
+.stage.dark .mascot-cap{color:#9fabc9;}
+.mascot-side{background:var(--surface);border:1px solid var(--line);border-radius:var(--r3);padding:18px;box-shadow:var(--sh-1);}
+.mascot-side>.ctitle:not(:first-child){margin-top:20px;}
+.mascot-side .note{font-size:13px;padding:12px 14px;}
+@media (max-width:900px){.mascot-hero{grid-template-columns:1fr;}}
+
+.ctitle{font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3);margin:0 0 10px;}
+.ctitle+.ctitle,.panel>.ctitle:not(:first-child){margin-top:20px;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{display:inline-flex;align-items:center;gap:7px;font-family:var(--sans);font-size:13.5px;color:var(--ink);background:var(--surface-2);border:1.5px solid var(--line);border-radius:11px;padding:8px 11px;cursor:pointer;transition:.13s;min-height:40px;}
+.chip:hover{border-color:var(--pine);}
+.chip.on{border-color:var(--terra);background:var(--terra-soft);font-weight:600;}
+.chip:focus-visible,.dl:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--terra);outline-offset:2px;}
+.sw{width:18px;height:18px;border-radius:6px;border:1px solid rgba(31,36,51,.14);flex:none;}
+.chip svg{width:26px;height:26px;flex:none;}
+
+label.f{display:flex;flex-direction:column;gap:5px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-bottom:11px;}
+label.f input{font-family:var(--sans);font-size:14px;text-transform:none;letter-spacing:0;padding:9px 11px;border:1.5px solid var(--line);border-radius:var(--r1);background:var(--surface-2);color:var(--ink);}
+
+.exp{border-top:1px dashed var(--line);margin-top:18px;padding-top:16px;display:flex;flex-direction:column;gap:10px;}
+.dlrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.dl{font-family:var(--sans);font-size:13px;padding:9px 13px;border:1.5px solid var(--line);border-radius:var(--r1);background:var(--surface-2);cursor:pointer;color:var(--ink);display:inline-flex;gap:5px;align-items:center;min-height:40px;}
+.dl:hover{border-color:var(--terra);background:var(--terra-soft);}
+.dl.primary{background:var(--pine);color:#fff;border-color:var(--pine);}
+.dl.primary:hover{background:var(--pine-dark);border-color:var(--pine-dark);}
+select.psize{font-family:var(--mono);font-size:12px;padding:8px 10px;border-radius:var(--r1);border:1.5px solid var(--line);background:var(--surface-2);color:var(--ink);cursor:pointer;min-height:40px;}
+
+.sizes{border-top:1px dashed var(--line);margin-top:16px;padding-top:14px;}
+.sizes .row{display:flex;gap:18px;align-items:flex-end;justify-content:center;flex-wrap:wrap;}
+.sizes .item{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.sizes .px{font-family:var(--mono);font-size:11px;color:var(--ink-3);}
+
+section{margin:46px 0 0;}
+.sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:4px;}
+.sec-head h2{font-family:var(--serif);font-size:21px;margin:0;font-weight:700;}
+.sec-head .n{font-family:var(--mono);font-size:12px;color:var(--ink-3);letter-spacing:.1em;}
+.sec-sub{color:var(--ink-2);font-size:14.5px;margin:0 0 18px;max-width:86ch;}
+
+.gal{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));}
+#poseGal{grid-template-columns:repeat(auto-fit,minmax(258px,1fr));align-items:start;}
+#poseGal .dl{font-size:12px;padding:8px 10px;}
+.gal.wide{grid-template-columns:repeat(auto-fit,minmax(330px,1fr));}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r3);padding:14px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--sh-1);}
+.fbox{background:var(--surface-2);border-radius:var(--r2);padding:18px;display:grid;place-items:center;min-height:140px;}
+.fbox.dark{background:#151b2d;}
+.fbox svg{width:100%;height:auto;display:block;}
+.tile .nm{font-size:14px;font-weight:600;}
+.tile .ds{color:var(--ink-3);font-size:12.5px;margin-top:-6px;}
+
+.note{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--terra);border-radius:var(--r2);padding:16px 18px;font-size:14.5px;color:var(--ink-2);}
+.note b{color:var(--ink);}
+.note ul{margin:8px 0 0;padding-left:20px;} .note li{margin:3px 0;}
+footer{color:var(--ink-3);font-size:13px;border-top:1px solid var(--line);padding-top:20px;margin-top:44px;}
+.warnbox{display:none;background:var(--terra-soft);border:1px solid var(--terra);border-radius:var(--r2);padding:14px 16px;margin:18px 0;font-size:14px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="kicker">Visual Identity · ระบบ TIMS</p>
+  <h1>ออกแบบ &amp; ดาวน์โหลดโลโก้ระบบ</h1>
+  <p class="lede">โลโก้ประกอบจาก <b>ตัวอักษร TIMS</b> + <b>ชื่อเต็มของระบบ</b> — เลือกสัญลักษณ์ · แบบตัวอักษร · ชุดสี จากแผงด้านขวา ตัวอย่างเปลี่ยนทันที แล้วกดดาวน์โหลดได้ทั้ง SVG (เวกเตอร์ ขยายไม่แตก) และ PNG (พื้นโปร่ง) ทุกรูปแบบมีปุ่มดาวน์โหลดของตัวเอง · ไฟล์ที่ได้<b>ฝังฟอนต์ไว้ในตัว</b> เปิดที่เครื่องไหนภาษาไทยก็ไม่เพี้ยน</p>
+
+  <div id="warn" class="warnbox"></div>
+
+  <div class="conf">
+    <div class="panel">
+      <p class="ctitle">ตัวอย่าง · แบบแนวตั้ง (ตราหลัก)</p>
+      <div class="stage" id="stageMain"></div>
+      <div class="exp">
+        <div class="dlrow">
+          <button class="dl primary" data-x="main|svg">⬇ ตราหลัก SVG</button>
+          <button class="dl" data-x="main|png">⬇ ตราหลัก PNG</button>
+          <span style="flex:1"></span>
+          <span class="ctitle" style="margin:0">ขนาด PNG</span>
+          <select class="psize" id="psize"><option value="512">512px</option><option value="1024" selected>1024px</option><option value="2048">2048px</option><option value="4096">4096px</option></select>
+        </div>
+      </div>
+      <div class="sizes">
+        <p class="ctitle" style="text-align:center">ทดสอบทุกขนาด · อ่านออกไหมเมื่อเล็กลง</p>
+        <div class="row" id="sizeRow"></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <p class="ctitle">แบบตัวอักษร TIMS</p>
+      <div class="chips" id="faceChips"></div>
+      <p class="ctitle">สัญลักษณ์</p>
+      <div class="chips" id="symChips"></div>
+      <p class="ctitle">ชุดสี</p>
+      <div class="chips" id="palChips"></div>
+      <p class="ctitle">ลูกเล่น</p>
+      <div class="chips" id="optChips">
+        <button class="chip on" data-opt="accentI">เน้นตัว I ด้วยสีส้ม</button>
+        <button class="chip on" data-opt="rule">เส้นคั่นใต้ตัวอักษร</button>
+        <button class="chip on" data-opt="en">แสดงชื่อภาษาอังกฤษ</button>
+      </div>
+      <p class="ctitle">ข้อความ (แก้ได้ทันที)</p>
+      <label class="f">ชื่อเต็มภาษาไทย<input id="inTh" type="text"></label>
+      <label class="f">ชื่อภาษาอังกฤษ<input id="inEn" type="text"></label>
+      <label class="f">หน่วยงาน บรรทัดที่ 1<input id="inOrg1" type="text"></label>
+      <label class="f">หน่วยงาน บรรทัดที่ 2<input id="inOrg2" type="text"></label>
+    </div>
+  </div>
+
+  <section>
+    <div class="sec-head"><span class="n">01</span><h2>รูปแบบการใช้งาน</h2></div>
+    <p class="sec-sub">แต่ละที่ใช้คนละแบบ — หัวเว็บใช้แนวนอน · ไอคอนแอป/favicon ใช้ตราจัตุรัส · เอกสารราชการใช้หัวกระดาษ · ทุกแบบเปลี่ยนตามที่เลือกด้านบนและดาวน์โหลดแยกได้</p>
+    <div class="gal wide" id="formatGal"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="n">02</span><h2>สัญลักษณ์ทั้งหมด</h2></div>
+    <p class="sec-sub">ทุกตัวสื่อความหมายจริงของระบบ — วงรอบฝึก 4 ครั้ง · การนิเทศ · การตรวจงานที่ส่ง · การบ่มเพาะครูใหม่ (กดที่การ์ดเพื่อเลือก)</p>
+    <div class="gal" id="symGal"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="n">03</span><h2>น้อง TIMS — มาสคอตของระบบ</h2></div>
+    <p class="sec-sub">หัวกับตัวเป็น<b>กล่องมนใบเดียว</b> · <b>หมวก แขน และเท้าลอยแยกจากตัว</b> ⇒ ขยับคนละจังหวะได้ ดูมีชีวิตโดยไม่ต้องวาดหลายเฟรม · <b>หมวกบัณฑิต</b>คือสัญลักษณ์ตัวเดียวกับในโลโก้ · ทุกท่าสื่อความหมายด้วย<b>แขนกับหน้าตา</b> ไม่ถือของใด ๆ · เปลี่ยนชุดสีแล้วน้อง TIMS เปลี่ยนตามทันที · วางบนพื้นเข้มได้ด้วยแบบ<b>มีเส้นขอบ</b> (สีตัวเหมือนเดิมทุกประการ เพิ่มแค่เส้นขอบตามรูปร่าง)</p>
+    <div class="mascot-hero">
+      <div class="stage" id="stageMascot"></div>
+      <div class="mascot-side">
+        <p class="ctitle">ท่าทาง</p>
+        <div class="chips" id="poseChips"></div>
+        <p class="ctitle">การเคลื่อนไหว</p>
+        <div class="chips" id="manimChips">
+          <button class="chip on" data-opt="manim">ขยับ (ไฟล์ SVG ขยับตามไปด้วย)</button>
+        </div>
+        <div class="note" style="margin-top:12px">
+          ไฟล์ <b>SVG</b> ที่ดาวน์โหลดไปจะ<b>ขยับได้จริง</b> (ฝังคีย์เฟรมไว้ในไฟล์) เปิดในเบราว์เซอร์หรือแทรกเป็นรูปในหน้าเว็บก็เล่นเอง ·
+          ไฟล์ <b>PNG</b> เป็นภาพนิ่งเฟรมแรก <b>พื้นโปร่ง</b> เอาไปวางบนพื้นสีอะไรก็ได้ — เลือกขนาดได้ที่
+          ช่อง <b>ขนาด PNG</b> บนแผงตั้งค่าด้านบนสุด (512 · 1024 · 2048 · 4096px) · 4096px ใช้ทำอินโฟกราฟิกและงานพิมพ์ได้สบาย
+        </div>
+      </div>
+    </div>
+    <p class="sec-sub" style="margin-top:22px"><b>รูปแบบการใช้งาน</b> — แต่ละที่ในระบบต้องการคนละทรง · ทุกแบบดาวน์โหลดได้ทั้ง <b>SVG ขยับ</b> (ฝังคีย์เฟรมในไฟล์) · <b>SVG นิ่ง</b> (ไม่มีคีย์เฟรมเลย สำหรับโปรแกรมที่ไม่รองรับ) · <b>PNG</b> (พื้นโปร่ง)</p>
+    <div class="gal wide" id="mfmtGal"></div>
+
+    <p class="sec-sub" style="margin-top:22px">ท่าทางทั้งหมด — แต่ละท่าผูกกับจังหวะจริงในระบบ ไม่ได้ตั้งมาลอย ๆ (กดที่การ์ดเพื่อเลือก)</p>
+    <div class="gal" id="poseGal"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="n">04</span><h2>ชุดสีทั้งหมด</h2></div>
+    <p class="sec-sub">ทุกชุดมาจากสีจริงของระบบใน <code>Prototype_TIMS.html</code> — น้ำเงิน Pine เป็นสีหลัก ส้ม Terra เป็นสีเน้น · มีชุดโมโนโครมและขาวล้วนสำหรับเอกสารขาวดำ/พื้นเข้ม (กดที่การ์ดเพื่อเลือก)</p>
+    <div class="gal" id="palGal"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><span class="n">05</span><h2>ข้อกำหนดการใช้โลโก้</h2></div>
+    <p class="sec-sub">ร่างไว้ให้ใช้ต่อได้เลยเมื่อเคาะแบบแล้ว</p>
+    <div class="gal wide">
+      <div class="tile"><div class="fbox" id="boxClear"></div><div class="nm">ระยะปลอดภัย (Clear space)</div><div class="ds">เว้นรอบโลโก้อย่างน้อยเท่ากับความสูงตัว T — ห้ามวางข้อความหรือขอบภาพชิดกว่านี้</div></div>
+      <div class="tile"><div class="fbox dark" id="boxDark"></div><div class="nm">บนพื้นเข้ม (Reversed)</div><div class="ds">ใช้ชุดสี “ขาวล้วน” เมื่อวางบนพื้นเข้มหรือภาพถ่าย</div></div>
+    </div>
+    <div class="note" style="margin-top:14px">
+      <b>ข้อห้าม</b>
+      <ul>
+        <li>ห้ามยืด/บีบสัดส่วน — ย่อขยายพร้อมกันทั้งแนวตั้งแนวนอนเท่านั้น</li>
+        <li>ห้ามเปลี่ยนสีนอกชุดที่กำหนด · ห้ามใส่เงา/ขอบนูน</li>
+        <li>ขนาดเล็กกว่า 32px ให้ใช้ “ไอคอนเดี่ยว” แทนตราที่มีชื่อเต็ม (ชื่อเต็มจะอ่านไม่ออก)</li>
+        <li>โลโก้นี้เป็นของ<b>ระบบ</b> ไม่ใช่ตราคณะ/ตรามหาวิทยาลัย — เอกสารทางการต้องวางตราหน่วยงานคู่กันตามระเบียบ</li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>ร่างเพื่อพิจารณา · สีและฟอนต์ชุดเดียวกับ <code>design/Prototype_TIMS.html</code> (Trirong + IBM Plex Sans Thai) · SVG = เวกเตอร์แก้ต่อได้ · PNG = พื้นโปร่ง · ไฟล์ 2048–4096px ใช้ยื่นจดเครื่องหมายหรือพิมพ์ป้ายได้</footer>
+</div>
+<svg id="mSvg" width="0" height="0" style="position:absolute;left:-9999px;top:0;overflow:hidden" aria-hidden="true"><text id="mText"></text></svg>
+<script>
+(function(){
+'use strict';
+
+/* ══════════ 0 · ฟอนต์ ══════════
+   logo-fonts.js เก็บ subset thai+latin เป็น base64 — ใช้ทั้งกับหน้านี้เอง
+   และฝังลงไฟล์ SVG ที่ดาวน์โหลด เพื่อให้ข้อความไทยไม่เพี้ยนบนเครื่องที่ไม่มีฟอนต์ */
+var FONTS = window.TIMS_LOGO_FONTS || [];
+var FONT_CSS='';
+
+var SANS='IBM Plex Sans Thai', SERIF='Trirong';
+(function(){
+  FONT_CSS=FONTS.map(faceCSS).join('');
+  var st=document.createElement('style'); st.textContent=FONT_CSS; document.head.appendChild(st);
+})();
+function faceCSS(f){
+  return "@font-face{font-family:'"+f.f+"';font-style:normal;font-weight:"+f.w+
+         ";font-display:block;src:url('"+f.d+"') format('woff2');unicode-range:"+f.r+";}";
+}
+/* ฝังเฉพาะฟอนต์ที่มาร์กอัปชิ้นนั้นเรียกใช้จริง — ไฟล์เล็กลงเท่าตัว */
+function fontDefs(str){
+  if(str.indexOf('<text')<0) return '';
+  var re=/font-family="([^"]+)" font-size="[^"]+" font-weight="([0-9]+)"/g,m,used={};
+  while((m=re.exec(str))) used[m[1]+'|'+m[2]]=1;
+  var css=FONTS.filter(function(f){return used[f.f+'|'+f.w];}).map(faceCSS).join('');
+  return css?'<defs><style type="text/css">'+css+'</style></defs>':'';
+}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function r2(n){return Math.round(n*100)/100;}
+
+/* ══════════ 1 · วัดขนาดข้อความจริง (getBBox) ══════════
+   วางข้อความด้วยพิกัดมุมซ้ายบนได้แม่นยำ ไม่ต้องเดา baseline — สำคัญมากกับภาษาไทย
+   ที่มีสระบน/ล่าง ทำให้ความสูงกล่องไม่เท่ากับ font-size */
+/* 🐛 บั๊กจริงที่เจอตอนทดสอบ: getBBox() ของ <text> คืน "กล่องบรรทัด" (ascent+descent ของฟอนต์)
+   ไม่ใช่ขอบตัวอักษรจริง — "TIMS" ที่ 200px คืนความสูง 347 ทั้งที่ตัวอักษรสูงจริง ~140
+   พอเอาไปคิดสัดส่วน โลโก้เลยยืดสูงผิดรูป (สูง 1021 แทนที่จะ ~460)
+   → ใช้ canvas measureText + actualBoundingBox* ซึ่งคืน "ขอบหมึกจริง" แทน
+   (ครอบสระบน/ล่าง/วรรณยุกต์ไทยด้วย) และเผื่อทางถอยไปใช้ getBBox ถ้าเบราว์เซอร์ไม่รองรับ */
+var mText=document.getElementById('mText');
+var mCv=document.createElement('canvas').getContext('2d');
+function meas(str,fam,size,weight,italic){
+  if(str==null||str==='') return {w:0,h:0,dx:0,asc:0};
+  mCv.font=(italic?'italic ':'')+weight+' '+size+'px "'+fam+'"';
+  var m=mCv.measureText(str);
+  if(typeof m.actualBoundingBoxAscent==='number'){
+    return {w:m.actualBoundingBoxRight+m.actualBoundingBoxLeft,
+            h:m.actualBoundingBoxAscent+m.actualBoundingBoxDescent,
+            dx:m.actualBoundingBoxLeft, asc:m.actualBoundingBoxAscent};
+  }
+  mText.setAttribute('font-family',fam);mText.setAttribute('font-size',size);
+  mText.setAttribute('font-weight',weight);mText.setAttribute('font-style',italic?'italic':'normal');
+  mText.setAttribute('x','0');mText.setAttribute('y','0');mText.textContent=str;
+  var b=mText.getBBox();
+  return {w:b.width,h:b.height,dx:-b.x,asc:-b.y};
+}
+/* T(str,opt) → {w,h,at(x,y)} : at() คืน <text> ที่ "ขอบหมึกมุมซ้ายบน" อยู่ที่ (x,y) พอดี */
+function T(str,o){
+  var m=meas(str,o.fam,o.size,o.weight,o.italic);
+  return {w:m.w,h:m.h,at:function(x,y){
+    if(!str) return '';
+    return '<text x="'+r2(x+m.dx)+'" y="'+r2(y+m.asc)+'" font-family="'+esc(o.fam)+'" font-size="'+o.size+
+      '" font-weight="'+o.weight+'"'+(o.italic?' font-style="italic"':'')+' fill="'+o.fill+'">'+esc(str)+'</text>';
+  }};
+}
+
+/* ══════════ 2 · ตัวอักษร TIMS แบบเรขาคณิต (เวกเตอร์ล้วน ไม่พึ่งฟอนต์) ══════════
+   กริด: ความสูงตัวอักษร 140 · ความหนาเส้น 28 · ช่องไฟ 24 */
+var GEO={
+  T:{w:100,d:function(f){return '<path d="M0 0H100V28H64V140H36V28H0Z" fill="'+f+'"/>';}},
+  I:{w:28, d:function(f){return '<rect x="0" y="0" width="28" height="140" fill="'+f+'"/>';}},
+  M:{w:124,d:function(f){return '<path d="M0 140V0H30L62 58L94 0H124V140H96V52L72 96H52L28 52V140Z" fill="'+f+'"/>';}},
+  S:{w:100,d:function(f){return '<path d="M86 46C86 28 70 16 50 16C31 16 15 27 15 44C15 60 30 66 50 71C70 76 85 84 85 102C85 119 69 124 50 124C31 124 15 116 15 100" fill="none" stroke="'+f+'" stroke-width="28"/>';}}
+};
+var TRACK=24;
+function wordGeo(col,acc){
+  var x=0,s='';
+  ['T','I','M','S'].forEach(function(ch){
+    var g=GEO[ch];
+    s+='<g transform="translate('+x+',0)">'+g.d(ch==='I'&&acc?acc:col)+'</g>';
+    x+=g.w+TRACK;
+  });
+  return {w:x-TRACK,h:140,inner:s};
+}
+function wordFont(fam,weight,col,acc){
+  var m=meas('TIMS',fam,200,weight,false);
+  var inner='<text x="'+r2(m.dx)+'" y="'+r2(m.asc)+'" font-family="'+esc(fam)+'" font-size="200" font-weight="'+weight+
+    '" fill="'+col+'">T'+(acc?'<tspan fill="'+acc+'">I</tspan>':'I')+'MS</text>';
+  return {w:m.w,h:m.h,inner:inner};
+}
+var FACES=[
+  ['geo','เรขาคณิต',function(c,a){return wordGeo(c,a);}],
+  ['serif','Trirong · ทางการ',function(c,a){return wordFont(SERIF,700,c,a);}],
+  ['sans','IBM Plex · โมเดิร์น',function(c,a){return wordFont(SANS,600,c,a);}]
+];
+function wordmark(col,acc){
+  var f=FACES.filter(function(x){return x[0]===state.face;})[0]||FACES[0];
+  return f[2](col,acc);
+}
+
+/* ══════════ 3 · สัญลักษณ์ ══════════ m=สีหลัก a=สีเน้น */
+var SYM={
+  none:{w:1,h:1,label:'ไม่มีสัญลักษณ์',note:'ตัวอักษรล้วน',draw:function(){return '';}},
+
+  steps:{w:150,h:150,label:'ขั้นบันได 4 ขั้น',note:'ฝึก 4 ครั้งจนจบ',draw:function(m,a){
+    return '<rect x="0" y="108" width="30" height="42" rx="7" fill="'+m+'"/>'
+      +'<rect x="40" y="80" width="30" height="70" rx="7" fill="'+m+'"/>'
+      +'<rect x="80" y="52" width="30" height="98" rx="7" fill="'+m+'"/>'
+      +'<rect x="120" y="24" width="30" height="126" rx="7" fill="'+a+'"/>'
+      +'<circle cx="135" cy="6" r="6" fill="'+a+'"/>';}},
+
+  cap:{w:220,h:116,label:'หมวกบัณฑิต',note:'วิชาชีพครู',draw:function(m,a){
+    return '<polygon points="110,4 214,46 110,88 6,46" fill="'+m+'"/>'
+      +'<circle cx="110" cy="46" r="11" fill="'+a+'"/>'
+      +'<path d="M110 54L188 38V96" fill="none" stroke="'+m+'" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/>'
+      +'<circle cx="188" cy="106" r="10" fill="'+a+'"/>';}},
+
+  board:{w:170,h:146,label:'กระดาน + ตรวจแล้ว',note:'ตรวจงานที่ส่ง',draw:function(m,a){
+    return '<rect x="0" y="0" width="170" height="116" rx="15" fill="'+m+'"/>'
+      +'<path d="M48 58L70 82L124 32" fill="none" stroke="'+a+'" stroke-width="17" stroke-linecap="round" stroke-linejoin="round"/>'
+      +'<rect x="77" y="112" width="16" height="22" rx="5" fill="'+m+'"/>'
+      +'<rect x="50" y="132" width="70" height="14" rx="7" fill="'+m+'"/>';}},
+
+  seed:{w:160,h:150,label:'ประคองต้นกล้า',note:'บ่มเพาะครูใหม่',draw:function(m,a){
+    return '<path d="M12 78C12 124 46 141 80 141C114 141 148 124 148 78" fill="none" stroke="'+m+'" stroke-width="18" stroke-linecap="round"/>'
+      +'<path d="M80 116V54" fill="none" stroke="'+m+'" stroke-width="14" stroke-linecap="round"/>'
+      +'<path d="M78 74C54 74 38 57 38 32C64 32 78 49 78 74Z" fill="'+m+'"/>'
+      +'<path d="M82 64C106 64 122 47 122 22C96 22 82 39 82 64Z" fill="'+a+'"/>';}},
+
+  compass:{w:140,h:140,label:'เข็มทิศ',note:'การนิเทศ ชี้แนะ',draw:function(m,a){
+    return '<circle cx="70" cy="70" r="61" fill="none" stroke="'+m+'" stroke-width="16"/>'
+      +'<polygon points="102,38 76,76 64,64" fill="'+a+'"/>'
+      +'<polygon points="38,102 64,64 76,76" fill="'+m+'"/>'
+      +'<circle cx="70" cy="70" r="8" fill="'+m+'"/>';}},
+
+  book:{w:180,h:126,label:'หนังสือเปิด',note:'เรียนรู้จากงานจริง',draw:function(m,a){
+    return '<path d="M6 20C34 4 62 4 84 18V116C62 102 34 102 6 118Z" fill="'+m+'"/>'
+      +'<path d="M174 20C146 4 118 4 96 18V116C118 102 146 102 174 118Z" fill="'+m+'"/>'
+      +'<rect x="82" y="14" width="16" height="104" rx="6" fill="'+a+'"/>';}},
+
+  mentor:{w:168,h:140,label:'นิเทศก์ + นักศึกษา',note:'พี่เลี้ยงกับผู้ฝึก',draw:function(m,a){
+    return '<circle cx="50" cy="32" r="26" fill="'+m+'"/>'
+      +'<path d="M8 140C8 101 27 80 50 80C73 80 92 101 92 140Z" fill="'+m+'"/>'
+      +'<circle cx="124" cy="60" r="21" fill="'+a+'"/>'
+      +'<path d="M90 140C90 111 105 96 124 96C143 96 158 111 158 140Z" fill="'+a+'"/>';}},
+
+  shield:{w:132,h:150,label:'โล่ + อักษร T',note:'ตราทางการ',draw:function(m,a){
+    return '<path d="M66 2L128 25V74C128 116 100 140 66 150C32 140 4 116 4 74V25Z" fill="'+m+'"/>'
+      +'<rect x="28" y="42" width="76" height="19" rx="5" fill="'+a+'"/>'
+      +'<rect x="56" y="42" width="20" height="70" rx="5" fill="'+a+'"/>';}},
+
+  cycle:{w:150,h:152,label:'วงรอบการฝึก',note:'4 ภาคเรียน หมุนต่อเนื่อง',draw:function(m,a){
+    return '<path d="M75 20A61 61 0 1 1 25 116" fill="none" stroke="'+m+'" stroke-width="18" stroke-linecap="round"/>'
+      +'<polygon points="73,0 73,40 107,20" fill="'+a+'"/>'
+      +'<circle cx="75" cy="81" r="17" fill="'+a+'"/>';}}
+};
+var SYM_ORDER=['steps','cap','board','seed','compass','book','mentor','shield','cycle','none'];
+function symBox(key,m,a){var s=SYM[key];return {w:s.w,h:s.h,inner:s.draw(m,a)};}
+/* ══════════ 3ข · มาสคอต "น้อง TIMS" ══════════
+   แบบมาจากภาพร่างของเจ้าของงานโดยตรง — ยึดตามนั้น ไม่ตีความใหม่
+     · หัวกับตัวเป็น **กล่องมนใบเดียว** ไม่แยกส่วน · หน้าอยู่บนกล่องนั้นเลย
+     · **ชิ้นส่วนลอยแยกจากตัว** — หมวก · แขนสองข้าง · เท้าสองข้าง ไม่มีเส้นต่อ
+       (ยกเว้นขาสั้นสองขาใต้หมวกตามภาพร่าง) ⇒ ขยับแต่ละชิ้นคนละจังหวะได้ ดูมีชีวิต
+     · หมวกบัณฑิต = สัญลักษณ์ cap ตัวเดียวกับในโลโก้ (ไม่ได้วาดใหม่)
+   สีมาจากชุดสีเดียวกับโลโก้เสมอ — เปลี่ยนชุดสีแล้วน้อง TIMS เปลี่ยนตาม */
+
+/* สัดส่วนกลางของทั้งตัว — แก้ที่นี่ที่เดียวขยับทั้งตัวทุกท่า */
+var M = {
+  W:280, H:320, cx:140,
+  bx:68, by:110, bw:144, bh:138, br:26,   /* กล่องตัว (หัวกับตัวเป็นชิ้นเดียว) */
+  eyeDX:26, eyeY:162, eyeRx:16, eyeRy:21, mouthY:208,
+  shY:168, shDX:76, armD:30, armRx:11, armRy:26,  /* แขนลอย — ไหล่อยู่นอกกล่อง */
+  capW:132, capY:44
+};
+
+/* ท่าทาง — ผูกกับ "จังหวะจริงในระบบ" ไม่ใช่ตั้งมาลอย ๆ
+   armL/armR = องศาของแขนลอย วัดจาก "ชี้ออกข้างลำตัวในแนวนอน"
+               0 = ชี้ออกตรง ๆ · บวก = ยกขึ้น · ลบ = ทิ้งลง
+               ทั้งสองข้างใช้เครื่องหมายเดียวกัน (ตัวมันสะท้อนซ้าย-ขวาให้เอง)
+   🔴 น้อง TIMS ไม่ถืออะไรทั้งสิ้น (เจ้าของงานตัดสินแล้ว) ⇒ ทุกท่าต้องสื่อความหมาย
+      ด้วยแขนกับหน้าตาเท่านั้น · ห้ามเพิ่มของถือกลับมาโดยไม่ถามก่อน */
+var POSES=[
+  {k:'hello', label:'ทักทาย',        where:'หน้าแรก · หน้าเข้าสู่ระบบ',
+   armL:-50, armR:40,  mouth:'smile', eyes:'open',
+   anim:'float', wave:true},
+  {k:'pass',  label:'ผ่านแล้ว',      where:'อนุมัติออกฝึก · กดผ่านการฝึก · บันทึกสำเร็จ',
+   armL:-46, armR:62,  mouth:'grin',  eyes:'happy',
+   anim:'bounce'},
+  {k:'guide', label:'ชี้แนะ',        where:'การนิเทศ · คำแนะนำ · ตัวช่วยบนหน้าจอ',
+   armL:-58, armR:10,  mouth:'talk',  eyes:'open',
+   anim:'nod'},
+  {k:'work',  label:'ตรวจงาน',       where:'งานที่ต้องส่ง · คิวตรวจงาน',
+   armL:-22, armR:-70, mouth:'flat',  eyes:'look',
+   anim:'float'},
+  {k:'think', label:'ยังไม่มีข้อมูล', where:'สถานะว่าง — ยังไม่มีอะไรให้ดู',
+   armL:-56, armR:64,  mouth:'small', eyes:'think',
+   anim:'think'},
+  {k:'sorry', label:'ยังไม่ได้',      where:'ตีกลับให้แก้ไข · ไม่มีสิทธิ์เข้า (403)',
+   armL:-74, armR:-74, mouth:'sad',   eyes:'sad',
+   anim:'sorry'},
+  {k:'cheer', label:'จบหลักสูตร',     where:'ครบเงื่อนไขจบ · ปิดรายวิชา',
+   armL:64,  armR:64,  mouth:'grin',  eyes:'happy',
+   anim:'cheer', tossCap:true},
+  {k:'sleep', label:'ปิดปรับปรุง',    where:'โหมดปิดปรับปรุง · นอกเวลาทำการ',
+   armL:-78, armR:-78, mouth:'zz',    eyes:'shut',
+   anim:'sleep', zzz:true}
+];
+function poseOf(k){for(var i=0;i<POSES.length;i++){if(POSES[i].k===k)return POSES[i];}return POSES[0];}
+
+/* จุดบนแขนลอย — คืนทั้งจุดหมุน (ไหล่) · จุดกลางแขน · องศาเอียงของวงรี
+   🔴 คิดเป็นพิกัดจริงในภาพทั้งหมด ไม่ใช้ transform attribute คู่กับ CSS transform
+      (สองอย่างนี้เป็นช่องเดียวกัน CSS จะทับ attribute ทั้งอัน) */
+function armAt(side,deg,dist){
+  var a=deg*Math.PI/180, dx=side*Math.cos(a), dy=-Math.sin(a);
+  return {sx:M.cx+side*M.shDX, sy:M.shY,
+          x:M.cx+side*M.shDX+dist*dx, y:M.shY+dist*dy,
+          rot:Math.atan2(-dx,dy)*180/Math.PI};
+}
+function mArm(side,deg,c,uid,cls){
+  var p=armAt(side,deg,M.armD);
+  return '<g class="'+uid+'-'+cls+'" style="transform-origin:'+p.sx+'px '+p.sy+'px">'
+    +'<ellipse cx="0" cy="0" rx="'+M.armRx+'" ry="'+M.armRy+'" fill="'+c+'"'
+    +' transform="translate('+r2(p.x)+','+r2(p.y)+') rotate('+r2(p.rot)+')"/></g>';
+}
+/* เท้าลอยสองชิ้น — ไม่ติดกับตัว ตามแบบที่เจ้าของงานวาด
+   ใช้สีเน้น (= รองเท้า) เพื่อให้ครึ่งล่างของตัวละครมีสีถ่วงกับหมวกด้านบน */
+function mFeet(c){
+  return '<ellipse cx="112" cy="262" rx="24" ry="12" fill="'+c+'" transform="rotate(-12 112 262)"/>'
+    +'<ellipse cx="170" cy="259" rx="24" ry="12" fill="'+c+'" transform="rotate(11 170 259)"/>';
+}
+
+/* ฐานหมวกบัณฑิต (crown) — ส่วนที่สวมอยู่บนหัวจริง ๆ
+   🔴 ของเดิมเป็น "ขีดสองขีด" ลอยใต้แผ่นหมวก ซึ่งอ่านไม่ออกว่าคืออะไร
+      หมวกบัณฑิตของจริงมี 3 ส่วน: แผ่นสี่เหลี่ยม · ฐานที่สวมหัว · พู่
+   🔴 ฐานต้องเป็น **ทรงกระบอก** ตามภาพตัวอย่างที่เจ้าของงานส่งมา ไม่ใช่แผ่นแบน
+      ⇒ ขอบล่างเป็นส่วนโค้งของวงรี (arc) ไม่ใช่เส้นตรง · แถบคาดก็โค้งตามทรงเดียวกัน
+      นี่คือสิ่งเดียวที่ทำให้อ่านออกว่าเป็นทรงกระบอกในภาพแบนที่ไม่มีเงา
+   แถบคาดสีเน้นทำสองหน้าที่ — แยกหมวกออกจากตัว (สีเดียวกันจะกลืน) และเติมสีให้ตัวละคร
+   วางให้ปลายล่างเลยขอบบนของตัวลงไป ⇒ ตอนหมวกเด้ง (capbob 4px) ก็ยังไม่หลุดจากหัว */
+function mCrown(body,acc){
+  var rx=38, ry=10, topY=92, botY=112, L=M.cx-rx, R=M.cx+rx;
+  var arc=function(y,rev){return 'A'+rx+' '+ry+' 0 0 '+(rev?0:1)+' '+(rev?L:R)+' '+y;};
+  return ''
+    /* ตัวกระบอก — ด้านข้างตรง ก้นโค้งตามวงรี (ความโค้งนี้คือสิ่งเดียวที่บอกว่าเป็นทรงกระบอก) */
+    +'<path d="M'+L+' '+topY+'L'+L+' '+botY+arc(botY)+'L'+R+' '+topY+'Z" fill="'+acc+'"/>'
+    /* ปากกระบอก — ส่วนใหญ่ถูกแผ่นหมวกทับ เหลือขอบที่ทำให้ทรงต่อเนื่อง */
+    +'<ellipse cx="'+M.cx+'" cy="'+topY+'" rx="'+rx+'" ry="'+ry+'" fill="'+acc+'"/>';
+}
+/* แก้ม — จุดสีเดียวที่ทำให้หน้าดู "มีเลือดฝาด" แทนที่จะเป็นหุ่นยนต์เปล่า ๆ */
+function mCheeks(a){
+  return [M.cx-52,M.cx+52].map(function(x){
+    return '<ellipse cx="'+x+'" cy="195" rx="11" ry="7" fill="'+a+'"/>';
+  }).join('');
+}
+
+/* ตา 6 แบบ — path/ellipse ล้วน ไม่ใช้ฟอนต์ (ไฟล์ .svg เปิดที่ไหนก็เหมือนกัน)
+   🔴 ของเดิมเป็นวงรีขาวเปล่า ๆ ไม่มีลูกตา ⇒ หน้าตาย ไม่รู้ว่ามองไปทางไหน
+      ตอนนี้มี 3 ชั้น: ตาขาว → ลูกตา (สีตัว) → ประกายตา 2 จุด
+      และ "ลูกตาเท่านั้นที่เลื่อน" ตอนมองข้าง/มองขึ้น ตาขาวอยู่นิ่ง ⇒ อ่านทิศทางสายตาออก */
+function mEyes(kind,c,bodyC,uid){
+  var L=M.cx-M.eyeDX, R=M.cx+M.eyeDX, Y=M.eyeY;
+  if(kind==='happy'||kind==='shut'){
+    var d=kind==='happy'?'q16 -19 32 0':'q16 17 32 0';
+    return [L,R].map(function(x){
+      return '<path d="M'+(x-16)+' '+Y+d+'" fill="none" stroke="'+c+'" stroke-width="7" stroke-linecap="round"/>';
+    }).join('');
+  }
+  var sad=kind==='sad';
+  var dx=kind==='look'?5:0, dy=kind==='think'?-5:0;
+  var rx=sad?13:M.eyeRx, ry=sad?16:M.eyeRy, pr=sad?7:9, py=sad?9:12;
+  return [L,R].map(function(x,i){
+    var brow=sad?'<path d="M'+(x-15)+' '+(Y-25)+'q15 '+(i?-9:9)+' 30 '+(i?9:-9)+'"'
+      +' fill="none" stroke="'+c+'" stroke-width="6" stroke-linecap="round"/>':'';
+    return brow+'<g class="'+uid+'-blink" style="transform-origin:'+x+'px '+Y+'px">'
+      +'<ellipse cx="'+x+'" cy="'+Y+'" rx="'+rx+'" ry="'+ry+'" fill="'+c+'"/>'
+      +'<ellipse cx="'+(x+dx)+'" cy="'+(Y+dy+3)+'" rx="'+pr+'" ry="'+py+'" fill="'+bodyC+'"/>'
+      +'<circle cx="'+(x+dx+4)+'" cy="'+(Y+dy-3)+'" r="4" fill="'+c+'"/>'
+      +'<circle cx="'+(x+dx-3)+'" cy="'+(Y+dy+8)+'" r="2" fill="'+c+'" opacity=".75"/>'
+      +'</g>';
+  }).join('');
+}
+function mMouth(kind,c,a){
+  var Y=M.mouthY, L=M.cx-24;
+  /* ลิ้น — ปากที่อ้าแล้วเป็นช่องเปล่าดูแข็ง ใส่ลิ้นสีเน้นให้ดูมีชีวิต */
+  function tongue(cy,rx,ry){return '<ellipse cx="'+M.cx+'" cy="'+cy+'" rx="'+rx+'" ry="'+ry+'" fill="'+a+'"/>';}
+  if(kind==='grin') return '<path d="M'+L+' '+(Y-6)+'q24 30 48 0z" fill="'+c+'"/>'+tongue(Y+5,10,6);
+  if(kind==='smile')return '<path d="M'+L+' '+Y+'q24 21 48 0" fill="none" stroke="'+c+'" stroke-width="7" stroke-linecap="round"/>';
+  if(kind==='talk') return '<ellipse cx="'+M.cx+'" cy="'+(Y+4)+'" rx="14" ry="12" fill="'+c+'"/>'+tongue(Y+10,8,5);
+  if(kind==='sad')  return '<path d="M'+L+' '+(Y+9)+'q24 -21 48 0" fill="none" stroke="'+c+'" stroke-width="7" stroke-linecap="round"/>';
+  if(kind==='small')return '<circle cx="'+M.cx+'" cy="'+(Y+2)+'" r="8" fill="'+c+'"/>';
+  if(kind==='zz')   return '<ellipse cx="'+M.cx+'" cy="'+(Y+2)+'" rx="11" ry="13" fill="'+c+'"/>'+tongue(Y+7,7,5);
+  return '<rect x="'+L+'" y="'+(Y-4)+'" width="48" height="8" rx="4" fill="'+c+'"/>';
+}
+/* ตัวอักษร Z ของท่านอน — วาดด้วย path ไม่ใช้ฟอนต์ */
+function mZ(x,y,s,c,uid,i){
+  return '<path class="'+uid+'-z'+i+'" style="transform-origin:'+(x+s/2)+'px '+(y+s/2)+'px"'
+    +' d="M'+x+' '+y+'h'+s+'l-'+s+' '+s+'h'+s+'" fill="none" stroke="'+c+'"'
+    +' stroke-width="'+(s*0.22)+'" stroke-linecap="round" stroke-linejoin="round"/>';
+}
+
+/* คีย์เฟรมของแต่ละท่า — ต้องเติมคำนำหน้าเฉพาะตัว (uid) ทุกชื่อ
+   🔴 <style> ใน inline SVG รั่วออกไปทั้งหน้า HTML ⇒ ถ้าไม่เติม uid มาสคอตหลายตัวบนหน้าเดียวจะกวนกันเอง
+      และต้องฝัง <style> ไว้ในไฟล์ .svg ด้วย ไม่งั้นดาวน์โหลดไปแล้วไม่ขยับ
+   ชิ้นส่วนที่ลอยแยก (หมวก · แขน) มีจังหวะของตัวเองซ้อนบนจังหวะของทั้งตัว
+   ⇒ ขยับไม่พร้อมกันเป๊ะ ดูมีชีวิตกว่าขยับเป็นก้อนเดียว */
+function mascotCSS(uid,pose,on){
+  if(!on) return '';
+  var u='.'+uid, k='@keyframes '+uid, css='';
+  css+=u+'-body{animation:'+uid+'-'+pose.anim+' var(--d,3s) ease-in-out infinite;transform-origin:'+M.cx+'px 300px}';
+  css+=k+'-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}';
+  css+=k+'-bounce{0%,100%{transform:translateY(0) scaleY(1)}30%{transform:translateY(-16px) scaleY(1.03)}55%{transform:translateY(0) scaleY(.97)}75%{transform:translateY(-5px) scaleY(1)}}';
+  css+=k+'-nod{0%,100%{transform:rotate(0)}30%{transform:rotate(-3.5deg)}65%{transform:rotate(2.5deg)}}';
+  css+=k+'-think{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-4px) rotate(3deg)}}';
+  css+=k+'-sorry{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(4px) rotate(-2deg)}}';
+  css+=k+'-cheer{0%,100%{transform:translateY(0)}40%{transform:translateY(-24px)}70%{transform:translateY(-4px)}}';
+  css+=k+'-sleep{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(3px) scale(.985)}}';
+  /* หมวกลอย — ขยับของตัวเองเสมอ (ยกเว้นท่าโยนหมวก) */
+  if(pose.tossCap){
+    css+=u+'-cap{animation:'+uid+'-toss 3s ease-in-out infinite;transform-origin:'+M.cx+'px 90px}';
+    css+=k+'-toss{0%,100%{transform:translateY(0) rotate(0)}40%{transform:translateY(-26px) rotate(-13deg)}70%{transform:translateY(-6px) rotate(5deg)}}';
+  }else{
+    css+=u+'-cap{animation:'+uid+'-capbob 2.9s ease-in-out infinite}';
+    css+=k+'-capbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}';
+  }
+  /* แขนลอย — โบกมือ หรือลอยเบา ๆ คนละจังหวะกับตัว */
+  if(pose.wave){
+    css+=u+'-wave{animation:'+uid+'-wave 1.7s ease-in-out infinite}';
+    css+=k+'-wave{0%,100%{transform:rotate(0)}25%{transform:rotate(-19deg)}60%{transform:rotate(13deg)}}';
+  }
+  css+=u+'-armb{animation:'+uid+'-armb 2.6s ease-in-out infinite}';
+  css+=u+'-armb2{animation:'+uid+'-armb 2.6s ease-in-out infinite;animation-delay:.5s}';
+  css+=k+'-armb{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}';
+  /* กะพริบตา */
+  css+=u+'-blink{animation:'+uid+'-blink 5.2s infinite}';
+  css+=k+'-blink{0%,92%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}';
+  if(pose.zzz){
+    [1,2,3].forEach(function(i){
+      css+=u+'-z'+i+'{animation:'+uid+'-zf 3.2s ease-in-out infinite;animation-delay:'+((i-1)*0.5)+'s;opacity:0}';
+    });
+    css+=k+'-zf{0%{opacity:0;transform:translateY(6px) scale(.8)}35%{opacity:1}100%{opacity:0;transform:translateY(-16px) scale(1.1)}}';
+  }
+  return '<style>'+css+'</style>';
+}
+
+/* กล่องมาสคอต 1 ตัว — คืนรูปเดียวกับ symBox/layout อื่น ⇒ ใช้ svgTag/exportSVG/exportPNG เดิมได้เลย */
+function mascotBox(poseKey,opt){
+  opt=opt||{};
+  var p=poseOf(poseKey), pk=pal(), c=pk.open, on=opt.anim!==false&&state.manim!==false;
+  var uid='ms'+(++UID), mono=pk.k==='white';
+  var body=mono?'#ffffff':c.main, acc=accOf(c), ink=mono?'#3a4a77':'#ffffff';
+  var line=mono?'#1f2433':'#ffffff';   /* สีเส้นขอบ — ต้องตรงข้ามกับตัวเสมอ */
+
+  /* โครงร่างทั้งตัว (ทุกชิ้นที่เป็นเงาภายนอก) — เรียกซ้ำด้วยสีอื่นได้เพื่อทำเส้นขอบ
+     หน้า (ตา/แก้ม/ปาก) ไม่อยู่ในนี้ เพราะอยู่ข้างในตัว ไม่ต้องมีขอบ */
+  function shell(cb,ca){
+    var cap=fitW(symBox('cap',cb,ca),M.capW);
+    return '<rect x="'+M.bx+'" y="'+M.by+'" width="'+M.bw+'" height="'+M.bh+'" rx="'+M.br+'" fill="'+cb+'"/>'
+      +'<g class="'+uid+'-cap">'+mCrown(cb,ca)+place(cap,M.cx-cap.w/2,M.capY)+'</g>'
+      +(opt.noFeet?'':mFeet(ca))
+      +mArm(-1,p.armL,cb,uid,'armb')
+      +mArm(1,p.armR,cb,uid,p.wave?'wave':'armb2');
+  }
+
+  var g='';
+  /* เส้นขอบตามรูปร่าง — โครงร่างทั้งชุดวาดหนาไว้ข้างหลัง แล้วของจริงทับทั้งชุด
+     ชิ้นในโครงร่างใช้ class เดียวกับของจริง ⇒ ขอบขยับตามทุกจังหวะโดยไม่ต้องทำอะไรเพิ่ม */
+  if(opt.outline){
+    g+='<g stroke="'+line+'" stroke-width="'+(opt.outlineW||18)+'" stroke-linejoin="round" stroke-linecap="round">'
+      +shell(line,line)+'</g>';
+  }
+  g+=shell(body,acc);
+  /* หน้าวาดท้ายสุด — ไม่มีอะไรทับได้ */
+  g+=mEyes(p.eyes,ink,body,uid)+mCheeks(acc)+mMouth(p.mouth,ink,acc);
+
+  if(p.zzz){ g+=mZ(214,88,13,acc,uid,1)+mZ(232,62,17,acc,uid,2)+mZ(252,32,21,acc,uid,3); }
+
+  var inner=mascotCSS(uid,p,on)+'<g id="'+uid+'-root"><g class="'+uid+'-body">'+g+'</g></g>';
+  return {w:M.W,h:M.H,inner:inner,pose:p,dark:!!opt.outline||mono};
+}
+
+/* ══════════ 4 · ชุดสี (จาก Prototype_TIMS.html) ══════════
+   open  = ใช้บนพื้นสว่าง/พื้นโปร่ง   badge = ใช้ในกรอบตรา (จัตุรัส/วงกลม/โล่) */
+var PALS=[
+  {k:'pine',name:'Pine · น้ำเงินหลัก',sw:'#3a4a77',
+   open:{main:'#3a4a77',accent:'#eb5a26',letter:'#3a4a77',sub:'#454d66',sub2:'#7e869f'},
+   badge:{bg:'#3a4a77',main:'#ffffff',accent:'#eb5a26',letter:'#ffffff',sub:'#ccd3e5',sub2:'#a8b2cd'}},
+  {k:'plum',name:'Plum · น้ำเงินเข้ม',sw:'#2b3759',
+   open:{main:'#2b3759',accent:'#eb5a26',letter:'#2b3759',sub:'#454d66',sub2:'#7e869f'},
+   badge:{bg:'#2b3759',main:'#ffffff',accent:'#eb5a26',letter:'#ffffff',sub:'#c8cfe2',sub2:'#a2accb'}},
+  {k:'terra',name:'Terra · ส้ม',sw:'#eb5a26',
+   open:{main:'#eb5a26',accent:'#3a4a77',letter:'#3a4a77',sub:'#454d66',sub2:'#7e869f'},
+   badge:{bg:'#eb5a26',main:'#ffffff',accent:'#2b3759',letter:'#ffffff',sub:'#ffe1d5',sub2:'#ffcdb9'}},
+  {k:'ink',name:'Ink · เกือบดำ',sw:'#1f2433',
+   open:{main:'#1f2433',accent:'#eb5a26',letter:'#1f2433',sub:'#454d66',sub2:'#7e869f'},
+   badge:{bg:'#1f2433',main:'#ffffff',accent:'#eb5a26',letter:'#ffffff',sub:'#c4c9d8',sub2:'#9aa1b6'}},
+  {k:'amber',name:'Amber · น้ำเงินรอง',sw:'#5b6aa0',
+   open:{main:'#5b6aa0',accent:'#eb5a26',letter:'#3a4a77',sub:'#454d66',sub2:'#7e869f'},
+   badge:{bg:'#5b6aa0',main:'#ffffff',accent:'#ffd9c9',letter:'#ffffff',sub:'#e0e5f2',sub2:'#c9d1e6'}},
+  {k:'grad',name:'ไล่เฉด น้ำเงิน→ส้ม',sw:'linear-gradient(135deg,#3a4a77,#eb5a26)',grad:true,
+   open:{main:'#3a4a77',accent:'#eb5a26',letter:'#3a4a77',sub:'#454d66',sub2:'#7e869f'},
+   badge:{bg:'GRAD',main:'#ffffff',accent:'#ffe0d3',letter:'#ffffff',sub:'#eef1f8',sub2:'#dbe1ef'}},
+  {k:'mono',name:'โมโนโครม น้ำเงิน',sw:'#3a4a77',
+   open:{main:'#3a4a77',accent:'#3a4a77',letter:'#3a4a77',sub:'#3a4a77',sub2:'#5b6aa0'},
+   badge:{bg:'#3a4a77',main:'#ffffff',accent:'#ffffff',letter:'#ffffff',sub:'#ffffff',sub2:'#ccd3e5'}},
+  {k:'light',name:'พื้นสว่าง',sw:'#eef1f8',
+   open:{main:'#3a4a77',accent:'#eb5a26',letter:'#3a4a77',sub:'#454d66',sub2:'#7e869f'},
+   badge:{bg:'#eef1f8',main:'#eb5a26',accent:'#3a4a77',letter:'#3a4a77',sub:'#454d66',sub2:'#7e869f'}},
+  {k:'outline',name:'เส้นขอบ',sw:'#fbfcff',stroke:'#3a4a77',
+   open:{main:'#3a4a77',accent:'#eb5a26',letter:'#3a4a77',sub:'#454d66',sub2:'#7e869f'},
+   badge:{bg:'#fbfcff',main:'#3a4a77',accent:'#eb5a26',letter:'#3a4a77',sub:'#454d66',sub2:'#7e869f'}},
+  {k:'white',name:'ขาวล้วน · พื้นเข้ม',sw:'#ffffff',darkStage:true,
+   open:{main:'#ffffff',accent:'#ffffff',letter:'#ffffff',sub:'#dfe4f0',sub2:'#b9c1d6'},
+   badge:{bg:'#ffffff',main:'#3a4a77',accent:'#eb5a26',letter:'#3a4a77',sub:'#454d66',sub2:'#7e869f'}}
+];
+function pal(){return PALS.filter(function(p){return p.k===state.pal;})[0]||PALS[0];}
+
+/* ══════════ 5 · สถานะ + ข้อความ ══════════ */
+var TXT={
+  th:'ระบบบริหารจัดการการฝึกประสบการณ์วิชาชีพครู',
+  en:'Teacher Internship Management System',
+  org1:'คณะครุศาสตร์และการพัฒนามนุษย์',
+  org2:'มหาวิทยาลัยราชภัฏศรีสะเกษ'
+};
+var state={face:'geo',sym:'steps',pal:'pine',accentI:true,rule:true,en:true,
+           mpose:'hello',manim:true};
+var UID=0;
+function accOf(c){return state.accentI?c.accent:c.letter;}
+function scaleTo(b,h){var k=h/b.h;return {w:b.w*k,h:h,inner:'<g transform="scale('+r2(k)+')">'+b.inner+'</g>'};}
+function fitW(b,w){var k=w/b.w;return {w:w,h:b.h*k,inner:'<g transform="scale('+r2(k)+')">'+b.inner+'</g>'};}
+function fitIn(b,mw,mh){var k=Math.min(mw/b.w,mh/b.h);return {w:b.w*k,h:b.h*k,inner:'<g transform="scale('+r2(k)+')">'+b.inner+'</g>'};}
+function place(b,x,y){return '<g transform="translate('+r2(x)+','+r2(y)+')">'+b.inner+'</g>';}
+
+/* ══════════ 6 · รูปแบบโลโก้ ══════════ */
+/* 6.1 แนวตั้ง — สัญลักษณ์ / TIMS / เส้นคั่น / ชื่อไทย / ชื่ออังกฤษ */
+function layVert(o){
+  o=o||{};var c=pal().open, noSym=o.noSym||state.sym==='none';
+  var thS=o.thS||36, enS=o.enS||23;
+  var th=T(TXT.th,{fam:SANS,size:thS,weight:600,fill:c.sub});
+  var en=state.en?T(TXT.en,{fam:SANS,size:enS,weight:500,fill:c.sub2}):null;
+  /* ขนาดตัว TIMS อิงความกว้างของชื่อเต็ม ไม่ใช่ค่าตายตัว — ชื่อเต็มไทยยาว 40 ตัวอักษร
+     ถ้าฟิกความสูงไว้ ตัวอักษรจะดูเล็กลอยอยู่กลางบรรทัดยาว ๆ */
+  var wm=fitW(wordmark(c.letter,accOf(c)),th.w*(noSym?0.74:0.62));
+  var sym=noSym?null:scaleTo(symBox(state.sym,c.main,c.accent),wm.h*1.42);
+  var W=Math.max(sym?sym.w:0,wm.w,th.w,en?en.w:0),y=0,s='';
+  if(sym){s+=place(sym,(W-sym.w)/2,0);y+=sym.h+wm.h*0.30;}
+  s+=place(wm,(W-wm.w)/2,y);y+=wm.h;
+  if(state.rule){var rh=Math.max(5,wm.h*0.055),rw=wm.w*0.34;y+=wm.h*0.17;
+    s+='<rect x="'+r2((W-rw)/2)+'" y="'+r2(y)+'" width="'+r2(rw)+'" height="'+r2(rh)+'" rx="'+r2(rh/2)+'" fill="'+c.accent+'"/>';y+=rh;}
+  y+=wm.h*0.19;s+=th.at((W-th.w)/2,y);y+=th.h;
+  if(en){y+=10;s+=en.at((W-en.w)/2,y);y+=en.h;}
+  return {w:W,h:y,inner:s,dark:!!pal().darkStage};
+}
+/* 6.2 แนวนอน — สัญลักษณ์ซ้าย · TIMS + ชื่อไทย ขวา */
+function layHorz(){
+  var c=pal().open,noSym=state.sym==='none';
+  var th=T(TXT.th,{fam:SANS,size:25,weight:600,fill:c.sub});
+  var wm=fitW(wordmark(c.letter,accOf(c)),th.w*0.47);
+  var gap=wm.h*0.16,colW=Math.max(wm.w,th.w),colH=wm.h+gap+th.h;
+  var sym=noSym?null:scaleTo(symBox(state.sym,c.main,c.accent),colH*0.92);
+  var H=Math.max(sym?sym.h:0,colH),x=0,s='';
+  if(sym){s+=place(sym,0,(H-sym.h)/2);x=sym.w+colH*0.26;}
+  var cy=(H-colH)/2;
+  s+=place(wm,x,cy)+th.at(x,cy+wm.h+gap);
+  return {w:x+colW,h:H,inner:s,dark:!!pal().darkStage};
+}
+/* 6.3 ตราในกรอบ — จัตุรัส / วงกลม / ไอคอนเดี่ยว */
+function layBadge(shape,iconOnly){
+  var p=pal(),c=p.badge,S=460,defs='',fill=c.bg,s='';
+  if(fill==='GRAD'){var id='tg'+(UID++);
+    defs='<defs><linearGradient id="'+id+'" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a4a77"/><stop offset="1" stop-color="#eb5a26"/></linearGradient></defs>';
+    fill='url(#'+id+')';}
+  if(shape==='circle') s+=p.stroke?'<circle cx="230" cy="230" r="223" fill="'+fill+'" stroke="'+p.stroke+'" stroke-width="14"/>'
+                                  :'<circle cx="230" cy="230" r="230" fill="'+fill+'"/>';
+  else s+=p.stroke?'<rect x="7" y="7" width="446" height="446" rx="106" fill="'+fill+'" stroke="'+p.stroke+'" stroke-width="14"/>'
+                  :'<rect x="0" y="0" width="460" height="460" rx="112" fill="'+fill+'"/>';
+  var noSym=state.sym==='none',g;
+  if(iconOnly){
+    g=noSym?scaleTo(wordGeo(c.letter,accOf(c)),160):scaleTo(symBox(state.sym,c.main,c.accent),260);
+  }else if(noSym){
+    g=scaleTo(wordmark(c.letter,accOf(c)),150);
+  }else{
+    var sym=scaleTo(symBox(state.sym,c.main,c.accent),168),wm=scaleTo(wordmark(c.letter,accOf(c)),62);
+    var W=Math.max(sym.w,wm.w);
+    g={w:W,h:sym.h+26+wm.h,inner:place(sym,(W-sym.w)/2,0)+place(wm,(W-wm.w)/2,sym.h+26)};
+  }
+  var lim=shape==='circle'?300:330;
+  g=fitIn(g,lim,lim);
+  return {w:S,h:S,inner:defs+s+place(g,(S-g.w)/2,(S-g.h)/2)};
+}
+/* 6.4 หัวกระดาษเอกสาร — โลโก้ | เส้นแบ่ง | ชื่อหน่วยงาน */
+function layHead(){
+  var c=pal().open,noSym=state.sym==='none';
+  var th=T(TXT.th,{fam:SANS,size:20,weight:600,fill:c.sub});
+  var wm=fitW(wordmark(c.letter,accOf(c)),th.w*0.44);
+  var o1=T(TXT.org1,{fam:SERIF,size:21,weight:700,fill:c.sub});
+  var o2=T(TXT.org2,{fam:SERIF,size:25,weight:700,fill:c.main});
+  var colH=wm.h+11+th.h,orgH=o1.h+8+o2.h,H=Math.max(colH,orgH),x=0,s='';
+  var sym=noSym?null:scaleTo(symBox(state.sym,c.main,c.accent),H*0.88);
+  if(sym){s+=place(sym,0,(H-sym.h)/2);x=sym.w+26;}
+  var cy=(H-colH)/2;
+  s+=place(wm,x,cy)+th.at(x,cy+wm.h+11);
+  x+=Math.max(wm.w,th.w)+34;
+  s+='<rect x="'+r2(x)+'" y="'+r2(H*0.04)+'" width="2" height="'+r2(H*0.92)+'" rx="1" fill="'+c.sub2+'"/>';
+  x+=36;
+  var oy=(H-orgH)/2;
+  s+=o1.at(x,oy)+o2.at(x,oy+o1.h+8);
+  return {w:x+Math.max(o1.w,o2.w),h:H,inner:s,dark:!!pal().darkStage};
+}
+/* 6.5 ระยะปลอดภัย */
+function layClear(){
+  var b=layHorz(),u=b.h*0.45,W=b.w+u*2,H=b.h+u*2;
+  var c=pal().open;
+  return {w:W,h:H,dark:b.dark,
+    inner:'<rect x="1" y="1" width="'+r2(W-2)+'" height="'+r2(H-2)+'" rx="10" fill="none" stroke="'+c.sub2+
+      '" stroke-width="2" stroke-dasharray="10 8" opacity=".7"/>'+place(b,u,u)};
+}
+
+var FORMATS=[
+  ['vert','ตราหลัก · แนวตั้ง','หน้าล็อกอิน · ปกเอกสาร · ป้ายใหญ่',function(){return layVert();},300],
+  ['horz','แนวนอน','แถบหัวเว็บของระบบ · ลายเซ็นอีเมล',function(){return layHorz();},420],
+  ['square','ตราจัตุรัส','ไอคอนแอป · รูปโปรไฟล์เพจ',function(){return layBadge('square',false);},190],
+  ['circle','ตราวงกลม','อวาตาร์ · สติกเกอร์ · ตราประทับ',function(){return layBadge('circle',false);},190],
+  ['icon','ไอคอนเดี่ยว','favicon · ไอคอนขนาดเล็กมาก',function(){return layBadge('square',true);},190],
+  ['word','ตัวอักษรล้วน','ที่ที่มีตราหน่วยงานอยู่แล้ว',function(){return layVert({noSym:true});},330],
+  ['head','หัวกระดาษเอกสาร','เอกสารราชการ · ใบประกาศ · ใบแจ้งรหัส',function(){return layHead();},520]
+];
+
+/* ══════════ 6ข · รูปแบบการใช้งานของน้อง TIMS ══════════
+   มาสคอตต้องมีชุดรูปแบบเท่ากับโลโก้ ไม่ใช่มีแต่ "ตัวเปล่า" — แต่ละที่ในระบบต้องการคนละทรง
+   (สถานะว่างใช้เต็มตัว · ไอคอนแจ้งเตือนใช้ครึ่งตัว · โปรไฟล์ใช้วงกลม · ทิปบนจอใช้กล่องคำพูด) */
+var MNAME='น้อง TIMS';
+var MSAY={hello:'สวัสดีครับ',pass:'เรียบร้อยแล้วครับ',guide:'ตรงนี้ทำแบบนี้นะครับ',work:'มีงานรอตรวจอยู่ครับ',
+  think:'ยังไม่มีข้อมูลเลยครับ',sorry:'ขออภัยครับ',cheer:'ยินดีด้วยครับ',sleep:'ปิดปรับปรุงอยู่ครับ'};
+
+/* ครอบเฉพาะบางส่วนของภาพ
+   🔴 ห้ามครอบด้วยการขยับ viewBox — `transform-origin` ของคีย์เฟรมวัดจาก**มุมของ viewBox**
+      ⇒ ขยับ viewBox แล้วจุดหมุนทุกจุดเลื่อนตาม ภาพนิ่งยังดูปกติแต่พอขยับจะเพี้ยนทั้งตัว
+      ใช้ clipPath + translate แทน (translate ไม่กระทบ เพราะ transform-origin
+      วัดในระบบพิกัดของ element เองซึ่งเลื่อนตามไปด้วย)
+   ⚠️ การ "ตัดล่าง/ตัดขวา" เฉย ๆ ไม่ต้องใช้ตัวนี้ — ลด w/h ตรง ๆ ได้ เพราะ viewBox ยังเริ่มที่ 0 0 */
+function mClip(b,x,y,w,h){
+  var id='mc'+(++UID);
+  return {w:w,h:h,dark:b.dark,pose:b.pose,
+    inner:'<defs><clipPath id="'+id+'"><rect x="0" y="0" width="'+r2(w)+'" height="'+r2(h)+'"/></clipPath></defs>'
+      +'<g clip-path="url(#'+id+')"><g transform="translate('+r2(-x)+','+r2(-y)+')">'+b.inner+'</g></g>'};
+}
+function mBust(a,outline){
+  return mClip(mascotBox(state.mpose,{anim:a,outline:outline,noFeet:true}),16,34,248,224);
+}
+
+/* 1 · เต็มตัว */
+function mfFull(a){return mascotBox(state.mpose,{anim:a});}
+/* 2 · ครึ่งตัว — ตัดเท้าและช่องว่างรอบออก ใช้ในที่ที่พื้นที่แนวตั้งจำกัด */
+function mfBust(a){return mBust(a);}
+/* 3 · อวาตาร์วงกลม — พื้นสีตัว ตัวมาสคอตสลับเป็นชุดสีขาวล้วนให้ตัดกับพื้น */
+function mfAvatar(a){
+  var S=460, p=pal(), c=p.open, ring=accOf(c), bg=p.k==='white'?'#1f2433':'#ffffff';
+  var g=fitIn(mBust(a,p.k==='white'),344,330);
+  return {w:S,h:S,dark:false,
+    inner:'<circle cx="230" cy="230" r="230" fill="'+bg+'"/>'
+      +'<circle cx="230" cy="230" r="220" fill="none" stroke="'+ring+'" stroke-width="18"/>'
+      +place(g,(S-g.w)/2,(S-g.h)/2+6)};
+}
+/* 4 · พร้อมชื่อ */
+function mfNamed(a){
+  var m=mascotBox(state.mpose,{anim:a}), c=pal().open, H=286;
+  var nm=T(MNAME,{fam:SERIF,size:42,weight:700,fill:c.main});
+  var W=Math.max(m.w,nm.w);
+  return {w:W,h:H+10+nm.h,dark:!!pal().darkStage,
+    inner:place({inner:m.inner},(W-m.w)/2,0)+nm.at((W-nm.w)/2,H+10)};
+}
+/* 5 · กล่องคำพูด — ข้อความเปลี่ยนตามท่าที่เลือก */
+function mfSpeech(a){
+  var p=pal(), c=p.open;
+  var m=fitIn(mascotBox(state.mpose,{anim:a}),214,246);
+  var t=T(MSAY[state.mpose]||MNAME,{fam:SANS,size:30,weight:600,fill:p.k==='white'?'#1f2433':c.sub});
+  var bw=t.w+54, bh=t.h+42, gap=20, bx=m.w+gap, by=16;
+  var sw=3, H=Math.max(m.h,by+bh+sw), W=bx+bw+sw, fill='#ffffff', line=c.main;
+  var ty=by+bh*0.44;
+  return {w:W,h:H,dark:!!p.darkStage,
+    inner:place(m,0,H-m.h)
+      +'<path d="M'+r2(bx+4)+' '+r2(ty)+'l-19 15l19 13z" fill="'+fill+'" stroke="'+line+'" stroke-width="'+sw+'" stroke-linejoin="round"/>'
+      +'<rect x="'+r2(bx)+'" y="'+by+'" width="'+r2(bw)+'" height="'+r2(bh)+'" rx="20" fill="'+fill+'" stroke="'+line+'" stroke-width="'+sw+'"/>'
+      +t.at(bx+27,by+21)};
+}
+/* 6 · คู่กับโลโก้ — ใช้เวลาต้องมีทั้งตัวระบบและตัวละครในภาพเดียว */
+function mfWithLogo(a){
+  var m=fitIn(mascotBox(state.mpose,{anim:a}),224,258), lg=layHorz(), gap=36;
+  var H=Math.max(m.h,lg.h);
+  return {w:m.w+gap+lg.w,h:H,dark:!!pal().darkStage,
+    inner:place(m,0,H-m.h)+place(lg,m.w+gap,(H-lg.h)/2)};
+}
+
+var MFORMATS=[
+  ['full','เต็มตัว','สถานะว่าง · หน้า 403 · โหมดปิดปรับปรุง',mfFull,210],
+  ['bust','ครึ่งตัว','ไอคอนแจ้งเตือน · การ์ดตัวช่วย · ที่แคบแนวตั้ง',mfBust,210],
+  ['avatar','อวาตาร์วงกลม','รูปโปรไฟล์ของระบบ · ไอคอนตัวช่วย · สติกเกอร์',mfAvatar,180],
+  ['named','พร้อมชื่อ','สไลด์แนะนำระบบ · ป้ายประชาสัมพันธ์',mfNamed,210],
+  ['speech','กล่องคำพูด','ทิปบนหน้าจอ · แบนเนอร์ · อินโฟกราฟิก',mfSpeech,440],
+  ['logo','คู่กับโลโก้','หัวเอกสาร · สไลด์ · สื่อประชาสัมพันธ์',mfWithLogo,470],
+  ['ondark','มีเส้นขอบ · สำหรับพื้นเข้ม','วางบนพื้นสีเข้ม · ภาพถ่าย · แบนเนอร์ (สีตัวเหมือนเดิม เพิ่มเส้นขอบตามรูปร่าง)',
+    function(a){return mascotBox(state.mpose,{anim:a,outline:true});},210]
+];
+
+/* ══════════ 7 · เขียนออกเป็นไฟล์ ══════════ */
+function svgTag(b,maxw){
+  var st=fontDefs(b.inner);
+  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+r2(b.w)+' '+r2(b.h)+
+    '" style="max-width:'+maxw+'px;width:100%;height:auto;display:block;margin:0 auto">'+st+b.inner+'</svg>';
+}
+function svgFile(b){
+  var st=fontDefs(b.inner);
+  return '<svg xmlns="http://www.w3.org/2000/svg" width="'+Math.round(b.w)+'" height="'+Math.round(b.h)+
+    '" viewBox="0 0 '+r2(b.w)+' '+r2(b.h)+'">'+st+b.inner+'</svg>';
+}
+function dlBlob(blob,name){
+  var u=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(function(){URL.revokeObjectURL(u);},1500);
+}
+function fname(kind,ext){
+  if(String(kind).indexOf('mascot')===0) return 'nong-tims_'+kind.slice(7)+'_'+state.pal+'.'+ext;
+  return 'tims-logo_'+kind+'_'+state.face+'_'+state.sym+'_'+state.pal+'.'+ext;
+}
+function exportSVG(b,kind){dlBlob(new Blob([svgFile(b)],{type:'image/svg+xml;charset=utf-8'}),fname(kind,'svg'));}
+function exportPNG(b,kind){
+  var px=+document.getElementById('psize').value;
+  var src='data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(svgFile(b))));
+  var img=new Image();
+  img.onload=function(){
+    var k=px/Math.max(b.w,b.h),cv=document.createElement('canvas');
+    cv.width=Math.round(b.w*k);cv.height=Math.round(b.h*k);
+    var cx=cv.getContext('2d');cx.drawImage(img,0,0,cv.width,cv.height);
+    cv.toBlob(function(bl){dlBlob(bl,fname(kind,'png'));},'image/png');
+  };
+  img.onerror=function(){alert('เอ็กซ์พอร์ต PNG ไม่สำเร็จ — ใช้ไฟล์ SVG แทนได้ครับ (คุณภาพดีกว่าด้วย)');};
+  img.src=src;
+}
+function dlButtons(b,kind){
+  var row=document.createElement('div');row.className='dlrow';
+  [['⬇ SVG','primary',function(){exportSVG(b,kind);}],['⬇ PNG','',function(){exportPNG(b,kind);}]]
+    .forEach(function(x){var bt=document.createElement('button');bt.className='dl'+(x[1]?' '+x[1]:'');
+      bt.textContent=x[0];bt.addEventListener('click',x[2]);row.appendChild(bt);});
+  return row;
+}
+
+/* ปุ่มดาวน์โหลดของน้อง TIMS — รับ "ตัวสร้าง" ไม่ใช่กล่องสำเร็จ
+   เพราะต้องสร้างใหม่ทุกครั้งตามว่าจะเอาแบบขยับหรือแบบนิ่ง */
+function dlButtonsM(make,kind){
+  var row=document.createElement('div');row.className='dlrow';
+  /* การ์ดท่าทางกดเพื่อเลือกท่าได้ ⇒ กันไม่ให้การกดปุ่มดาวน์โหลดไปสั่งเลือกท่าแล้ววาดหน้าใหม่ */
+  row.addEventListener('click',function(e){e.stopPropagation();});
+  [['⬇ SVG ขยับ','primary',function(){exportSVG(make(true),kind);}],
+   ['⬇ SVG นิ่ง','',function(){exportSVG(make(false),kind+'-still');}],
+   ['⬇ PNG','',function(){exportPNG(make(false),kind);}]]
+    .forEach(function(x){var bt=document.createElement('button');bt.className='dl'+(x[1]?' '+x[1]:'');
+      bt.textContent=x[0];bt.addEventListener('click',x[2]);row.appendChild(bt);});
+  return row;
+}
+
+/* ══════════ 8 · วาดหน้าจอ ══════════ */
+var elStage=document.getElementById('stageMain'),elFmt=document.getElementById('formatGal'),
+    elSizes=document.getElementById('sizeRow'),elSym=document.getElementById('symGal'),elPal=document.getElementById('palGal'),
+    elPose=document.getElementById('poseGal'),elMFmt=document.getElementById('mfmtGal');
+var mainBox=null;
+
+function render(){
+  var p=pal();
+  /* ตัวอย่างใหญ่ */
+  mainBox=layVert();
+  elStage.className='stage'+(mainBox.dark?' dark':'');
+  elStage.innerHTML=svgTag(mainBox,420);
+  /* ทดสอบขนาดเล็ก */
+  elSizes.innerHTML='';
+  [128,64,48,32,16].forEach(function(px){
+    var it=document.createElement('div');it.className='item';
+    var box=document.createElement('div');box.style.width=px+'px';
+    box.innerHTML=svgTag(layBadge('square',px<=32),px);
+    var lb=document.createElement('div');lb.className='px';lb.textContent=px+'px';
+    it.appendChild(box);it.appendChild(lb);elSizes.appendChild(it);
+  });
+  /* รูปแบบการใช้งาน */
+  elFmt.innerHTML='';
+  FORMATS.forEach(function(f){
+    var b=f[3](),t=document.createElement('div');t.className='tile';
+    var fb=document.createElement('div');fb.className='fbox'+(b.dark?' dark':'');
+    fb.innerHTML=svgTag(b,f[4]);
+    var nm=document.createElement('div');nm.className='nm';nm.textContent=f[1];
+    var ds=document.createElement('div');ds.className='ds';ds.textContent=f[2];
+    t.appendChild(fb);t.appendChild(nm);t.appendChild(ds);t.appendChild(dlButtons(b,f[0]));
+    elFmt.appendChild(t);
+  });
+  /* มาสคอต — ตัวใหญ่ + แกลเลอรีท่าทาง */
+  var mb=mascotBox(state.mpose);
+  var mStage=document.getElementById('stageMascot');
+  mStage.className='stage'+(mb.dark?' dark':'');
+  mStage.innerHTML=svgTag(mb,300)+
+    '<div class="mascot-cap">'+esc(mb.pose.label)+' — '+esc(mb.pose.where)+'</div>';
+  mStage.appendChild(dlButtonsM(function(a){return mascotBox(state.mpose,{anim:a});},'mascot_'+state.mpose));
+  /* รูปแบบการใช้งาน — ชุดเดียวกับที่โลโก้มี */
+  elMFmt.innerHTML='';
+  MFORMATS.forEach(function(f){
+    var b=f[3](true), t=document.createElement('div');t.className='tile';
+    var fb=document.createElement('div');fb.className='fbox'+(b.dark?' dark':'');
+    fb.innerHTML=svgTag(b,f[4]);
+    var nm=document.createElement('div');nm.className='nm';nm.textContent=f[1];
+    var ds=document.createElement('div');ds.className='ds';ds.textContent=f[2];
+    t.appendChild(fb);t.appendChild(nm);t.appendChild(ds);t.appendChild(dlButtonsM(f[3],'mascot_'+f[0]));
+    elMFmt.appendChild(t);
+  });
+  elPose.innerHTML='';
+  POSES.forEach(function(p){
+    var b=mascotBox(p.k), t=document.createElement('div');
+    t.className='tile';t.dataset.k=p.k;t.style.cursor='pointer';
+    var fb=document.createElement('div');fb.className='fbox'+(b.dark?' dark':'');
+    fb.innerHTML=svgTag(b,150);
+    var nm=document.createElement('div');nm.className='nm';nm.textContent=p.label;
+    var ds=document.createElement('div');ds.className='ds';ds.textContent=p.where;
+    t.appendChild(fb);t.appendChild(nm);t.appendChild(ds);
+    t.appendChild(dlButtonsM(function(a){var k=state.mpose;state.mpose=p.k;
+      var bb=mascotBox(p.k,{anim:a});state.mpose=k;return bb;},'mascot_'+p.k));
+    t.addEventListener('click',function(){state.mpose=p.k;render();
+      document.getElementById('stageMascot').scrollIntoView({block:'center',behavior:'smooth'});});
+    elPose.appendChild(t);
+  });
+
+  /* ข้อกำหนด */
+  var cs=layClear();
+  document.getElementById('boxClear').className='fbox'+(cs.dark?' dark':'');
+  document.getElementById('boxClear').innerHTML=svgTag(cs,360);
+  var keep=state.pal;state.pal='white';
+  document.getElementById('boxDark').innerHTML=svgTag(layHorz(),360);
+  state.pal=keep;
+  /* ชิป */
+  mark('#faceChips','face');mark('#symChips','sym');mark('#palChips','pal');
+  mark('#poseChips','mpose');
+  document.querySelectorAll('#manimChips .chip').forEach(function(c){c.classList.toggle('on',!!state[c.dataset.opt]);});
+  document.querySelectorAll('#poseGal .tile').forEach(function(t){t.style.borderColor=(t.dataset.k===state.mpose)?'#eb5a26':'';});
+  document.querySelectorAll('#optChips .chip').forEach(function(c){c.classList.toggle('on',!!state[c.dataset.opt]);});
+  document.querySelectorAll('#symGal .tile').forEach(function(t){t.style.borderColor=(t.dataset.k===state.sym)?'#eb5a26':'';});
+  document.querySelectorAll('#palGal .tile').forEach(function(t){t.style.borderColor=(t.dataset.k===state.pal)?'#eb5a26':'';});
+}
+function mark(sel,key){
+  document.querySelectorAll(sel+' .chip').forEach(function(c){c.classList.toggle('on',c.dataset.v===state[key]);});
+}
+
+/* ══════════ 9 · แผงควบคุม ══════════ */
+function chip(host,val,html,onPick){
+  var b=document.createElement('button');b.className='chip';b.dataset.v=val;b.innerHTML=html;
+  b.addEventListener('click',onPick);host.appendChild(b);
+}
+FACES.forEach(function(f){
+  chip(document.getElementById('faceChips'),f[0],esc(f[1]),function(){state.face=f[0];render();});
+});
+SYM_ORDER.forEach(function(k){
+  var s=SYM[k];
+  var ico=k==='none'?'':'<svg viewBox="0 0 '+s.w+' '+s.h+'">'+s.draw('#3a4a77','#eb5a26')+'</svg>';
+  chip(document.getElementById('symChips'),k,ico+esc(s.label),function(){state.sym=k;render();});
+});
+PALS.forEach(function(p){
+  chip(document.getElementById('palChips'),p.k,'<span class="sw" style="background:'+p.sw+'"></span>'+esc(p.name),
+    function(){state.pal=p.k;render();});
+});
+document.querySelectorAll('#optChips .chip').forEach(function(c){
+  c.addEventListener('click',function(){state[c.dataset.opt]=!state[c.dataset.opt];render();});
+});
+
+/* มาสคอต — ท่าทาง · การเคลื่อนไหว */
+POSES.forEach(function(p){
+  chip(document.getElementById('poseChips'),p.k,esc(p.label),function(){state.mpose=p.k;render();});
+});
+document.querySelectorAll('#manimChips .chip').forEach(function(c){
+  c.addEventListener('click',function(){state[c.dataset.opt]=!state[c.dataset.opt];render();});
+});
+var ins={th:'inTh',en:'inEn',org1:'inOrg1',org2:'inOrg2'};
+Object.keys(ins).forEach(function(k){
+  var el=document.getElementById(ins[k]);el.value=TXT[k];
+  el.addEventListener('input',function(){TXT[k]=el.value;render();});
+});
+document.querySelectorAll('[data-x]').forEach(function(b){
+  b.addEventListener('click',function(){
+    var p=b.dataset.x.split('|');
+    if(p[1]==='svg') exportSVG(mainBox,p[0]); else exportPNG(mainBox,p[0]);
+  });
+});
+document.getElementById('psize').addEventListener('change',function(){});
+
+/* แกลเลอรีสัญลักษณ์ + ชุดสี (กดเลือกได้) */
+SYM_ORDER.forEach(function(k){
+  var s=SYM[k],t=document.createElement('div');t.className='tile';t.dataset.k=k;t.style.cursor='pointer';
+  var keep=state.sym;state.sym=k;
+  var box='<div class="fbox">'+svgTag(layBadge('square',false),150)+'</div>';
+  state.sym=keep;
+  t.innerHTML=box+'<div class="nm">'+esc(s.label)+'</div><div class="ds">'+esc(s.note)+'</div>';
+  t.addEventListener('click',function(){state.sym=k;render();window.scrollTo({top:0,behavior:'smooth'});});
+  elSym.appendChild(t);
+});
+PALS.forEach(function(p){
+  var t=document.createElement('div');t.className='tile';t.dataset.k=p.k;t.style.cursor='pointer';
+  var keep=state.pal;state.pal=p.k;
+  var box='<div class="fbox'+(p.darkStage?' dark':'')+'">'+svgTag(layBadge('square',false),150)+'</div>';
+  state.pal=keep;
+  t.innerHTML=box+'<div class="nm">'+esc(p.name)+'</div>';
+  t.addEventListener('click',function(){state.pal=p.k;render();window.scrollTo({top:0,behavior:'smooth'});});
+  elPal.appendChild(t);
+});
+
+/* ══════════ 10 · เริ่มทำงานหลังฟอนต์พร้อม (ไม่งั้นวัดความกว้างข้อความเพี้ยน) ══════════ */
+function boot(){
+  if(!FONTS.length){
+    var w=document.getElementById('warn');w.style.display='block';
+    w.textContent='⚠ โหลด logo-fonts.js ไม่สำเร็จ — ตัวอย่างจะใช้ฟอนต์ของเครื่องแทน และไฟล์ที่ดาวน์โหลดจะไม่ฝังฟอนต์ (เปิดหน้านี้ผ่าน http://localhost/TIMS/design/tims-logo-maker.html)';
+  }
+  render();
+}
+if(document.fonts&&document.fonts.ready) document.fonts.ready.then(boot).catch(boot); else boot();
+})();
+</script>
+</body>
+</html>
